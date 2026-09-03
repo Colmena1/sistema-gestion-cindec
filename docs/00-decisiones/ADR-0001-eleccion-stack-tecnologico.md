@@ -87,7 +87,7 @@ Node.js + Express + React logra el mejor balance: es también un stack con alta 
 ## Action Items
 
 1. [x] Crear la estructura de carpetas del repositorio (backend/frontend/docs/database).
-2. [ ] Inicializar `package.json` del backend con las dependencias base (Express, Sequelize, mysql2, dotenv, cors, jsonwebtoken, bcryptjs).
+2. [x] Inicializar `package.json` del backend con las dependencias base (Express, Sequelize, mysql2, dotenv, cors, jsonwebtoken, bcryptjs).
 3. [ ] Confirmar con el asesor empresarial (Juan Alexis) que no hay una preferencia/restricción de CINDEC sobre el stack (por ejemplo, si ya tienen hosting contratado con requisitos específicos).
 4. [ ] Instalar MySQL localmente (o usar XAMPP/MySQL Workbench si ya están instalados) y crear la base de datos vacía del proyecto.
 5. [ ] Iniciar el levantamiento de requerimientos (semana 36-37 del cronograma) en `docs/01-requerimientos/`.
