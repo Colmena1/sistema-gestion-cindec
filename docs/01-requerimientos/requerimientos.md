@@ -1,71 +1,138 @@
-# Documento de requerimientos (borrador)
+# Documento de requerimientos
 
-**Estado:** BORRADOR — construido a partir del anteproyecto ya aprobado (Planteamiento del Problema, Objetivos específicos, Alcances y Alcance técnico). Pendiente de validar con Juan Alexis García Gómez (asesor empresarial CINDEC). Ver `guia-validacion-asesor.md` para las preguntas puntuales que faltan por confirmar.
+**Estado:** Nivel 1 validado con CINDEC (entrevista del 2026-09-15, ver `RespLineamientos 1.txt` en el chat/registro del proyecto). Quedan muy pocos `[VALIDAR]` — el resto de las respuestas fue lo bastante detallado para cerrar la mayoría de las dudas del borrador anterior.
 
-Cada requerimiento que depende de un dato que el anteproyecto no especifica está marcado como `[VALIDAR]` — no se inventó ningún campo, regla o cifra que no esté ya sustentado en el anteproyecto o en la información pública de CINDEC.
+**Importante — alcance:** este documento es el alcance **V1, el que se entrega en la residencia** (coincide con el anteproyecto ya aprobado). CINDEC también describió una visión de producto más grande (plataforma SaaS multiempresa, verificación pública por QR, WhatsApp, pagos, aulas virtuales) — esa parte está documentada aparte en [`vision-futura-cindec.md`](vision-futura-cindec.md) y NO forma parte de estos requerimientos. Ver [`docs/00-decisiones/ADR-0002-alcance-v1-vs-vision-futura.md`](../00-decisiones/ADR-0002-alcance-v1-vs-vision-futura.md) para la justificación de ese corte.
+
+## 0. Contexto del proceso real de CINDEC (resumen de la entrevista)
+
+- CINDEC certifica bajo estándares CONOCER (por ejemplo EC0110.02 — Asesoría en comercialización de bienes inmuebles, EC0903.02 — Promoción especializada de crédito de vivienda, entre otros vigentes).
+- El proceso real: la empresa/persona solicita información → se acuerda estándar, participantes, fechas y costo → se registran los participantes → se imparte la capacitación (si aplica) → se evalúa la competencia con los instrumentos/evidencias del estándar CONOCER → se determina competente/no competente → si es competente, **CINDEC solicita y paga la certificación al CONOCER, y es el CONOCER quien la emite** a través de su propio Sistema Integral de Información.
+- Este último punto es clave: **CINDEC no genera el documento oficial de certificación** — lo tramita y lo recibe. El sistema debe llevar el seguimiento de ese trámite y resguardar el documento recibido, no fabricar un certificado oficial (ver Módulo Certificaciones, más abajo).
+- Las capacitaciones pueden ser presenciales, en línea o mixtas.
 
 ## 1. Requerimientos funcionales
 
 ### Módulo: Usuarios
 
 - **RF-USR-01:** El sistema debe permitir registrar usuarios con al menos nombre, correo electrónico y contraseña.
-- **RF-USR-02:** El sistema debe permitir asignar un rol a cada usuario, de acuerdo con las funciones que desempeña dentro de la plataforma. `[VALIDAR: catálogo exacto de roles — el anteproyecto habla de "diferentes roles y niveles de acceso" sin listarlos; se asume al menos administrador, instructor y participante por ser los tres actores que aparecen en el resto del anteproyecto]`.
-- **RF-USR-03:** El sistema debe restringir el acceso a las funcionalidades de cada módulo según el rol del usuario autenticado.
-- **RF-USR-04:** El sistema debe permitir a un administrador crear, editar y activar/desactivar cuentas de usuario.
+- **RF-USR-02:** El sistema debe permitir asignar uno de los siguientes roles a cada usuario:
+  - **Administrador general:** control total de la plataforma (usuarios, cursos, certificaciones, reportes).
+  - **Coordinador de capacitación:** administra grupos, fechas, participantes, instructores/evaluadores, asistencia y seguimiento operativo.
+  - **Instructor:** gestiona materiales, asistencia, actividades y avance de los participantes de sus cursos.
+  - **Evaluador:** consulta las evaluaciones que tiene asignadas, registra evidencias y resultados.
+  - **Participante:** se registra, consulta sus cursos, materiales, evaluaciones, avance y documentos propios.
+  - **Empresa cliente** *(versión acotada en V1)*: consulta el avance, resultados y documentos autorizados de sus propios trabajadores — ver nota de alcance en `vision-futura-cindec.md`.
+- **RF-USR-03:** El sistema debe restringir el acceso a las funcionalidades de cada módulo según el rol del usuario autenticado, incluyendo qué puede *consultar* y qué puede *modificar* cada rol (ver tabla de permisos abajo).
+- **RF-USR-04:** El sistema debe permitir a un administrador crear, editar y activar/desactivar cuentas de usuario, con auditoría de cambios sobre configuración y registros sensibles.
 - **RF-USR-05:** El sistema debe permitir iniciar sesión mediante correo electrónico y contraseña.
-- **RF-USR-06:** `[VALIDAR]` ¿Se requiere recuperación de contraseña por correo, o el administrador la restablece manualmente? El anteproyecto no lo especifica.
+- **RF-USR-06:** `[VALIDAR]` La entrevista no especificó si se requiere recuperación de contraseña automática por correo o si el administrador la restablece manualmente — se recomienda implementar recuperación por correo de una vez, ya que el sistema de todas formas necesita enviar correos (ver RF-REP/notificaciones).
 
-### Módulo: Cursos y participantes
+**Permisos de consulta y modificación por rol** (según lo confirmado por CINDEC):
 
-- **RF-CUR-01:** El sistema debe permitir registrar cursos. `[VALIDAR: campos exactos — por ejemplo nombre del curso, estándar de competencia CONOCER asociado, instructor asignado, fechas de inicio/fin, cupo]`.
-- **RF-CUR-02:** El sistema debe permitir registrar participantes e inscribirlos a uno o más cursos.
-- **RF-CUR-03:** El sistema debe permitir registrar instructores y asignarlos a uno o más cursos.
-- **RF-CUR-04:** El sistema debe permitir consultar, desde un solo lugar, el historial de cursos de un participante — resuelve directamente el problema descrito en el anteproyecto de "sin historial digital accesible".
-- **RF-CUR-05:** El sistema debe permitir consultar el historial de cursos impartidos por un instructor.
-- **RF-CUR-06:** El sistema debe permitir dar seguimiento al estatus de un curso. `[VALIDAR: estados exactos del ciclo de vida de un curso, p. ej. planeado / en curso / finalizado / cancelado]`.
+| Rol | Consulta | Modifica |
+|---|---|---|
+| Administrador | Todo el sistema | Toda la configuración y registros, con auditoría |
+| Coordinador | Cursos, grupos, participantes, calendario, asistencia, evaluaciones, reportes operativos | Cursos, grupos, horarios, asignaciones, seguimiento operativo |
+| Instructor | Cursos asignados, grupos, participantes, materiales, asistencia, avance | Materiales y registros de sus cursos; asistencia y actividades |
+| Evaluador | Evaluaciones asignadas, participantes, instrumentos, evidencias, resultados | Datos y resultados de las evaluaciones que tenga asignadas |
+| Participante | Sus datos, cursos inscritos, materiales, evaluaciones, resultados, documentos propios | Sus datos personales autorizados, contraseña, preferencias de contacto |
+| Empresa cliente | Sus trabajadores, cursos contratados, avances, resultados y documentos autorizados | Ninguna (solo consulta en V1) |
 
-### Módulo: Aprendizaje y evaluaciones
+> Los resultados de evaluación y los certificados deben tener controles para evitar modificaciones no autorizadas (ya confirmado por CINDEC como requisito explícito).
 
-- **RF-APR-01:** El sistema debe permitir asociar materiales de aprendizaje a un curso. `[VALIDAR: tipo de materiales — documentos PDF, presentaciones, enlaces a video, etc.]`.
-- **RF-APR-02:** El sistema debe permitir a los participantes consultar los materiales de aprendizaje del curso en el que están inscritos.
-- **RF-APR-03:** El sistema debe permitir crear evaluaciones asociadas a un curso.
-- **RF-APR-04:** El sistema debe permitir aplicar evaluaciones a los participantes de un curso. `[VALIDAR: tipo de evaluación — opción múltiple, abierta o mixta; si se resuelve dentro del sistema o solo se captura un resultado obtenido de forma externa]`.
-- **RF-APR-05:** El sistema debe permitir consultar los resultados de las evaluaciones de un participante. `[VALIDAR: calificación mínima aprobatoria y si se permite más de un intento]`.
+### Módulo: Cursos, grupos y participantes
 
-### Módulo: Certificaciones
+- **RF-CUR-01:** El sistema debe permitir registrar cursos con: nombre/estándar de competencia asociado, modalidad (presencial / en línea / mixta), fechas, cupo, instructor y evaluador asignados.
+- **RF-CUR-02:** El sistema debe permitir crear grupos dentro de un curso (varios grupos pueden compartir el mismo curso/estándar en distintas fechas).
+- **RF-CUR-03:** El sistema debe permitir el autorregistro de un participante mediante un formulario digital (datos personales, contacto, curso de interés, documentación necesaria) — confirmado explícitamente por CINDEC como necesidad ("se requiere un formulario digital para que el participante pueda registrarse por sí mismo").
+- **RF-CUR-04:** El sistema debe permitir que un coordinador asigne participantes a cursos/grupos, controlando el cupo disponible.
+- **RF-CUR-05:** El sistema debe permitir registrar instructores y evaluadores, y asignarlos a uno o más cursos/grupos.
+- **RF-CUR-06:** El sistema debe permitir consultar, desde un solo lugar, el historial completo de cursos, evaluaciones y certificaciones de un participante.
+- **RF-CUR-07:** El sistema debe permitir consultar el historial de cursos impartidos por un instructor y de evaluaciones realizadas por un evaluador.
+- **RF-CUR-08:** El sistema debe permitir dar seguimiento al estatus de un curso/grupo (al menos: planeado, en curso, concluido; `[VALIDAR]` si además se requiere un estatus de "cancelado").
+- **RF-CUR-09 (modalidad en línea/mixta):** Cuando el curso sea en línea o mixto, el sistema debe permitir registrar un enlace de videoconferencia, calendario y horario asociados al grupo.
+- **RF-CUR-10 (asistencia):** El sistema debe permitir registrar la asistencia de los participantes en sesiones presenciales o mixtas.
 
-- **RF-CERT-01:** El sistema debe permitir generar una constancia digital para un participante que haya concluido/aprobado un curso.
-- **RF-CERT-02:** El sistema debe permitir consultar el historial de constancias emitidas para un participante.
-- **RF-CERT-03:** El sistema debe permitir a un administrador consultar y administrar las constancias generadas por la plataforma.
-- **RF-CERT-04:** `[VALIDAR]` ¿Qué información es obligatoria en la constancia según los lineamientos de la acreditación ECE516-22 / estándares CONOCER? (por ejemplo, folio, sello, datos del estándar de competencia, vigencia).
-- **RF-CERT-05:** `[VALIDAR]` ¿La constancia se descarga en PDF, se envía automáticamente por correo, o ambas cosas?
-- **RF-CERT-06:** `[VALIDAR]` ¿Se requiere algún código o folio de verificación único por constancia?
+### Módulo: Aprendizaje
+
+- **RF-APR-01:** El sistema debe permitir cargar y organizar materiales de aprendizaje asociados a un curso: manuales, presentaciones, documentos PDF, ejercicios y videos (o enlaces a video).
+- **RF-APR-02:** El sistema debe permitir a los participantes consultar y descargar los materiales del curso en el que están inscritos.
+- **RF-APR-03:** El sistema debe permitir consultar, por participante, qué materiales ha revisado (para el indicador de "materiales consultados" pedido por CINDEC).
+
+> Nota de alcance: esto cubre "compartir y organizar materiales". Un aula virtual autodidacta con secuencia de lecciones y avance automático (lo que CINDEC llamó "aulas virtuales") es una experiencia más completa tipo LMS — queda en `vision-futura-cindec.md`.
+
+### Módulo: Evaluaciones
+
+- **RF-EVA-01:** El sistema debe permitir registrar evaluaciones asociadas a un curso/estándar de competencia, incluyendo los instrumentos y evidencias correspondientes al estándar CONOCER aplicable (confirmado: las evaluaciones siguen el proceso autorizado por CONOCER, no son necesariamente de opción múltiple genérica).
+- **RF-EVA-02:** El sistema debe permitir a un evaluador registrar evidencias y el resultado de la evaluación de un participante.
+- **RF-EVA-03:** El sistema debe distinguir explícitamente entre estos estados (confirmado por CINDEC, son conceptos distintos que no deben confundirse):
+  - Capacitación concluida
+  - Evaluación aprobada / no aprobada
+  - Persona competente / persona todavía en proceso
+  - Certificación emitida
+- **RF-EVA-04:** `[VALIDAR]` La calificación/criterio mínimo y el número de intentos permitidos dependen del estándar de competencia específico — no se puede fijar un valor único para todo el sistema; se recomienda que el criterio de aprobación se registre por evaluación/estándar, no como una constante global del sistema.
+- **RF-EVA-05:** El sistema debe permitir consultar el estatus de evaluación de un participante (pendiente, aprobada, no aprobada) desde su historial.
+
+### Módulo: Certificaciones (trámite y seguimiento — CONOCER emite el documento oficial)
+
+- **RF-CERT-01:** El sistema debe permitir registrar que un participante fue determinado "competente" en un estándar de competencia (resultado de RF-EVA-03).
+- **RF-CERT-02:** El sistema debe permitir registrar una solicitud de certificación ante CONOCER para un participante competente, con al menos: fecha de solicitud, estatus del trámite (solicitado / pagado / en trámite / emitido) y folio interno.
+- **RF-CERT-03:** El sistema debe permitir adjuntar y resguardar el documento oficial (PDF) que CONOCER entrega una vez emitida la certificación, asociado al participante y al folio.
+- **RF-CERT-04:** El sistema debe permitir registrar, del documento recibido, al menos: nombre del participante, curso/estándar de competencia, tipo de documento, fecha de emisión, folio, datos de la Entidad de Certificación, vigencia (cuando aplique).
+- **RF-CERT-05:** El sistema debe permitir consultar el historial completo de certificaciones: por participante, por curso, por estatus de trámite, por fechas.
+- **RF-CERT-06:** El sistema debe permitir a un participante descargar sus propios documentos de certificación ya emitidos.
+- **RF-CERT-07 (verificación — versión V1, interna):** El sistema debe permitir, dentro de la plataforma (usuarios autenticados), consultar el estatus/autenticidad de una certificación por folio.
+
+> La verificación *pública* (código QR en el documento físico, consultable desde internet por cualquier persona sin iniciar sesión) requiere despliegue en producción con acceso público — fuera del alcance V1 por la Limitación de "entorno local, sin producción". Ver `vision-futura-cindec.md`.
 
 ### Módulo: Reportes
 
-> El anteproyecto no detalla el contenido de este módulo en el texto (solo aparece como actividad de desarrollo en el cronograma: "Desarrollo del módulo de reportes"). Es el módulo con más huecos por confirmar.
+- **RF-REP-01:** El sistema debe generar los siguientes reportes operativos (todos derivados de datos ya capturados por los módulos anteriores, sin necesitar información adicional):
+  - Participantes registrados por periodo
+  - Cursos impartidos / cursos activos y concluidos
+  - Inscripciones por curso
+  - Avance de participantes
+  - Asistencia
+  - Evaluaciones realizadas (aprobadas / no aprobadas)
+  - Personas competentes y no competentes
+  - Certificaciones solicitadas / en trámite / emitidas
+  - Certificados por empresa (usando la relación simple participante-empresa de RF-USR-02)
+  - Historial de certificaciones
+  - Reportes por instructor y por evaluador
+- **RF-REP-02:** Los reportes deben poder exportarse (al menos PDF o Excel) para enviarse fuera del sistema.
 
-- **RF-REP-01:** `[VALIDAR]` El sistema debe generar reportes — falta definir con CINDEC qué reportes son realmente útiles (¿participantes certificados por periodo? ¿cursos impartidos por instructor? ¿estatus general de un curso?).
+> Fuera de alcance V1: reporte de ingresos por curso/servicio (depende de facturación) y reportes de desempeño/conversión comercial (más cercano a un CRM) — ambos en `vision-futura-cindec.md`.
+
+### Notificaciones (nuevo, dentro de alcance V1)
+
+- **RF-NOT-01:** El sistema debe enviar confirmaciones y recordatorios por correo electrónico (registro exitoso, próxima sesión, evaluación pendiente, certificación emitida).
+
+> Notificaciones por WhatsApp requieren un servicio de terceros de pago — fuera de alcance V1, ver `vision-futura-cindec.md`.
 
 ## 2. Requerimientos no funcionales
 
-- **RNF-01:** La aplicación debe ser accesible desde navegadores estándar de escritorio (Chrome, Edge, Firefox), sin requerir instalación adicional por parte del usuario. *(ya comprometido en el anteproyecto)*
-- **RNF-02:** El sistema se implementará y validará en un entorno local durante el periodo de residencia profesional, sin desplegarse en un ambiente de producción. *(ya comprometido)*
-- **RNF-03:** El sistema no requiere conexión permanente a internet para su funcionamiento local, salvo que durante el análisis se defina una integración con consultas externas relacionadas con los estándares CONOCER. `[VALIDAR: si esa integración es necesaria o no]`.
+- **RNF-01:** La aplicación debe ser accesible desde navegadores estándar de escritorio (Chrome, Edge, Firefox), sin requerir instalación adicional. *(ya comprometido en el anteproyecto)*
+- **RNF-02:** El sistema se implementará y validará en un entorno local durante el periodo de residencia, sin desplegarse en un ambiente de producción. *(ya comprometido — implica que la verificación pública por QR y el portal empresarial multiempresa quedan fuera de V1)*
+- **RNF-03:** El sistema no requiere conexión permanente a internet para su funcionamiento local, salvo el envío de notificaciones por correo (RF-NOT-01), que si se implementa síncrono sí necesita conexión al momento de enviar.
 - **RNF-04:** El sistema no incluirá una aplicación móvil nativa en esta primera versión, solo aplicación web. *(ya comprometido)*
-- **RNF-05:** El sistema no contempla integración con plataformas de pago ni servicios de terceros que no sean indispensables para su funcionamiento. *(ya comprometido)*
-- **RNF-06:** La arquitectura debe diseñarse de forma modular para facilitar su crecimiento futuro, aunque el soporte multiempresa o en la nube queda fuera del alcance de esta versión. *(ya comprometido)*
-- **RNF-07:** El acceso a cada módulo debe estar controlado por el rol del usuario autenticado.
+- **RNF-05:** El sistema no contempla integración con plataformas de pago ni con servicios de terceros de paga (como WhatsApp Business API) que no sean indispensables para su funcionamiento. *(ya comprometido; confirma que "facturación" y "WhatsApp" pedidos por CINDEC quedan en Visión futura)*
+- **RNF-06:** La arquitectura debe diseñarse de forma modular (separación por capas: rutas/controladores/servicios/modelos, y por dominio: usuarios, cursos, evaluaciones, certificaciones) para facilitar su crecimiento hacia la visión de plataforma multiempresa descrita en `vision-futura-cindec.md`, aunque esa implementación quede fuera de esta versión.
+- **RNF-07:** El acceso a cada módulo y a cada acción de consulta/modificación debe estar controlado por el rol del usuario autenticado, según la tabla de permisos de la sección de Usuarios.
+- **RNF-08:** Los resultados de evaluación y los documentos de certificación deben quedar protegidos contra modificaciones no autorizadas (por ejemplo, solo el evaluador asignado y el administrador pueden editar un resultado ya registrado).
 
 ## 3. Casos de uso (nivel alto — se detallan como diagramas UML en la fase de Diseño)
 
-- Un administrador registra un nuevo curso y asigna un instructor.
-- Un administrador inscribe (o el propio participante se inscribe, según se valide) a un participante en un curso.
-- Un instructor sube materiales de aprendizaje para su curso.
-- Un participante consulta los materiales y presenta una evaluación de su curso.
-- Un administrador genera la constancia digital de un participante que aprobó un curso.
-- Un administrador consulta el historial completo de un participante (cursos, evaluaciones, constancias) desde un solo lugar.
+- Un coordinador crea un curso/grupo y asigna instructor y evaluador.
+- Un participante se autorregistra mediante el formulario público y queda pendiente de asignación a un curso.
+- Un coordinador asigna al participante a un curso/grupo, respetando el cupo.
+- Un instructor sube materiales de aprendizaje y pasa lista de asistencia.
+- Un evaluador registra evidencias y el resultado (competente / no competente) de un participante.
+- Un administrador registra la solicitud de certificación ante CONOCER para un participante competente, y después adjunta el documento oficial cuando CONOCER lo emite.
+- Un participante consulta su historial completo (cursos, evaluaciones, certificaciones) y descarga su documento de certificación.
+- Una empresa cliente consulta el avance y resultados de sus propios trabajadores (sin ver información de otras empresas).
+- Un coordinador o administrador genera un reporte operativo y lo exporta a PDF/Excel.
 
 ## Siguiente paso
 
-Revisar `guia-validacion-asesor.md` antes de la reunión con Juan Alexis. Cada `[VALIDAR]` de este documento debe quedar resuelto (o explícitamente pospuesto) antes de pasar a `docs/02-diseno/`.
+Este documento queda cerrado para efectos de pasar a `docs/02-diseno/`, salvo los 2-3 puntos marcados `[VALIDAR]` que son de bajo riesgo (recuperación de contraseña, estatus "cancelado" de un curso, criterio de aprobación por estándar) — se pueden resolver sobre la marcha durante el Diseño sin bloquear el arranque de esa fase.

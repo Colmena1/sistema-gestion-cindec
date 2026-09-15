@@ -97,14 +97,31 @@ El cronograma es fijo (Desarrollo concentrado en semanas 41-46), así que convie
 | Gestión de certificaciones | | | | |
 | Reportes | | | | |
 
+
+Sobre apariencia/interfaz:
+
+¿Tienen colores institucionales definidos (aunque sea solo en el logo) que quieran ver reflejados en el sistema, o les da igual mientras se vea profesional?
+¿Prefieren algo más formal/serio (acorde a que certifican bajo estándares CONOCER) o no les importa que se vea más moderno/casual?
+¿El logo de CINDEC lo tienen en algún archivo de buena calidad (PNG/SVG con fondo transparente), o solo lo tienen en la página web?
+
+Otras preguntas rápidas útiles:
+
+¿Cómo le llaman ellos internamente a los "participantes"? (¿alumnos, evaluados, candidatos? — para que la terminología del sistema coincida con la que ya usan y no se sienta ajeno)
+¿El sistema debería llamarse de alguna forma en particular (un nombre corto/comercial), o "Sistema CINDEC" está bien?
+¿Hay algún horario en el que definitivamente NO se pueda usar el sistema (por mantenimiento, por ejemplo entre semana en la noche), o no importa?
+¿Alguien de CINDEC va a necesitar capacitación formal para usar el sistema al final, o Juan Alexis se encarga de enseñarle al resto del equipo?
 ---
 
 ## Registro de respuestas
 
-> Llenar durante o después de la reunión. Una vez lleno, regresar a `requerimientos.md` y quitar las etiquetas `[VALIDAR]` ya resueltas.
+**Fecha de la reunión:** 2026-09-15
 
-**Fecha de la reunión:**
+**Estado:** Respondida — CINDEC entregó respuestas muy completas a un cuestionario extendido de 32 puntos (archivo `RespLineamientos 1.txt` compartido en el chat del proyecto). Las respuestas ya quedaron incorporadas en `requerimientos.md` (alcance V1) y en `vision-futura-cindec.md` (lo que excede el alcance de la residencia — ver `docs/00-decisiones/ADR-0002-alcance-v1-vs-vision-futura.md`).
 
-**Respuestas:**
+**Pendiente de esta entrevista (bajo riesgo, no bloquea Diseño):**
+- Recuperación de contraseña: ¿automática por correo o restablecimiento manual por el administrador?
+- ¿Un curso/grupo puede quedar en estatus "cancelado", además de planeado/en curso/concluido?
+- Criterio de aprobación (calificación mínima, número de intentos): confirmar que se define por estándar de competencia, no como valor único del sistema.
 
-- (pendiente)
+**Pendiente de comunicar a Juan Alexis (no es una pregunta, es una alineación de expectativas):** la diferencia entre lo que se entrega en esta residencia (`requerimientos.md`) y la visión de plataforma SaaS multiempresa que describieron (`vision-futura-cindec.md`) — ver ADR-0002.
+
