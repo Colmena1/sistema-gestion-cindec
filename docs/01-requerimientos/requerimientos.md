@@ -1,6 +1,6 @@
 # Documento de requerimientos
 
-**Estado:** Nivel 1 validado con CINDEC (entrevista del 2026-09-15, ver `RespLineamientos 1.txt` en el chat/registro del proyecto). Quedan muy pocos `[VALIDAR]` — el resto de las respuestas fue lo bastante detallado para cerrar la mayoría de las dudas del borrador anterior.
+**Estado:** CERRADO. Validado con CINDEC (entrevista del 2026-09-15, ver `RespLineamientos 1.txt` en el chat/registro del proyecto). Los dos últimos puntos abiertos se resolvieron como decisiones de ingeniería el mismo día porque Juan Alexis no estaba disponible (ver nota al final del documento) — no quedan `[VALIDAR]` pendientes.
 
 **Importante — alcance:** este documento es el alcance **V1, el que se entrega en la residencia** (coincide con el anteproyecto ya aprobado). CINDEC también describió una visión de producto más grande (plataforma SaaS multiempresa, verificación pública por QR, WhatsApp, pagos, aulas virtuales) — esa parte está documentada aparte en [`vision-futura-cindec.md`](vision-futura-cindec.md) y NO forma parte de estos requerimientos. Ver [`docs/00-decisiones/ADR-0002-alcance-v1-vs-vision-futura.md`](../00-decisiones/ADR-0002-alcance-v1-vs-vision-futura.md) para la justificación de ese corte.
 
@@ -26,7 +26,7 @@
 - **RF-USR-03:** El sistema debe restringir el acceso a las funcionalidades de cada módulo según el rol del usuario autenticado, incluyendo qué puede *consultar* y qué puede *modificar* cada rol (ver tabla de permisos abajo).
 - **RF-USR-04:** El sistema debe permitir a un administrador crear, editar y activar/desactivar cuentas de usuario, con auditoría de cambios sobre configuración y registros sensibles.
 - **RF-USR-05:** El sistema debe permitir iniciar sesión mediante correo electrónico y contraseña.
-- **RF-USR-06:** `[VALIDAR]` La entrevista no especificó si se requiere recuperación de contraseña automática por correo o si el administrador la restablece manualmente — se recomienda implementar recuperación por correo de una vez, ya que el sistema de todas formas necesita enviar correos (ver RF-REP/notificaciones).
+- **RF-USR-06:** El sistema debe permitir la recuperación de contraseña mediante un enlace enviado por correo electrónico (decidido 2026-09-15: reutiliza el mismo servicio de correo de RF-NOT-01, evita que cada olvido de contraseña dependa de que el administrador la restablezca manualmente).
 
 **Permisos de consulta y modificación por rol** (según lo confirmado por CINDEC):
 
@@ -50,7 +50,7 @@
 - **RF-CUR-05:** El sistema debe permitir registrar instructores y evaluadores, y asignarlos a uno o más cursos/grupos.
 - **RF-CUR-06:** El sistema debe permitir consultar, desde un solo lugar, el historial completo de cursos, evaluaciones y certificaciones de un participante.
 - **RF-CUR-07:** El sistema debe permitir consultar el historial de cursos impartidos por un instructor y de evaluaciones realizadas por un evaluador.
-- **RF-CUR-08:** El sistema debe permitir dar seguimiento al estatus de un curso/grupo (al menos: planeado, en curso, concluido; `[VALIDAR]` si además se requiere un estatus de "cancelado").
+- **RF-CUR-08:** El sistema debe permitir dar seguimiento al estatus de un curso/grupo: planeado, en curso, concluido o cancelado (decisión de ingeniería 2026-09-15, Alexis no disponible para confirmar — es un valor por default razonable, sin costo de implementación adicional; ajustar si CINDEC indica otro nombre de estatus más adelante).
 - **RF-CUR-09 (modalidad en línea/mixta):** Cuando el curso sea en línea o mixto, el sistema debe permitir registrar un enlace de videoconferencia, calendario y horario asociados al grupo.
 - **RF-CUR-10 (asistencia):** El sistema debe permitir registrar la asistencia de los participantes en sesiones presenciales o mixtas.
 
@@ -65,13 +65,16 @@
 ### Módulo: Evaluaciones
 
 - **RF-EVA-01:** El sistema debe permitir registrar evaluaciones asociadas a un curso/estándar de competencia, incluyendo los instrumentos y evidencias correspondientes al estándar CONOCER aplicable (confirmado: las evaluaciones siguen el proceso autorizado por CONOCER, no son necesariamente de opción múltiple genérica).
-- **RF-EVA-02:** El sistema debe permitir a un evaluador registrar evidencias y el resultado de la evaluación de un participante.
+- **RF-EVA-02:** El sistema debe permitir a un evaluador registrar evidencias, la calificación numérica (0-100) y el resultado de la evaluación de un participante.
 - **RF-EVA-03:** El sistema debe distinguir explícitamente entre estos estados (confirmado por CINDEC, son conceptos distintos que no deben confundirse):
   - Capacitación concluida
   - Evaluación aprobada / no aprobada
   - Persona competente / persona todavía en proceso
   - Certificación emitida
-- **RF-EVA-04:** `[VALIDAR]` La calificación/criterio mínimo y el número de intentos permitidos dependen del estándar de competencia específico — no se puede fijar un valor único para todo el sistema; se recomienda que el criterio de aprobación se registre por evaluación/estándar, no como una constante global del sistema.
+- **RF-EVA-04 (confirmado por Juan Alexis, 2026-09-16):** Sí es una calificación numérica sobre 100, pero el mínimo aprobatorio **depende de cada estándar de competencia** (ejemplo dado por Alexis: 95-97% de 100%, no un valor único para todo el sistema). Por lo tanto:
+  - Cada evaluación debe registrar un puntaje (0-100) y comparar contra un **criterio mínimo aprobatorio configurable por evaluación/estándar** (no una constante global del sistema) — confirma lo que ya habíamos anticipado como recomendación de diseño, ahora con el dato real.
+  - Si el participante no alcanza el mínimo, el sistema debe permitir **repetir la evaluación** (nuevo registro, no se sobrescribe el anterior — se conserva el historial completo de intentos).
+  - El sistema debe permitir marcar que el participante retomó el curso (o parte de él) como refuerzo antes de volver a evaluarse — confirmado por Alexis como parte real del proceso ("con opción de reforzar con el curso de nuevo").
 - **RF-EVA-05:** El sistema debe permitir consultar el estatus de evaluación de un participante (pendiente, aprobada, no aprobada) desde su historial.
 
 ### Módulo: Certificaciones (trámite y seguimiento — CONOCER emite el documento oficial)
@@ -135,4 +138,4 @@
 
 ## Siguiente paso
 
-Este documento queda cerrado para efectos de pasar a `docs/02-diseno/`, salvo los 2-3 puntos marcados `[VALIDAR]` que son de bajo riesgo (recuperación de contraseña, estatus "cancelado" de un curso, criterio de aprobación por estándar) — se pueden resolver sobre la marcha durante el Diseño sin bloquear el arranque de esa fase.
+Documento cerrado — ya no quedan `[VALIDAR]` pendientes. Los últimos dos (estatus "cancelado" y criterio de aprobación/intentos) se resolvieron como decisiones de ingeniería el 2026-09-15 porque Juan Alexis no estaba disponible; quedan marcadas explícitamente como tal en RF-CUR-08 y RF-EVA-04, para revisar con él cuando pueda confirmar o corregir. Listo para pasar a `docs/02-diseno/`.
