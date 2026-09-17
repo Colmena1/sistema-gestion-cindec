@@ -43,16 +43,18 @@
 
 ### Módulo: Cursos, grupos y participantes
 
-- **RF-CUR-01:** El sistema debe permitir registrar cursos con: nombre/estándar de competencia asociado, modalidad (presencial / en línea / mixta), fechas, cupo, instructor y evaluador asignados.
-- **RF-CUR-02:** El sistema debe permitir crear grupos dentro de un curso (varios grupos pueden compartir el mismo curso/estándar en distintas fechas).
+- **RF-CUR-01 (corregido 2026-09-17):** El sistema debe permitir registrar cursos con su información propia (la que no cambia entre grupos): nombre, estándar de competencia CONOCER asociado y descripción.
+- **RF-CUR-02 (corregido 2026-09-17):** El sistema debe permitir crear uno o más grupos para un curso, cada uno con sus propios: fechas de inicio/fin, cupo, modalidad (presencial / en línea / mixta), instructor y evaluador asignados. Varios grupos pueden compartir el mismo curso/estándar en fechas y condiciones distintas — por eso estos datos van en el grupo, no en el curso.
 - **RF-CUR-03:** El sistema debe permitir el autorregistro de un participante mediante un formulario digital (datos personales, contacto, curso de interés, documentación necesaria) — confirmado explícitamente por CINDEC como necesidad ("se requiere un formulario digital para que el participante pueda registrarse por sí mismo").
-- **RF-CUR-04:** El sistema debe permitir que un coordinador asigne participantes a cursos/grupos, controlando el cupo disponible.
-- **RF-CUR-05:** El sistema debe permitir registrar instructores y evaluadores, y asignarlos a uno o más cursos/grupos.
+- **RF-CUR-04:** El sistema debe permitir que un coordinador asigne participantes a un **grupo** específico, controlando el cupo disponible de ese grupo.
+- **RF-CUR-05:** El sistema debe permitir registrar instructores y evaluadores, y asignarlos a uno o más **grupos**.
 - **RF-CUR-06:** El sistema debe permitir consultar, desde un solo lugar, el historial completo de cursos, evaluaciones y certificaciones de un participante.
 - **RF-CUR-07:** El sistema debe permitir consultar el historial de cursos impartidos por un instructor y de evaluaciones realizadas por un evaluador.
-- **RF-CUR-08:** El sistema debe permitir dar seguimiento al estatus de un curso/grupo: planeado, en curso, concluido o cancelado (decisión de ingeniería 2026-09-15, Alexis no disponible para confirmar — es un valor por default razonable, sin costo de implementación adicional; ajustar si CINDEC indica otro nombre de estatus más adelante).
-- **RF-CUR-09 (modalidad en línea/mixta):** Cuando el curso sea en línea o mixto, el sistema debe permitir registrar un enlace de videoconferencia, calendario y horario asociados al grupo.
-- **RF-CUR-10 (asistencia):** El sistema debe permitir registrar la asistencia de los participantes en sesiones presenciales o mixtas.
+- **RF-CUR-08:** El sistema debe permitir dar seguimiento al estatus de un **grupo** (no del curso-plantilla, que no tiene ciclo de vida propio): planeado, en curso, concluido o cancelado (decisión de ingeniería 2026-09-15, Alexis no disponible para confirmar — es un valor por default razonable, sin costo de implementación adicional; ajustar si CINDEC indica otro nombre de estatus más adelante).
+- **RF-CUR-09 (modalidad en línea/mixta):** Cuando un grupo sea en línea o mixto, el sistema debe permitir registrar un enlace de videoconferencia, calendario y horario propios de ese grupo.
+- **RF-CUR-10 (asistencia):** El sistema debe permitir registrar la asistencia de los participantes en las sesiones presenciales o mixtas de un grupo.
+
+> **Nota de diseño (corregido 2026-09-17, observación de Mauricio):** originalmente varios de estos campos (fechas, cupo, instructor, evaluador) estaban asignados al curso en vez de al grupo — eso era inconsistente con RF-CUR-02, que ya reconocía que un mismo curso puede tener varios grupos en fechas distintas. Se corrigió antes de pasar a Diseño para no arrastrar el error al modelo entidad-relación: el **curso** es la plantilla/catálogo (qué se enseña), el **grupo** es la oferta concreta (cuándo, con quién, con qué cupo).
 
 ### Módulo: Aprendizaje
 
@@ -64,7 +66,7 @@
 
 ### Módulo: Evaluaciones
 
-- **RF-EVA-01:** El sistema debe permitir registrar evaluaciones asociadas a un curso/estándar de competencia, incluyendo los instrumentos y evidencias correspondientes al estándar CONOCER aplicable (confirmado: las evaluaciones siguen el proceso autorizado por CONOCER, no son necesariamente de opción múltiple genérica).
+- **RF-EVA-01:** El sistema debe permitir registrar evaluaciones asociadas a un curso/estándar de competencia (el instrumento de evaluación es el mismo sin importar el grupo), incluyendo los instrumentos y evidencias correspondientes al estándar CONOCER aplicable (confirmado: las evaluaciones siguen el proceso autorizado por CONOCER, no son necesariamente de opción múltiple genérica). La aplicación de la evaluación a un participante ocurre dentro del **grupo** en el que está inscrito (ahí es donde hay una fecha y un evaluador concretos).
 - **RF-EVA-02:** El sistema debe permitir a un evaluador registrar evidencias, la calificación numérica (0-100) y el resultado de la evaluación de un participante.
 - **RF-EVA-03:** El sistema debe distinguir explícitamente entre estos estados (confirmado por CINDEC, son conceptos distintos que no deben confundirse):
   - Capacitación concluida
@@ -113,22 +115,31 @@
 
 > Notificaciones por WhatsApp requieren un servicio de terceros de pago — fuera de alcance V1, ver `vision-futura-cindec.md`.
 
-## 2. Requerimientos no funcionales
+## 2. Restricciones
 
-- **RNF-01:** La aplicación debe ser accesible desde navegadores estándar de escritorio (Chrome, Edge, Firefox), sin requerir instalación adicional. *(ya comprometido en el anteproyecto)*
-- **RNF-02:** El sistema se implementará y validará en un entorno local durante el periodo de residencia, sin desplegarse en un ambiente de producción. *(ya comprometido — implica que la verificación pública por QR y el portal empresarial multiempresa quedan fuera de V1)*
-- **RNF-03:** El sistema no requiere conexión permanente a internet para su funcionamiento local, salvo el envío de notificaciones por correo (RF-NOT-01), que si se implementa síncrono sí necesita conexión al momento de enviar.
-- **RNF-04:** El sistema no incluirá una aplicación móvil nativa en esta primera versión, solo aplicación web. *(ya comprometido)*
-- **RNF-05:** El sistema no contempla integración con plataformas de pago ni con servicios de terceros de paga (como WhatsApp Business API) que no sean indispensables para su funcionamiento. *(ya comprometido; confirma que "facturación" y "WhatsApp" pedidos por CINDEC quedan en Visión futura)*
-- **RNF-06:** La arquitectura debe diseñarse de forma modular (separación por capas: rutas/controladores/servicios/modelos, y por dominio: usuarios, cursos, evaluaciones, certificaciones) para facilitar su crecimiento hacia la visión de plataforma multiempresa descrita en `vision-futura-cindec.md`, aunque esa implementación quede fuera de esta versión.
-- **RNF-07:** El acceso a cada módulo y a cada acción de consulta/modificación debe estar controlado por el rol del usuario autenticado, según la tabla de permisos de la sección de Usuarios.
-- **RNF-08:** Los resultados de evaluación y los documentos de certificación deben quedar protegidos contra modificaciones no autorizadas (por ejemplo, solo el evaluador asignado y el administrador pueden editar un resultado ya registrado).
+*(corregido 2026-09-17 — observación de Mauricio: varios de estos puntos estaban mezclados con los RNF, pero una restricción es un límite de alcance/tecnología ya decidido, no un atributo de calidad medible. Se separan, y además coincide con la estructura del formato ERS que vamos a usar, que ya trae una sección propia de Restricciones.)*
 
-## 3. Casos de uso (nivel alto — se detallan como diagramas UML en la fase de Diseño)
+- El sistema se implementará y validará en un entorno local durante el periodo de residencia, sin desplegarse en un ambiente de producción. *(ya comprometido en el anteproyecto — implica que la verificación pública por QR y el portal empresarial multiempresa quedan fuera de V1)*
+- No requiere conexión permanente a internet para su funcionamiento local, salvo el envío de notificaciones por correo (RF-NOT-01).
+- No incluirá una aplicación móvil nativa en esta primera versión, solo aplicación web. *(ya comprometido)*
+- No contempla integración con plataformas de pago ni con servicios de terceros de paga (como WhatsApp Business API) que no sean indispensables para su funcionamiento. *(ya comprometido; confirma que "facturación" y "WhatsApp" pedidos por CINDEC quedan en Visión futura)*
+- Aplicación web accesible desde navegadores estándar de escritorio (Chrome, Edge, Firefox), sin requerir instalación adicional. *(ya comprometido)*
 
-- Un coordinador crea un curso/grupo y asigna instructor y evaluador.
-- Un participante se autorregistra mediante el formulario público y queda pendiente de asignación a un curso.
-- Un coordinador asigna al participante a un curso/grupo, respetando el cupo.
+## 3. Requerimientos no funcionales (medibles/verificables)
+
+*(reescritos 2026-09-17 para que cada uno tenga un criterio de cumple/no cumple comprobable, en vez de una frase de intención. No se inventan cifras de rendimiento/uptime que CINDEC nunca dio — es un prototipo local de pocos usuarios, así que esas cifras serían inventadas; en su lugar, cada RNF queda formulado como algo verificable con un caso de prueba.)*
+
+- **RNF-01 (control de acceso):** Todo endpoint de la API debe validar el rol del usuario autenticado antes de ejecutar la acción correspondiente; una petición sin autorización debe rechazarse con error 403. *Verificable con casos de prueba por rol.*
+- **RNF-02 (integridad de resultados):** Un resultado de evaluación o un documento de certificación ya registrado solo puede ser modificado por el evaluador que lo generó o por un administrador; cualquier otro intento debe rechazarse. *Verificable.*
+- **RNF-03 (mantenibilidad):** El backend debe mantener separación de capas (rutas/controladores/servicios/modelos); ningún controlador debe acceder directamente a la base de datos sin pasar por la capa de servicios. *Verificable por revisión de código.*
+- **RNF-04 (auditoría):** Toda modificación a cuentas de usuario o a la configuración del sistema debe quedar registrada con usuario, fecha y acción realizada. *Verificable.*
+- **RNF-05 (escalabilidad/modularidad):** La arquitectura debe mantenerse organizada por dominio (usuarios, cursos, evaluaciones, certificaciones) para facilitar su crecimiento hacia la visión de plataforma descrita en `vision-futura-cindec.md`, aunque esa implementación quede fuera de esta versión. *Verificable por revisión de la estructura de carpetas/módulos.*
+
+## 4. Casos de uso (nivel alto — se detallan como diagramas UML en la fase de Diseño)
+
+- Un coordinador crea un curso y luego uno o más grupos para ese curso, asignando instructor y evaluador a cada grupo.
+- Un participante se autorregistra mediante el formulario público y queda pendiente de asignación a un grupo.
+- Un coordinador asigna al participante a un grupo específico, respetando su cupo.
 - Un instructor sube materiales de aprendizaje y pasa lista de asistencia.
 - Un evaluador registra evidencias y el resultado (competente / no competente) de un participante.
 - Un administrador registra la solicitud de certificación ante CONOCER para un participante competente, y después adjunta el documento oficial cuando CONOCER lo emite.
@@ -138,4 +149,6 @@
 
 ## Siguiente paso
 
-Documento cerrado — ya no quedan `[VALIDAR]` pendientes. Los últimos dos (estatus "cancelado" y criterio de aprobación/intentos) se resolvieron como decisiones de ingeniería el 2026-09-15 porque Juan Alexis no estaba disponible; quedan marcadas explícitamente como tal en RF-CUR-08 y RF-EVA-04, para revisar con él cuando pueda confirmar o corregir. Listo para pasar a `docs/02-diseno/`.
+Documento cerrado — ya no quedan `[VALIDAR]` pendientes. Los últimos dos (estatus "cancelado" y criterio de aprobación/intentos) se resolvieron como decisiones de ingeniería el 2026-09-15 porque Juan Alexis no estaba disponible; quedan marcadas explícitamente como tal en RF-CUR-08 y RF-EVA-04, para revisar con él cuando pueda confirmar o corregir.
+
+**Revisión técnica del 2026-09-17 (observaciones de Mauricio):** se corrigió la separación curso/grupo (RF-CUR-01/02 y sus dependientes) y se separaron las Restricciones de los Requerimientos no funcionales, reescribiendo estos últimos para que sean verificables. Listo para pasar a `docs/02-diseno/`.
