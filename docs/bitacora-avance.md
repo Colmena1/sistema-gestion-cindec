@@ -58,3 +58,27 @@ Formato sugerido por entrada:
 
 **Próxima semana:**
 - Cerrar Análisis (semana 39) y arrancar `docs/02-diseno/`: arquitectura, modelo entidad-relación, diagramas UML, prototipos.
+
+## Semana 40 (28-sep al 4-oct-2026) — Fase: Análisis del Sistema
+
+**Hecho:**
+- Se construyó el ERS (Especificación de Requisitos de Software, formato IEEE 830) en `docs/01-requerimientos/ERS-CINDEC.docx`, consolidando `requerimientos.md`, el anteproyecto y `vision-futura-cindec.md`.
+- Reunión con el asesor académico para validar el hallazgo de CONOCER como emisor del certificado y el formato de entregables.
+
+**Decisiones tomadas:**
+- Se retira por completo el rol "Empresa cliente" de V1 (ni siquiera la versión acotada de solo consulta) por restricción de tiempo de desarrollo. V1 queda con cinco roles. El rol completo se traslada íntegramente a `vision-futura-cindec.md`. Se actualizaron `requerimientos.md` (RF-USR-02, RF-REP-01, casos de uso) y el ERS en consecuencia.
+
+**Pendiente / bloqueos:**
+- Regenerar y re-entregar `ERS-CINDEC.docx` reflejando el corte del rol "Empresa cliente".
+- Comunicar a Juan Alexis el corte de alcance V1 vs Visión futura (Action Item de ADR-0002, sigue abierto).
+- Confirmar con el asesor académico si el hallazgo de CONOCER como emisor amerita algún ajuste en el anteproyecto ya aprobado (Action Item de ADR-0002, sigue abierto).
+
+**Arranque de la fase de Diseño del Sistema (2026-10-01):**
+- Paso 1 de 6 — Diseño de la arquitectura del sistema: terminado y aprobado (`docs/02-diseno/01-arquitectura.md`). Cliente-servidor en tres capas (React SPA → API REST Express → MySQL + almacenamiento de archivos), componentes transversales (autenticación JWT, autorización por rol, validación, auditoría, manejo de errores), convenciones de la API, diagrama de despliegue local y trazabilidad RNF → decisión. 3 figuras en `docs/02-diseno/img/`.
+- ADR-0003: se adopta un monolito modular (carpetas por módulo en `backend/src/modules/`), descartando vistas en servidor y microservicios. La reorganización de carpetas se aplica al iniciar Desarrollo (semana 41).
+
+**Pendiente (nuevo):**
+- Preguntar a Juan Alexis en qué equipo se instalará la versión local para validación y qué cuenta de correo se usará para el SMTP.
+
+**Próxima semana:**
+- Continuar Diseño: modelo entidad-relación, diseño de BD y diccionario de datos, diagramas UML, prototipos.

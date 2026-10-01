@@ -1,0 +1,38 @@
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.node { border: 2px solid #374151; border-radius: 10px; padding: 12px 14px 14px; background:#f9fafb; }
+.node > .t { font-weight:700; font-size:14px; margin-bottom: 4px; }
+.node > .s { font-size:12px; color:#6b7280; margin-bottom: 10px; }
+.cmp { border: 1.5px solid #cbd5e1; background:#fff; border-radius:7px; padding: 8px 10px; font-size:12.5px; margin-bottom:8px; line-height:1.4; }
+.cmp b { display:block; font-size:13px; }
+.cmp .p { float:right; font-family: monospace; font-size: 12px; background:#eef2ff; color:#3730a3; padding: 1px 6px; border-radius: 4px; }
+.mid { display:flex; flex-direction: column; justify-content: center; align-items:center; font-size:12px; color:#374151; text-align:center; padding: 0 8px; }
+.mid .a { font-size: 26px; }
+</style></head><body>
+<h1>Figura 3. Diagrama de despliegue (entorno local, V1)</h1>
+<div class="sub">El sistema se instala y valida en un equipo/servidor local de CINDEC; no hay despliegue en producción durante la residencia (restricción 2.4 del ERS).</div>
+<div class="row" style="align-items: stretch; gap: 0">
+  <div class="node" style="flex: 1">
+    <div class="t">Equipos de usuario</div>
+    <div class="s">PC o celular de la red local de CINDEC</div>
+    <div class="cmp"><b>Navegador web</b>Chrome / Edge / Firefox. No requiere instalar nada.</div>
+    <div class="cmp"><b>Aplicación React</b>Descargada del servidor al abrir la URL.</div>
+  </div>
+  <div class="mid" style="width: 150px"><span class="a">⇄</span>HTTP<br>red local (LAN)</div>
+  <div class="node" style="flex: 2">
+    <div class="t">Servidor local (equipo de CINDEC o del residente)</div>
+    <div class="s">Windows · Node.js · MySQL (XAMPP o MySQL Server)</div>
+    <div class="cmp"><span class="p">:4000</span><b>Proceso Node.js — API Express</b>Atiende <code>/api/v1/*</code> y además sirve los archivos ya compilados de React (<code>npm run build</code>), así todo funciona con una sola dirección.</div>
+    <div class="cmp"><span class="p">:3306 / :3307</span><b>MySQL — base de datos <code>cindec_db</code></b>Solo accesible desde el propio servidor.</div>
+    <div class="cmp"><b>Carpeta <code>uploads/</code></b>Materiales, evidencias y PDF de CONOCER (fuera de la carpeta pública).</div>
+    <div class="cmp"><b>Archivo <code>.env</code></b>Credenciales de BD, secreto JWT y datos SMTP. Nunca se sube a Git.</div>
+  </div>
+  <div class="mid" style="width: 150px"><span class="a">→</span>SMTP<br>internet<br><small>(solo para correo)</small></div>
+  <div class="node" style="flex: 1; border-style: dashed">
+    <div class="t">Proveedor de correo</div>
+    <div class="s">Servicio externo</div>
+    <div class="cmp"><b>Servidor SMTP</b>Cuenta de correo de CINDEC (por definir con el asesor).</div>
+  </div>
+</div>
+<div class="note" style="margin-top:14px">Durante el desarrollo, React corre en su propio servidor de pruebas de Vite (puerto 5173) y llama a la API en el 4000; en la implementación final ambos quedan servidos por el mismo proceso Node.js.</div>
+</body></html>

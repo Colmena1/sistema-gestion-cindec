@@ -1,0 +1,59 @@
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css"></head><body>
+<h1>Figura 1. Arquitectura general del sistema</h1>
+<div class="sub">Sistema Integral de Gestión de Capacitación y Certificación Digital — CINDEC · Alcance V1 · Cliente-servidor en tres capas</div>
+
+<div class="layer pres">
+  <div class="tag">Capa de presentación (cliente) <span class="r">Navegador web: Chrome · Edge · Firefox (RNF-01, RNF-02)</span></div>
+  <div class="row">
+    <div class="box"><b>Aplicación React (SPA, Vite)</b>Pantallas por módulo y por rol. Se carga una sola vez y cambia de vista sin recargar la página.</div>
+    <div class="box"><b>Rutas protegidas por rol</b>Cada rol ve solo su menú y sus pantallas (RNF-13).</div>
+    <div class="box"><b>Validación de formularios</b>Primera validación antes de enviar al servidor (RNF-09, RNF-12).</div>
+    <div class="box"><b>Cliente HTTP</b>Envía las peticiones a la API y adjunta el token de sesión (JWT).</div>
+  </div>
+</div>
+
+<div class="arrow"><span class="a">⇅</span><br>HTTP · JSON (API REST <code>/api/v1/…</code>) · encabezado <code>Authorization: Bearer &lt;JWT&gt;</code></div>
+
+<div class="layer logic">
+  <div class="tag">Capa de lógica de negocio (servidor) <span class="r">Node.js + Express · monolito modular</span></div>
+  <div class="lbl">Componentes transversales (se aplican a todos los módulos)</div>
+  <div class="row">
+    <div class="box mod"><b>Autenticación</b><small>JWT + bcrypt</small></div>
+    <div class="box mod"><b>Autorización</b><small>por rol (RNF-03/04)</small></div>
+    <div class="box mod"><b>Validación</b><small>de datos (RNF-09)</small></div>
+    <div class="box mod"><b>Auditoría</b><small>quién y cuándo (RNF-07)</small></div>
+    <div class="box mod"><b>Manejo de errores</b><small>respuestas uniformes</small></div>
+  </div>
+  <div class="lbl">Módulos funcionales (uno por dominio — RNF-17)</div>
+  <div class="row">
+    <div class="box mod"><b>Usuarios</b><small>RF-USR</small></div>
+    <div class="box mod"><b>Cursos, grupos y participantes</b><small>RF-CUR</small></div>
+    <div class="box mod"><b>Aprendizaje</b><small>RF-APR</small></div>
+    <div class="box mod"><b>Evaluaciones</b><small>RF-EVA</small></div>
+    <div class="box mod"><b>Certificaciones</b><small>RF-CERT</small></div>
+    <div class="box mod"><b>Reportes</b><small>RF-REP</small></div>
+    <div class="box mod"><b>Notificaciones</b><small>RF-NOT</small></div>
+  </div>
+</div>
+
+<div class="row" style="gap:0">
+  <div class="arrow" style="flex:2"><span class="a">⇅</span><br>Sequelize (ORM) · SQL</div>
+  <div class="arrow" style="flex:1"><span class="a">⇅</span><br>Lectura / escritura de archivos</div>
+  <div class="arrow" style="flex:1"><span class="a">↓</span><br>SMTP (requiere internet)</div>
+</div>
+
+<div class="row" style="align-items:stretch">
+  <div class="layer data" style="flex:3">
+    <div class="tag">Capa de datos</div>
+    <div class="row">
+      <div class="box" style="flex:2"><b>Base de datos MySQL (<code>cindec_db</code>)</b>Usuarios, roles, cursos, grupos, inscripciones, asistencia, evaluaciones e intentos, trámites de certificación, bitácora de auditoría. Esquema versionado con migraciones.</div>
+      <div class="box"><b>Almacenamiento de archivos</b>Carpeta local del servidor: materiales, evidencias y PDF oficiales de CONOCER. En BD solo se guarda la ruta. Se descargan solo con sesión válida (RNF-06).</div>
+    </div>
+  </div>
+  <div class="layer ext" style="flex:1">
+    <div class="tag">Servicios externos</div>
+    <div class="box" style="margin-bottom:8px"><b>Servidor de correo (SMTP)</b>Confirmaciones, recordatorios y recuperación de contraseña. Única dependencia externa de V1.</div>
+    <div class="box" style="border-style:dashed"><b>CONOCER</b><small>Sin integración. El trámite se hace fuera del sistema; aquí solo se registra su seguimiento y se guarda el PDF.</small></div>
+  </div>
+</div>
+</body></html>

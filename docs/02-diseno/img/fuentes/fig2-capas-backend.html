@@ -1,0 +1,36 @@
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="base.css">
+<style>
+.flow { display: flex; flex-direction: column; align-items: stretch; }
+.step { display: grid; grid-template-columns: 230px 1fr 280px; gap: 0; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #fff; overflow: hidden; }
+.step .n { padding: 11px 14px; font-weight: 700; font-size: 14px; border-right: 1.5px solid #e5e7eb; }
+.step .n code { display:block; font-weight: 500; font-size: 11.5px; color:#6b7280; margin-top:2px; }
+.step .d { padding: 11px 14px; font-size: 12.5px; line-height: 1.45; }
+.step .e { padding: 11px 14px; font-size: 12px; line-height: 1.4; background: #f8fafc; border-left: 1.5px solid #e5e7eb; color: #374151; }
+.step .e b { color:#111827; }
+.c1 .n { background:#eff6ff; color:#1d4ed8; } .c2 .n { background:#f5f3ff; color:#6d28d9; }
+.c3 .n { background:#ecfdf5; color:#047857; } .c4 .n { background:#ecfdf5; color:#047857; }
+.c5 .n { background:#fffbeb; color:#b45309; } .c6 .n { background:#fffbeb; color:#b45309; }
+.dn { text-align:center; font-size:18px; color:#6b7280; line-height: 1; padding: 3px 0; }
+.rule { margin-top: 16px; border: 2px solid #dc2626; background:#fef2f2; border-radius: 8px; padding: 10px 14px; font-size: 13px; }
+.rule b { color:#b91c1c; }
+.hdr { display: grid; grid-template-columns: 230px 1fr 280px; font-size: 11.5px; font-weight: 700; color:#6b7280; text-transform: uppercase; letter-spacing:.04em; padding: 0 0 6px; }
+.hdr div { padding: 0 14px; }
+</style></head><body>
+<h1>Figura 2. Capas internas del backend y recorrido de una petición</h1>
+<div class="sub">Cada petición atraviesa las mismas capas, en el mismo orden. Ejemplo: un coordinador inscribe a un participante en un grupo (RF-CUR-04).</div>
+<div class="hdr"><div>Capa</div><div>Responsabilidad</div><div>En el ejemplo de inscripción</div></div>
+<div class="flow">
+  <div class="step c1"><div class="n">1. Rutas<code>routes</code></div><div class="d">Define qué URL y qué método HTTP atiende cada módulo, y en qué orden se aplican los middlewares.</div><div class="e"><b>POST</b> /api/v1/grupos/:id/inscripciones</div></div>
+  <div class="dn">↓</div>
+  <div class="step c2"><div class="n">2. Middlewares<code>middlewares</code></div><div class="d">Filtros previos: verifica el token (¿hay sesión?), el rol (¿tiene permiso?) y que los datos de entrada sean válidos. Si algo falla, la petición se detiene aquí.</div><div class="e">Token válido · rol = Coordinador o Administrador · <i>participanteId</i> presente → si no: <b>401 / 403 / 400</b></div></div>
+  <div class="dn">↓</div>
+  <div class="step c3"><div class="n">3. Controladores<code>controllers</code></div><div class="d">Traducen HTTP ↔ lógica: toman los datos de la petición, llaman al servicio y devuelven la respuesta con su código HTTP. No contienen reglas de negocio.</div><div class="e">Llama a <i>inscribirParticipante(grupoId, participanteId, usuario)</i></div></div>
+  <div class="dn">↓</div>
+  <div class="step c4"><div class="n">4. Servicios<code>services</code></div><div class="d">Toda la lógica de negocio: reglas, validaciones de negocio, transacciones y registro de auditoría. Es la única capa que usa los modelos.</div><div class="e">¿Grupo planeado o en curso? ¿Cupo &gt; 0? → inscribe y audita · sin cupo → <b>409 Conflicto</b></div></div>
+  <div class="dn">↓</div>
+  <div class="step c5"><div class="n">5. Modelos<code>models</code> (Sequelize)</div><div class="d">Representan las tablas y sus relaciones; Sequelize genera el SQL. Las migraciones mantienen el historial de cambios del esquema.</div><div class="e">Grupo, Inscripcion, Participante, Auditoria</div></div>
+  <div class="dn">↓</div>
+  <div class="step c6"><div class="n">6. Base de datos<code>MySQL</code></div><div class="d">Almacena la información con llaves foráneas y restricciones que protegen la integridad (RNF-08).</div><div class="e">INSERT en <i>inscripciones</i> + INSERT en <i>auditoria</i>, dentro de una transacción</div></div>
+</div>
+<div class="rule"><b>Regla de diseño (RNF-16):</b> los controladores nunca acceden directamente a los modelos ni a la base de datos; siempre pasan por un servicio. Así la lógica queda en un solo lugar y se puede probar sin HTTP.</div>
+</body></html>

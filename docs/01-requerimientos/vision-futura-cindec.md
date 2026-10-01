@@ -37,6 +37,8 @@ Ir más allá de "consultar y descargar materiales de un curso" (que sí está e
 - Reporte de ingresos por curso o servicio (depende de que exista el módulo de facturación).
 - Reportes de desempeño y conversión comercial (más cercano a un CRM que a un sistema de gestión de capacitación/certificación).
 
-## Rol "Empresa cliente" en su forma completa
+## Rol "Empresa cliente" (completo — ya no hay versión acotada en V1)
 
-En V1 se incluye una versión acotada de este rol: una empresa puede ver el avance/resultados de sus propios trabajadores, filtrado por una relación simple participante-empresa (ver `requerimientos.md`, RF-USR-02). La versión completa —donde la empresa se auto-registra y administra su propia cuenta, cursos y usuarios sin intervención de CINDEC— es parte de la visión SaaS y queda para después.
+Inicialmente se había planeado incluir en V1 una versión acotada de este rol (una empresa consultando el avance/resultados de sus propios trabajadores). El 2026-10-01 se decidió sacar el rol completo de V1 por restricción de tiempo de desarrollo: ni la versión acotada ni la completa se implementan durante la residencia. En V1, todo el seguimiento de participantes por empresa lo realiza el personal de CINDEC (coordinador/administrador) a través de los módulos existentes, sin que la empresa tenga acceso propio al sistema.
+
+La visión completa del rol —donde la empresa se auto-registra y administra su propia cuenta, cursos y usuarios sin intervención de CINDEC, incluyendo el acceso de solo consulta a sus propios resultados— queda íntegramente para después, como parte de la visión SaaS.
