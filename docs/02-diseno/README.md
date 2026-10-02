@@ -14,8 +14,8 @@ Contenido esperado (entregable "Diseño completo del sistema" del Gantt):
 | # | Actividad del cronograma | Documento | Estado |
 |---|---|---|---|
 | 1 | Diseño de la arquitectura del sistema | [`01-arquitectura.md`](01-arquitectura.md) · [ADR-0003](../00-decisiones/ADR-0003-estilo-arquitectonico.md) | Aprobado (2026-10-01) |
-| 2 | Modelo entidad-relación | — | Pendiente |
-| 3 | Diseño de la base de datos (y diccionario de datos) | — | Pendiente |
+| 2 | Modelo entidad-relación | [`02-modelo-entidad-relacion.md`](02-modelo-entidad-relacion.md) | Aprobado (2026-10-01) |
+| 3 | Diseño de la base de datos (lógico, normalización, físico y diccionario de datos) | [`03-diseno-logico.md`](03-diseno-logico.md) | En curso: parte lógica en revisión |
 | 4 | Diagramas UML | — | Pendiente |
 | 5 | Prototipos de interfaces | — | Pendiente |
 | 6 | Entregable: Diseño completo del sistema | — | Pendiente |

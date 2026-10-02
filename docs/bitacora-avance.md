@@ -77,7 +77,12 @@ Formato sugerido por entrada:
 - Paso 1 de 6 — Diseño de la arquitectura del sistema: terminado y aprobado (`docs/02-diseno/01-arquitectura.md`). Cliente-servidor en tres capas (React SPA → API REST Express → MySQL + almacenamiento de archivos), componentes transversales (autenticación JWT, autorización por rol, validación, auditoría, manejo de errores), convenciones de la API, diagrama de despliegue local y trazabilidad RNF → decisión. 3 figuras en `docs/02-diseno/img/`.
 - ADR-0003: se adopta un monolito modular (carpetas por módulo en `backend/src/modules/`), descartando vistas en servidor y microservicios. La reorganización de carpetas se aplica al iniciar Desarrollo (semana 41).
 
+- Paso 2 de 6 — Modelo entidad-relación: terminado y aprobado (`docs/02-diseno/02-modelo-entidad-relacion.md`, figura 4). 20 entidades, 24 relaciones; los 4 estados de RF-EVA-03 quedan en atributos distintos; el instrumento de evaluación pertenece al estándar.
+- Decisiones del residente: se mantiene un rol por usuario (RF-USR-02) y un estándar por curso (RF-CUR-01), como dice el ERS.
+- Paso 3 iniciado: diseño lógico con 26 llaves foráneas (`03-diseno-logico.md`, figura 5), en revisión.
+
 **Pendiente (nuevo):**
+- Validar con Juan Alexis: CURP, empresa de procedencia, documentos del participante y tipos de instrumento de evaluación (marcados [VALIDAR] en el E-R).
 - Preguntar a Juan Alexis en qué equipo se instalará la versión local para validación y qué cuenta de correo se usará para el SMTP.
 
 **Próxima semana:**
