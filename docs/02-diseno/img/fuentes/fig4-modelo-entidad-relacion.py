@@ -22,8 +22,8 @@ ent('ROL', 'ROL', 'usr', C[0], R0, [('id_rol','PK'),('nombre','U'),('descripcion
 ent('USU', 'USUARIO', 'usr', C[0], R1, [('id_usuario','PK'),('nombre',''),('apellidos',''),('correo','U'),('contrasena_hash',''),('activo',''),('fecha_registro',''),('ultimo_acceso','')])
 ent('TOK', 'TOKEN_RECUPERACION', 'usr', C[0], R2, [('id_token','PK'),('token_hash',''),('fecha_expiracion',''),('usado','')])
 ent('AUD', 'AUDITORIA', 'usr', C[0], 814, [('id_auditoria','PK'),('fecha_hora',''),('accion',''),('entidad_afectada',''),('id_registro_afectado',''),('detalle','')])
-ent('PAR', 'PARTICIPANTE', 'cur', C[1], R1, [('id_participante','PK'),('telefono',''),('curp','V'),('empresa_procedencia','V'),('origen_registro',''),('fecha_registro','')])
-ent('DOP', 'DOCUMENTO_PARTICIPANTE', 'cur', C[1], R2, [('id_documento','PK'),('tipo_documento','V'),('nombre_archivo',''),('ruta_archivo',''),('fecha_carga','')])
+ent('PAR', 'PARTICIPANTE', 'cur', C[1], R1, [('id_participante','PK'),('telefono',''),('curp','U'),('empresa_procedencia',''),('origen_registro',''),('fecha_registro','')])
+ent('DOP', 'DOCUMENTO_PARTICIPANTE', 'cur', C[1], R2, [('id_documento','PK'),('tipo_documento',''),('nombre_archivo',''),('ruta_archivo',''),('fecha_carga','')])
 ent('CON', 'CONSULTA_MATERIAL', 'apr', C[1], R0, [('id_consulta','PK'),('fecha_primera_consulta',''),('fecha_ultima_consulta','')])
 ent('MAT', 'MATERIAL', 'apr', C[2], R0, [('id_material','PK'),('titulo',''),('tipo',''),('ruta_archivo',''),('url_video',''),('orden',''),('fecha_carga','')])
 ent('INS', 'INSCRIPCION', 'cur', C[2], R1, [('id_inscripcion','PK'),('fecha_inscripcion',''),('estatus',''),('es_refuerzo','')])
@@ -32,7 +32,7 @@ ent('CUR', 'CURSO', 'cur', C[3], R0, [('id_curso','PK'),('nombre',''),('descripc
 ent('GRU', 'GRUPO', 'cur', C[3], R1, [('id_grupo','PK'),('clave','U'),('fecha_inicio',''),('fecha_fin',''),('cupo',''),('modalidad',''),('estatus',''),('horario',''),('enlace_videoconferencia','')])
 ent('SES', 'SESION', 'cur', C[3], R2, [('id_sesion','PK'),('fecha',''),('hora_inicio',''),('hora_fin',''),('tema','')])
 ent('EST', 'ESTANDAR_COMPETENCIA', 'cur', C[4], R0, [('id_estandar','PK'),('codigo','U'),('nombre',''),('descripcion',''),('activo','')])
-ent('EVA', 'EVALUACION', 'eva', C[4], R1, [('id_evaluacion','PK'),('nombre',''),('descripcion',''),('tipo_instrumento','V'),('calificacion_minima',''),('activa','')])
+ent('EVA', 'EVALUACION', 'eva', C[4], R1, [('id_evaluacion','PK'),('nombre',''),('descripcion',''),('tipo_instrumento',''),('calificacion_minima',''),('activa','')])
 ent('INT', 'INTENTO_EVALUACION', 'eva', C[4], R2, [('id_intento','PK'),('numero_intento',''),('fecha_aplicacion',''),('calificacion',''),('estatus',''),('dictamen',''),('observaciones','')])
 ent('EVI', 'EVIDENCIA', 'eva', C[5], R2, [('id_evidencia','PK'),('descripcion',''),('ruta_archivo',''),('fecha_carga','')])
 ent('TRA', 'TRAMITE_CERTIFICACION', 'cer', C[5], R1, [('id_tramite','PK'),('folio_interno','U'),('fecha_solicitud',''),('estatus','')])
@@ -124,7 +124,7 @@ legend = f'''<div class="lg" style="left:{C[2]}px;top:925px">
 <div class="lt">Notación (pata de gallo / crow's foot) — se lee desde la entidad del lado opuesto</div>
 <div class="ls"><span>{legsym('one')} exactamente uno</span><span>{legsym('zone')} cero o uno</span><span>{legsym('zmany')} cero o muchos</span><span>{legsym('many')} uno o muchos</span></div>
 <div class="ls" style="margin-top:6px">{legend_mod}</div>
-<div class="ls" style="margin-top:6px"><span><span class="tg pk">PK</span> identificador</span><span><span class="tg u">U</span> valor único</span><span><span class="tg v">validar</span> pendiente de confirmar con CINDEC</span></div>
+<div class="ls" style="margin-top:6px"><span><span class="tg pk">PK</span> identificador</span><span><span class="tg u">U</span> valor único</span></div>
 </div>'''
 
 W_CANVAS = C[6] + W + 40

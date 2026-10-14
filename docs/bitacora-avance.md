@@ -82,8 +82,20 @@ Formato sugerido por entrada:
 - Paso 3 iniciado: diseño lógico con 26 llaves foráneas (`03-diseno-logico.md`, figura 5), en revisión.
 
 **Pendiente (nuevo):**
-- Validar con Juan Alexis: CURP, empresa de procedencia, documentos del participante y tipos de instrumento de evaluación (marcados [VALIDAR] en el E-R).
 - Preguntar a Juan Alexis en qué equipo se instalará la versión local para validación y qué cuenta de correo se usará para el SMTP.
 
 **Próxima semana:**
 - Continuar Diseño: modelo entidad-relación, diseño de BD y diccionario de datos, diagramas UML, prototipos.
+
+## Semana 42 (12-oct al 18-oct-2026) — Fase: Diseño del Sistema
+
+**Hecho:**
+- Se resolvieron los puntos [VALIDAR] del modelo E-R con el *Manual del participante — Red de prestadores de servicios* de CONOCER entregado por CINDEC (`otros/CINDEC, Formatos.pdf`): CURP (única por participante), empresa de procedencia (opcional, "información laboral" de la ficha de registro), catálogo de documentos del participante, tipos de instrumento (guía de observación, lista de cotejo, cuestionario) y término oficial del dictamen ("Todavía no competente").
+- Se corrigió `02-modelo-entidad-relacion.md`: el commit anterior había guardado por error la versión borrador del documento.
+
+**Pendiente:**
+- Revisión del residente de la parte lógica del Paso 3 (`03-diseno-logico.md`, figura 5).
+- Decidir si se registra el consentimiento para el RENAP (lo pide la ficha de registro de CONOCER); no se agregó al modelo.
+
+**Próxima semana:**
+- Paso 3: normalización y diseño físico (tipos de dato, índices, diccionario de datos).

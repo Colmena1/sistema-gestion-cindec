@@ -2,7 +2,7 @@
 
 > Fase: **Diseño del Sistema** · Actividad del cronograma: *Elaboración del modelo entidad-relación*.
 > Base: ERS v1.1 (`docs/01-requerimientos/ERS-CINDEC.docx`) y arquitectura aprobada (`01-arquitectura.md`).
-> Estado: **borrador para revisión del residente** (2026-10-01).
+> Estado: **aprobado por el residente** (2026-10-01). Actualizado el 2026-10-14: se resolvieron los puntos pendientes con el *Manual del participante — Red de prestadores de servicios* de CONOCER entregado por CINDEC (`otros/CINDEC, Formatos.pdf`).
 
 ## 1. Propósito y alcance
 
@@ -16,7 +16,7 @@ Notación: **pata de gallo (crow's foot)**. Cada relación se lee desde la entid
 
 ## 3. Entidades
 
-20 entidades, agrupadas por el módulo del ERS al que pertenecen. **PK** = identificador; **U** = valor único; **[VALIDAR]** = atributo que se confirma con CINDEC.
+20 entidades, agrupadas por el módulo del ERS al que pertenecen. **PK** = identificador; **U** = valor único.
 
 ### 3.1 Usuarios
 
@@ -35,8 +35,8 @@ Notación: **pata de gallo (crow's foot)**. Cada relación se lee desde la entid
 | **CURSO** | Plantilla o catálogo: *qué* se enseña. No tiene fechas ni cupo. | id_curso (PK), nombre, descripcion, activo | RF-CUR-01 |
 | **GRUPO** | Oferta concreta de un curso: *cuándo*, *con quién* y *con qué cupo*. | id_grupo (PK), clave (U), fecha_inicio, fecha_fin, cupo, modalidad (presencial / en línea / mixta), estatus (planeado / en curso / concluido / cancelado), horario, enlace_videoconferencia | RF-CUR-02, 08, 09 |
 | **SESION** | Cada clase programada de un grupo; es la base de la asistencia y de los recordatorios de "próxima sesión". | id_sesion (PK), fecha, hora_inicio, hora_fin, tema | RF-CUR-09, 10, RF-NOT-01 |
-| **PARTICIPANTE** | Datos adicionales de un usuario con rol Participante. | id_participante (PK), telefono, curp [VALIDAR], empresa_procedencia [VALIDAR], origen_registro (autorregistro / alta por coordinador), fecha_registro | RF-CUR-03 |
-| **DOCUMENTO_PARTICIPANTE** | Documentación que el participante entrega al registrarse. | id_documento (PK), tipo_documento [VALIDAR], nombre_archivo, ruta_archivo, fecha_carga | RF-CUR-03 |
+| **PARTICIPANTE** | Datos adicionales de un usuario con rol Participante. | id_participante (PK), telefono, curp (U), empresa_procedencia (opcional), origen_registro (autorregistro / alta por coordinador), fecha_registro | RF-CUR-03 |
+| **DOCUMENTO_PARTICIPANTE** | Documentación que el participante entrega al registrarse. | id_documento (PK), tipo_documento (identificación oficial: INE / cartilla militar / cédula profesional / pasaporte; fotografía digital; ficha de registro firmada; identificación del padre o tutor, si es menor de edad), nombre_archivo, ruta_archivo, fecha_carga | RF-CUR-03 |
 | **INSCRIPCION** | Un participante dentro de un grupo. Resuelve la relación muchos-a-muchos participante ↔ grupo. | id_inscripcion (PK), fecha_inscripcion, estatus (inscrito / capacitación concluida / baja), es_refuerzo | RF-CUR-04, 06, RF-EVA-03, 04 |
 | **ASISTENCIA** | Si un inscrito asistió o no a una sesión. | id_asistencia (PK), asistio, observaciones | RF-CUR-10 |
 
@@ -51,8 +51,8 @@ Notación: **pata de gallo (crow's foot)**. Cada relación se lee desde la entid
 
 | Entidad | Qué representa | Atributos | RF |
 |---|---|---|---|
-| **EVALUACION** | Instrumento de evaluación de un estándar, con su calificación mínima aprobatoria. | id_evaluacion (PK), nombre, descripcion, tipo_instrumento [VALIDAR], calificacion_minima (0-100), activa | RF-EVA-01, 04 |
-| **INTENTO_EVALUACION** | Cada vez que un participante presenta una evaluación. Los reintentos son registros nuevos; nunca se sobrescribe un intento anterior. | id_intento (PK), numero_intento, fecha_aplicacion, calificacion (0-100), estatus (pendiente / aprobada / no aprobada), dictamen (competente / todavía en proceso), observaciones | RF-EVA-02, 03, 04, 05, RF-CERT-01 |
+| **EVALUACION** | Instrumento de evaluación de un estándar, con su calificación mínima aprobatoria. | id_evaluacion (PK), nombre, descripcion, tipo_instrumento (guía de observación / lista de cotejo / cuestionario), calificacion_minima (0-100), activa | RF-EVA-01, 04 |
+| **INTENTO_EVALUACION** | Cada vez que un participante presenta una evaluación. Los reintentos son registros nuevos; nunca se sobrescribe un intento anterior. | id_intento (PK), numero_intento, fecha_aplicacion, calificacion (0-100), estatus (pendiente / aprobada / no aprobada), dictamen (competente / todavía no competente), observaciones | RF-EVA-02, 03, 04, 05, RF-CERT-01 |
 | **EVIDENCIA** | Archivo o descripción que respalda un intento. | id_evidencia (PK), descripcion, ruta_archivo, fecha_carga | RF-EVA-02 |
 
 ### 3.5 Certificaciones
@@ -97,14 +97,14 @@ Notación: **pata de gallo (crow's foot)**. Cada relación se lee desde la entid
 2. **Los 4 estados de RF-EVA-03 viven en lugares distintos**, para que no se confundan:
    - *Capacitación concluida* → `INSCRIPCION.estatus`
    - *Evaluación aprobada / no aprobada* → `INTENTO_EVALUACION.estatus` (calificación comparada contra `calificacion_minima`)
-   - *Competente / todavía en proceso* → `INTENTO_EVALUACION.dictamen` (juicio del evaluador, distinto de la calificación)
+   - *Competente / todavía no competente* → `INTENTO_EVALUACION.dictamen` (juicio del evaluador, distinto de la calificación). Se usa el término oficial de CONOCER, "Todavía no competente"; equivale a la "persona todavía en proceso" del ERS.
    - *Certificación emitida* → `TRAMITE_CERTIFICACION.estatus`
 3. **El instrumento de evaluación pertenece al estándar**, no al curso. CONOCER evalúa por estándar, y la calificación mínima "depende de cada estándar" (dato de Juan Alexis). Como cada curso apunta a un estándar, desde un grupo se llega al instrumento que le corresponde.
 4. **Reintentos y refuerzo** (RF-EVA-04). Cada intento es un registro nuevo con `numero_intento`, así que el historial completo se conserva. Si el participante recursa como refuerzo, se crea una **nueva INSCRIPCION** en otro grupo con `es_refuerzo = sí`.
 5. **Instructor y evaluador son usuarios con ese rol**, no entidades aparte: sus datos ya están en USUARIO, y un participante solo necesita ficha extra porque tiene datos propios (teléfono, documentos).
 6. **Archivos fuera de la BD**. Materiales, evidencias, documentos del participante y PDF de CONOCER se guardan en la carpeta `uploads/`; la entidad solo guarda la ruta y sus datos (decisión de arquitectura, sección 3.3).
 7. **Datos del certificado sin duplicar** (RF-CERT-04). El nombre del participante y el estándar del documento se obtienen por las relaciones (documento → trámite → intento → inscripción → participante / grupo → curso → estándar). Solo se guardan los datos propios del documento (folio CONOCER, tipo, emisión, vigencia, entidad).
-8. **Sin multiempresa en V1** (RNF-21). No hay entidad EMPRESA. `empresa_procedencia` es solo un dato informativo del participante [VALIDAR]. Si en el futuro se convierte en una entidad, el resto del modelo no cambia.
+8. **Sin multiempresa en V1** (RNF-21). No hay entidad EMPRESA. `empresa_procedencia` es solo un dato informativo y opcional del participante (corresponde a la "información laboral" que pide la ficha de registro de CONOCER). Si en el futuro se convierte en una entidad, el resto del modelo no cambia.
 9. **Reportes** (RF-REP) y **notificaciones** (RF-NOT-01) no necesitan entidades propias: los reportes son consultas sobre estas tablas, y los correos se generan a partir de SESION, INTENTO y TRAMITE.
 
 ## 6. Cobertura de requerimientos
@@ -118,11 +118,15 @@ Notación: **pata de gallo (crow's foot)**. Cada relación se lee desde la entid
 | Certificaciones | RF-CERT-01 a 07 |
 | Reportes / Notificaciones | Consultas y procesos sobre las entidades anteriores (decisión 9) |
 
-## 7. Puntos a validar con CINDEC (Juan Alexis)
+## 7. Puntos resueltos
 
-- [ ] **CURP del participante:** ¿se captura en el registro? Normalmente CONOCER la pide para el trámite de certificación.
-- [ ] **Empresa de procedencia:** ¿sirve guardarla como dato informativo (texto libre)?
-- [ ] **Documentación del participante:** ¿qué documentos se piden exactamente (p. ej. identificación, comprobante)? Así se arma el catálogo de `tipo_documento`.
-- [ ] **Tipo de instrumento de evaluación:** ¿qué tipos maneja CINDEC (cuestionario, guía de observación, lista de cotejo…)?
-- [ ] **Un rol por usuario:** ¿una misma persona puede ser instructor y evaluador al mismo tiempo? Si sí, ROL–USUARIO pasaría a ser muchos-a-muchos.
-- [ ] Revisión de este borrador por el residente.
+Fuente de los puntos 1 a 4: *Manual del participante — Red de prestadores de servicios* (CONOCER), entregado por CINDEC (`otros/CINDEC, Formatos.pdf`).
+
+- [x] **CURP del participante:** se captura y es única por persona. La ficha de registro del candidato pide su información de identificación, y CONOCER exige que la fotografía del candidato se nombre con su CURP (manual, p. 36).
+- [x] **Empresa de procedencia:** se conserva como dato opcional. La ficha de registro de CONOCER pide la "información laboral" del candidato (manual, p. 35).
+- [x] **Documentación del participante:** copia de una identificación oficial (INE, cartilla militar, cédula profesional o pasaporte), fotografía digital (JPG, BMP o PNG, máximo 300 KB, a color y de frente; la ECE decide si la pide) y ficha de registro firmada. Si el candidato es menor de edad, también se pide la identificación del padre o tutor (manual, pp. 35-36). Con esto se arma el catálogo de `tipo_documento`.
+- [x] **Tipo de instrumento de evaluación:** guía de observación, lista de cotejo y cuestionario (manual, pp. 53-54).
+- [x] **Término del dictamen:** CONOCER emite el juicio "Competente" o "Todavía no competente" (manual, p. 70).
+- [x] **Un rol por usuario:** se mantiene como dice el ERS (RF-USR-02). Decidido por el residente el 2026-10-01. Si CINDEC necesitara que una persona tenga dos roles, el cambio sería una tabla intermedia USUARIO_ROL.
+- [x] **Curso ↔ estándar:** se mantiene "un curso se basa en un estándar; un estándar puede usarse en varios cursos" (RF-CUR-01). Decidido por el residente el 2026-10-01. Si CINDEC vendiera cursos que cubren varios estándares, el cambio sería una tabla intermedia CURSO_ESTANDAR.
+- [x] Revisión de este documento por el residente (aprobado 2026-10-01).
