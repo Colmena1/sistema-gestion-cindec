@@ -92,9 +92,10 @@ Formato sugerido por entrada:
 **Hecho:**
 - Se resolvieron los puntos [VALIDAR] del modelo E-R con el *Manual del participante — Red de prestadores de servicios* de CONOCER entregado por CINDEC (`otros/CINDEC, Formatos.pdf`): CURP (única por participante), empresa de procedencia (opcional, "información laboral" de la ficha de registro), catálogo de documentos del participante, tipos de instrumento (guía de observación, lista de cotejo, cuestionario) y término oficial del dictamen ("Todavía no competente").
 - Se corrigió `02-modelo-entidad-relacion.md`: el commit anterior había guardado por error la versión borrador del documento.
+- Paso 3, parte lógica (`03-diseno-logico.md`, figura 5): aprobada por el residente.
+- Paso 3, normalización (`03-2-normalizacion.md`): aprobada. Las 20 tablas cumplen 1FN, 2FN y 3FN; se eliminaron `PARTICIPANTE.fecha_registro` y `GRUPO.horario` (redundantes) y se documentaron dos excepciones: el estatus de INTENTO_EVALUACION y el de TRAMITE_CERTIFICACION. Figuras 4 y 5 actualizadas. Versión visual en `Normalizacion-BD-CINDEC.xlsx`.
 
 **Pendiente:**
-- Revisión del residente de la parte lógica del Paso 3 (`03-diseno-logico.md`, figura 5).
 - Decidir si se registra el consentimiento para el RENAP (lo pide la ficha de registro de CONOCER); no se agregó al modelo.
 
 **Próxima semana:**

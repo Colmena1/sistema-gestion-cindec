@@ -33,9 +33,9 @@ Notación: **pata de gallo (crow's foot)**. Cada relación se lee desde la entid
 |---|---|---|---|
 | **ESTANDAR_COMPETENCIA** | Estándar CONOCER que CINDEC evalúa (p. ej. EC0110.02). | id_estandar (PK), codigo (U), nombre, descripcion, activo | RF-CUR-01, RF-EVA-01 |
 | **CURSO** | Plantilla o catálogo: *qué* se enseña. No tiene fechas ni cupo. | id_curso (PK), nombre, descripcion, activo | RF-CUR-01 |
-| **GRUPO** | Oferta concreta de un curso: *cuándo*, *con quién* y *con qué cupo*. | id_grupo (PK), clave (U), fecha_inicio, fecha_fin, cupo, modalidad (presencial / en línea / mixta), estatus (planeado / en curso / concluido / cancelado), horario, enlace_videoconferencia | RF-CUR-02, 08, 09 |
+| **GRUPO** | Oferta concreta de un curso: *cuándo*, *con quién* y *con qué cupo*. | id_grupo (PK), clave (U), fecha_inicio, fecha_fin, cupo, modalidad (presencial / en línea / mixta), estatus (planeado / en curso / concluido / cancelado), enlace_videoconferencia | RF-CUR-02, 08, 09 |
 | **SESION** | Cada clase programada de un grupo; es la base de la asistencia y de los recordatorios de "próxima sesión". | id_sesion (PK), fecha, hora_inicio, hora_fin, tema | RF-CUR-09, 10, RF-NOT-01 |
-| **PARTICIPANTE** | Datos adicionales de un usuario con rol Participante. | id_participante (PK), telefono, curp (U), empresa_procedencia (opcional), origen_registro (autorregistro / alta por coordinador), fecha_registro | RF-CUR-03 |
+| **PARTICIPANTE** | Datos adicionales de un usuario con rol Participante. | id_participante (PK), telefono, curp (U), empresa_procedencia (opcional), origen_registro (autorregistro / alta por coordinador) | RF-CUR-03 |
 | **DOCUMENTO_PARTICIPANTE** | Documentación que el participante entrega al registrarse. | id_documento (PK), tipo_documento (identificación oficial: INE / cartilla militar / cédula profesional / pasaporte; fotografía digital; ficha de registro firmada; identificación del padre o tutor, si es menor de edad), nombre_archivo, ruta_archivo, fecha_carga | RF-CUR-03 |
 | **INSCRIPCION** | Un participante dentro de un grupo. Resuelve la relación muchos-a-muchos participante ↔ grupo. | id_inscripcion (PK), fecha_inscripcion, estatus (inscrito / capacitación concluida / baja), es_refuerzo | RF-CUR-04, 06, RF-EVA-03, 04 |
 | **ASISTENCIA** | Si un inscrito asistió o no a una sesión. | id_asistencia (PK), asistio, observaciones | RF-CUR-10 |
@@ -130,3 +130,4 @@ Fuente de los puntos 1 a 4: *Manual del participante — Red de prestadores de s
 - [x] **Un rol por usuario:** se mantiene como dice el ERS (RF-USR-02). Decidido por el residente el 2026-10-01. Si CINDEC necesitara que una persona tenga dos roles, el cambio sería una tabla intermedia USUARIO_ROL.
 - [x] **Curso ↔ estándar:** se mantiene "un curso se basa en un estándar; un estándar puede usarse en varios cursos" (RF-CUR-01). Decidido por el residente el 2026-10-01. Si CINDEC vendiera cursos que cubren varios estándares, el cambio sería una tabla intermedia CURSO_ESTANDAR.
 - [x] Revisión de este documento por el residente (aprobado 2026-10-01).
+- [x] **Normalización (2026-10-15):** se eliminaron `PARTICIPANTE.fecha_registro` (repetía `USUARIO.fecha_registro`) y `GRUPO.horario` (se obtiene de SESION). Ver `03-2-normalizacion.md`.

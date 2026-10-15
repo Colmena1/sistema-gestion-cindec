@@ -2,7 +2,7 @@
 
 > Fase: **Diseño del Sistema** · Actividad del cronograma: *Diseño de la base de datos*.
 > Base: modelo entidad-relación aprobado (`02-modelo-entidad-relacion.md`, 2026-10-01).
-> Estado: **borrador para revisión del residente** (2026-10-01).
+> Estado: **aprobado por el residente** (2026-10-14). Actualizado el 2026-10-15: la figura 5 ya no incluye `PARTICIPANTE.fecha_registro` ni `GRUPO.horario` (ver `03-2-normalizacion.md`).
 > Este paso tiene tres partes: **1. diseño lógico** (este documento), 2. normalización y 3. diseño físico (tipos de dato, índices y diccionario de datos).
 
 ## 1. Qué se hizo
