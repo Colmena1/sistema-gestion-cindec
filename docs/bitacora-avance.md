@@ -107,6 +107,8 @@ Formato sugerido por entrada:
 - Paso 3, diseño físico: la base de datos `cindec_db` se construyó en MySQL 8.0.42 (MySQL Workbench) con 9 scripts en `docs/02-diseno/sql/`: creación de la base (utf8mb4, InnoDB), las 20 tablas por módulo con sus 26 llaves foráneas, UNIQUE, CHECK y ENUM, 5 índices adicionales, datos de prueba ficticios y pruebas de reglas.
 - Pruebas: 8 operaciones inválidas fueron rechazadas por la propia base de datos (duplicados, FK inexistente, borrado con RESTRICT, CHECK de fechas/calificación/estatus, ENUM) y se comprobó el ON DELETE CASCADE de `token_recuperacion` (RNF-08, RNF-10).
 - Diagrama físico generado con Reverse Engineer de Workbench (`img/fig6-diagrama-fisico.png`, modelo `cindec_db.mwb`) y diccionario de datos (`03-3-diccionario-de-datos.md` y `Diccionario-de-datos-cindec_db.xlsx`).
+- Evidencia de la construcción de la base de datos en Word (`Evidencia-construccion-BD-cindec_db.docx`, 53 figuras y referencias APA).
+- Paso 4, casos de uso: 22 casos de uso y 5 diagramas, uno por módulo (`04-uml-casos-de-uso.md`, figuras 7 a 11), aprobados por el residente.
 - Se decidió usar el MySQL 8.0 local (puerto 3306) en lugar del de XAMPP (MariaDB, 3307); el `.env` del backend se ajusta al iniciar Desarrollo.
 
 **Pendiente:**
