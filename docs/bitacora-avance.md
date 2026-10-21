@@ -111,9 +111,13 @@ Formato sugerido por entrada:
 - Paso 4, casos de uso: 22 casos de uso y 5 diagramas, uno por módulo (`04-uml-casos-de-uso.md`, figuras 7 a 11), aprobados por el residente.
 - Paso 4, diagrama de clases: 20 clases del dominio con atributos, operaciones, asociaciones y composiciones, más 10 enumeraciones que coinciden con los ENUM de la base de datos (`04-2-uml-clases.md`, figuras 12 y 13), aprobado por el residente.
 - Paso 4, diagramas de secuencia (`04-3-uml-secuencia.md`, figuras 14 y 15): inscripción con control de cupo (CU-07 + CU-08) y trámite de certificación con notificación (CU-17 + CU-18 + CU-21), recorriendo las capas de la arquitectura.
+- Paso 4 cerrado: casos de uso, clases y secuencia aprobados.
+- Paso 5, prototipos: inventario de 25 pantallas y mapa de navegación por rol (figura 16); guía de estilo con la identidad de CINDEC (logo y colores entregados por el residente, Nunito Sans, voz de usted; figura 17 y Sistema de diseño CINDEC); 10 wireframes, 11 mockups (incluida la variante sin cupo) y 4 pantallas en el navegador del celular (RNF-02). Imágenes en `docs/02-diseno/img/prototipos/`.
+- Se decidió el autorregistro en tres pasos: Cuenta · Datos personales · Documentos.
 - Se decidió usar el MySQL 8.0 local (puerto 3306) en lugar del de XAMPP (MariaDB, 3307); el `.env` del backend se ajusta al iniciar Desarrollo.
 
 **Pendiente:**
 - Revisión del residente del diccionario de datos.
-- Paso 4 (UML) y Paso 5 (prototipos); 2do reporte parcial del 26 al 30 de octubre.
+- Revisión de los prototipos con Juan Alexis (preguntas en `05-prototipos.md`, sección 5.7).
+- Paso 6: entregable Word *Diseño completo del sistema*; 2do reporte parcial del 26 al 30 de octubre.
 
