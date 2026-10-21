@@ -69,7 +69,7 @@ Formato sugerido por entrada:
 - Se retira por completo el rol "Empresa cliente" de V1 (ni siquiera la versión acotada de solo consulta) por restricción de tiempo de desarrollo. V1 queda con cinco roles. El rol completo se traslada íntegramente a `vision-futura-cindec.md`. Se actualizaron `requerimientos.md` (RF-USR-02, RF-REP-01, casos de uso) y el ERS en consecuencia.
 
 **Pendiente / bloqueos:**
-- Regenerar y re-entregar `ERS-CINDEC.docx` reflejando el corte del rol "Empresa cliente".
+- Regenerar y re-entregar `ERS-CINDEC.docx` reflejando el corte del rol "Empresa cliente". (Corrección hecha el 01-oct en v1.1; v1.2 lista el 21-oct.)
 - Comunicar a Juan Alexis el corte de alcance V1 vs Visión futura (Action Item de ADR-0002, sigue abierto).
 - Confirmar con el asesor académico si el hallazgo de CONOCER como emisor amerita algún ajuste en el anteproyecto ya aprobado (Action Item de ADR-0002, sigue abierto).
 
@@ -114,10 +114,17 @@ Formato sugerido por entrada:
 - Paso 4 cerrado: casos de uso, clases y secuencia aprobados.
 - Paso 5, prototipos: inventario de 25 pantallas y mapa de navegación por rol (figura 16); guía de estilo con la identidad de CINDEC (logo y colores entregados por el residente, Nunito Sans, voz de usted; figura 17 y Sistema de diseño CINDEC); 10 wireframes, 11 mockups (incluida la variante sin cupo) y 4 pantallas en el navegador del celular (RNF-02). Imágenes en `docs/02-diseno/img/prototipos/`.
 - Se decidió el autorregistro en tres pasos: Cuenta · Datos personales · Documentos.
+- ERS actualizada a la versión 1.2 (`docs/01-requerimientos/ERS-CINDEC.docx`): término oficial de CONOCER para el dictamen ("Todavía no competente") e historial de versiones en la portada; sin cambios en los requisitos. Lista para entregarse a los asesores.
+- Metodología: se confirma Scrum + modelo incremental. Análisis y Diseño se trabajaron por iteraciones con revisión y aprobación; a partir de Desarrollo, sprints de 1 semana (1-2 módulos por sprint según el cronograma) con planeación, entrega del módulo, revisión con Juan Alexis (Product Owner) y retrospectiva registrada en esta bitácora.
+- Reuniones del periodo del 2do reporte (18-sep al 30-oct):
+  - 02/10/2026, 12:00-14:00, con Juan Alexis (asesor empresarial): funcionamiento del sistema. Juan Alexis está enterado y de acuerdo con la separación Alcance V1 / Visión futura (se cierra el Action Item de ADR-0002).
+  - 07/10/2026, 12:00-13:30, con el asesor docente: modelo E-R, modelo relacional y normalización.
+  - 15/10/2026, 10:00-11:30, con Juan Alexis: logotipo y colores de CINDEC; da libertad al residente en el diseño, apegado a la identidad de CINDEC.
 - Se decidió usar el MySQL 8.0 local (puerto 3306) en lugar del de XAMPP (MariaDB, 3307); el `.env` del backend se ajusta al iniciar Desarrollo.
 
 **Pendiente:**
 - Revisión del residente del diccionario de datos.
-- Revisión de los prototipos con Juan Alexis (preguntas en `05-prototipos.md`, sección 5.7).
+- Presentar los prototipos a Juan Alexis cuando tenga disponibilidad (preguntas en `05-prototipos.md`, sección 5.7).
+- Reunión con el asesor docente programada para el 29/10/2026.
 - Paso 6: entregable Word *Diseño completo del sistema*; 2do reporte parcial del 26 al 30 de octubre.
 
