@@ -109,6 +109,7 @@ Formato sugerido por entrada:
 - Diagrama físico generado con Reverse Engineer de Workbench (`img/fig6-diagrama-fisico.png`, modelo `cindec_db.mwb`) y diccionario de datos (`03-3-diccionario-de-datos.md` y `Diccionario-de-datos-cindec_db.xlsx`).
 - Evidencia de la construcción de la base de datos en Word (`Evidencia-construccion-BD-cindec_db.docx`, 53 figuras y referencias APA).
 - Paso 4, casos de uso: 22 casos de uso y 5 diagramas, uno por módulo (`04-uml-casos-de-uso.md`, figuras 7 a 11), aprobados por el residente.
+- Paso 4, diagrama de clases: 20 clases del dominio con atributos, operaciones, asociaciones y composiciones, más 10 enumeraciones que coinciden con los ENUM de la base de datos (`04-2-uml-clases.md`, figuras 12 y 13), aprobado por el residente.
 - Se decidió usar el MySQL 8.0 local (puerto 3306) en lugar del de XAMPP (MariaDB, 3307); el `.env` del backend se ajusta al iniciar Desarrollo.
 
 **Pendiente:**
