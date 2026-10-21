@@ -100,3 +100,16 @@ Formato sugerido por entrada:
 
 **Próxima semana:**
 - Paso 3: normalización y diseño físico (tipos de dato, índices, diccionario de datos).
+
+## Semana 43 (19-oct al 25-oct-2026) — Fase: Diseño del Sistema
+
+**Hecho:**
+- Paso 3, diseño físico: la base de datos `cindec_db` se construyó en MySQL 8.0.42 (MySQL Workbench) con 9 scripts en `docs/02-diseno/sql/`: creación de la base (utf8mb4, InnoDB), las 20 tablas por módulo con sus 26 llaves foráneas, UNIQUE, CHECK y ENUM, 5 índices adicionales, datos de prueba ficticios y pruebas de reglas.
+- Pruebas: 8 operaciones inválidas fueron rechazadas por la propia base de datos (duplicados, FK inexistente, borrado con RESTRICT, CHECK de fechas/calificación/estatus, ENUM) y se comprobó el ON DELETE CASCADE de `token_recuperacion` (RNF-08, RNF-10).
+- Diagrama físico generado con Reverse Engineer de Workbench (`img/fig6-diagrama-fisico.png`, modelo `cindec_db.mwb`) y diccionario de datos (`03-3-diccionario-de-datos.md` y `Diccionario-de-datos-cindec_db.xlsx`).
+- Se decidió usar el MySQL 8.0 local (puerto 3306) en lugar del de XAMPP (MariaDB, 3307); el `.env` del backend se ajusta al iniciar Desarrollo.
+
+**Pendiente:**
+- Revisión del residente del diccionario de datos.
+- Paso 4 (UML) y Paso 5 (prototipos); 2do reporte parcial del 26 al 30 de octubre.
+

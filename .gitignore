@@ -21,3 +21,6 @@ npm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Respaldo automático de MySQL Workbench
+*.mwb.bak
