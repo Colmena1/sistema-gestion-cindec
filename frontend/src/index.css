@@ -206,6 +206,65 @@ img { max-width: 100%; }
 .acceso__pie { display: flex; align-items: center; gap: 12px; color: var(--gris-medio); font-size: 14px; }
 .acceso__pie img { width: 60px; height: auto; }
 
+/* ---------- Encabezado de pantalla: título + botón principal ---------- */
+.encabezado-pantalla { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-4); flex-wrap: wrap; margin-bottom: var(--esp-6); }
+.encabezado-pantalla .titulo-pantalla { margin: 0; }
+.bloque { display: block; }
+.relleno { padding: var(--esp-6); }
+
+/* ---------- Botones secundarios ---------- */
+.boton--secundario { background: var(--blanco); color: var(--gris-texto); border-color: var(--borde-control); }
+.boton--secundario:hover:not(:disabled) { background: var(--gris-fondo); }
+.boton--peligro { background: var(--error); color: var(--blanco); }
+.boton--peligro:hover:not(:disabled) { background: #8f1c13; }
+.boton--chico { padding: 6px 12px; font-size: 14px; }
+
+/* ---------- Etiquetas de estatus (color + texto) ---------- */
+.etiqueta { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; font-size: 14px; font-weight: 700; white-space: nowrap; }
+.etiqueta::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.etiqueta--exito  { background: var(--exito-fondo); color: var(--exito); }
+.etiqueta--alerta { background: var(--alerta-fondo); color: var(--alerta); }
+.etiqueta--error  { background: var(--error-fondo); color: var(--error); }
+.etiqueta--info   { background: var(--azul-niebla); color: var(--azul-cindec); }
+.etiqueta--neutro { background: var(--gris-engrane); color: var(--gris-texto); }
+
+/* ---------- Filtros sobre una tabla ---------- */
+.filtros { display: grid; grid-template-columns: minmax(220px, 2fr) minmax(160px, 1fr) minmax(140px, 1fr); gap: var(--esp-4); align-items: end; margin-bottom: var(--esp-4); }
+.filtros .campo { margin: 0; }
+.campo__con-icono { position: relative; }
+.campo__con-icono svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gris-medio); }
+.campo__con-icono input { padding-left: 38px; }
+
+/* ---------- Tabla (máximo 6 columnas, acción al final de la fila) ---------- */
+.tarjeta--tabla { padding: 0; }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th { text-align: left; font-size: 14px; font-weight: 700; color: var(--gris-medio); padding: 12px var(--esp-4); border-bottom: 1px solid var(--gris-engrane); background: var(--gris-fondo); }
+.tabla td { padding: 12px var(--esp-4); border-bottom: 1px solid var(--gris-engrane); vertical-align: middle; }
+.tabla tr:last-child td { border-bottom: 0; }
+.tabla tbody tr:hover { background: #FAFAFC; }
+.tabla__fila--inactiva td { color: var(--gris-medio); }
+.tabla__acciones { text-align: right; white-space: nowrap; }
+.tabla__acciones .boton + .boton { margin-left: var(--esp-2); }
+.tarjeta--tabla { overflow-x: auto; }
+/* En computadora las acciones de la fila son solo ícono (el nombre aparece al pasar el mouse) */
+.boton--accion { padding: 8px; }
+.boton--accion .texto-boton { display: none; }
+.paginacion { display: flex; align-items: center; justify-content: center; gap: var(--esp-4); margin-top: var(--esp-4); }
+
+/* ---------- Aviso flotante de confirmación ---------- */
+.aviso--flotante { position: fixed; right: var(--esp-6); bottom: var(--esp-6); z-index: 60; box-shadow: 0 8px 24px rgba(0, 0, 0, .12); max-width: 420px; }
+
+/* ---------- Ventana emergente ---------- */
+.modal__velo { position: fixed; inset: 0; z-index: 50; background: rgba(20, 20, 30, .45); display: flex; align-items: center; justify-content: center; padding: var(--esp-4); }
+.modal { background: var(--blanco); border-radius: var(--radio-tarjeta); width: 100%; max-width: 560px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 16px 48px rgba(0, 0, 0, .2); }
+.modal__cabecera { display: flex; align-items: center; justify-content: space-between; padding: var(--esp-4) var(--esp-6); border-bottom: 1px solid var(--gris-engrane); }
+.modal__cabecera .subtitulo { margin: 0; }
+.modal__cuerpo { padding: var(--esp-4) var(--esp-6); overflow-y: auto; }
+.modal__cuerpo .aviso { margin-bottom: var(--esp-4); }
+.modal__pie { display: flex; justify-content: flex-end; gap: var(--esp-2); padding: var(--esp-4) var(--esp-6); border-top: 1px solid var(--gris-engrane); }
+.dos-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--esp-4); }
+.campo input:disabled { background: var(--gris-fondo); color: var(--gris-medio); }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -228,4 +287,19 @@ img { max-width: 100%; }
   .velo { display: block; position: fixed; inset: 0; z-index: 20; background: rgba(20, 20, 30, .35); }
   .contenido { padding: var(--esp-6) var(--esp-4); }
   .acceso__tarjeta { padding: var(--esp-6) var(--esp-4); }
+  /* Filtros uno debajo de otro y tablas convertidas en tarjetas */
+  .filtros { grid-template-columns: 1fr; }
+  .dos-columnas { grid-template-columns: 1fr; }
+  .encabezado-pantalla .boton--principal { width: 100%; }
+  .tarjeta--tabla { background: none; border: 0; }
+  .tabla thead { display: none; }
+  .tabla, .tabla tbody, .tabla tr, .tabla td { display: block; width: 100%; }
+  .tabla tr { background: var(--blanco); border: 1px solid var(--gris-engrane); border-radius: var(--radio-tarjeta); padding: var(--esp-2) 0; margin-bottom: 12px; }
+  .tabla td { border: 0; padding: 6px var(--esp-4); }
+  .tabla td[data-etiqueta]:not(:first-child)::before { content: attr(data-etiqueta); display: block; font-size: 12px; font-weight: 700; color: var(--gris-medio); }
+  .tabla__acciones { text-align: left; display: flex !important; gap: var(--esp-2); flex-wrap: wrap; }
+  .tabla__acciones .boton + .boton { margin-left: 0; }
+  .boton--accion { padding: 6px 12px; }
+  .boton--accion .texto-boton { display: inline; }
+  .aviso--flotante { left: var(--esp-4); right: var(--esp-4); bottom: var(--esp-4); }
 }

@@ -169,4 +169,12 @@ Formato sugerido por entrada:
 - Scripts `npm run asignar-contrasena` y `npm run contrasenas-prueba` (usuarios ficticios del script 08).
 - Frontend: pantalla de inicio de sesión (P-01, mockup M01), sesión real con token, rutas protegidas por rol, menú del rol del usuario y Cerrar sesión. Se retiró el usuario de demostración.
 - Corrección: el nombre del rol en la base es "Coordinador de capacitación"; el menú del frontend se alineó con los nombres exactos de la tabla `rol`.
+- Ajustes de interfaz pedidos por el residente: menú lateral contraíble a solo íconos en computadora (se recuerda la preferencia) y pantallas más compactas para que el login y el menú quepan sin desplazamiento.
+
+**Hecho (22-oct) — Parte 2: Gestión de usuarios (CU-03, RF-USR-01, 02 y 04):**
+- API `/api/v1/usuarios` (solo Administrador general): listar con búsqueda, filtro por rol y estado y paginación; consultar; registrar; editar (datos, rol y contraseña opcional); activar/desactivar. Catálogo `GET /usuarios/roles`.
+- Reglas de negocio: correo único; los participantes no se registran desde esta pantalla (requieren CURP y documentos; se registran en el Sprint 2 por autorregistro o desde Participantes) y su rol no se puede cambiar; un administrador no puede desactivarse a sí mismo; siempre debe quedar al menos un administrador activo.
+- Auditoría (RNF-07): cada alta, edición (con el detalle de qué cambió, de qué valor a qué valor), cambio de contraseña y activación/desactivación se guarda en la tabla `auditoria` dentro de la misma transacción.
+- Pantalla P-05 Usuarios: tabla con buscador, filtros, etiquetas de estatus, ventana para registrar/editar con validación por campo y confirmación para desactivar; en celular la tabla se muestra como tarjetas (RNF-02).
+- Componentes reutilizables: `Modal` (ventana emergente) y `EtiquetaEstatus`.
 

@@ -23,6 +23,23 @@ export function SesionProvider({ children }) {
       .finally(() => setCargando(false))
   }, [])
 
+  // Sincroniza las pestañas del mismo navegador: todas comparten un solo token,
+  // así que si en otra pestaña se inicia o se cierra sesión, esta se actualiza también.
+  useEffect(() => {
+    const alCambiarAlmacenamiento = (evento) => {
+      if (evento.key !== 'token') return
+      if (!evento.newValue) {
+        setUsuario(null) // se cerró sesión en otra pestaña
+        return
+      }
+      cliente.get('/auth/yo')  // se inició sesión (quizá con otro usuario) en otra pestaña
+        .then(({ data }) => setUsuario(data.usuario))
+        .catch(() => setUsuario(null))
+    }
+    window.addEventListener('storage', alCambiarAlmacenamiento)
+    return () => window.removeEventListener('storage', alCambiarAlmacenamiento)
+  }, [])
+
   const iniciarSesion = useCallback(async (correo, contrasena) => {
     const { data } = await cliente.post('/auth/login', { correo, contrasena })
     guardarToken(data.token)
