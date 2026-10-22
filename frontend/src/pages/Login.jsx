@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { CircleAlert, Eye, EyeOff, LoaderCircle } from 'lucide-react'
 import logo from '../assets/logo-cindec.png'
 import logoConocer from '../assets/logo-red-conocer.png'
@@ -78,7 +78,7 @@ export default function Login() {
             </button>
           </div>
           {errores.contrasena && <p className="campo__error">{errores.contrasena}</p>}
-          <span className="acceso__olvido" title="Disponible en la parte 3 del Sprint 1">¿Olvidó su contraseña?</span>
+          <Link to="/recuperar" className="acceso__olvido">¿Olvidó su contraseña?</Link>
         </div>
 
         <button type="submit" className="boton boton--principal boton--ancho" disabled={enviando}>

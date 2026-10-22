@@ -12,4 +12,23 @@ async function yo(req, res) {
   res.json({ ok: true, usuario });
 }
 
-module.exports = { login, yo };
+async function recuperar(req, res) {
+  await authService.solicitarRecuperacion(req.body.correo);
+  // Misma respuesta siempre: no se revela si el correo está registrado.
+  res.json({
+    ok: true,
+    mensaje: 'Si el correo está registrado, en unos minutos recibirá un enlace para definir una contraseña nueva. Revise también su carpeta de correo no deseado.',
+  });
+}
+
+async function validarToken(req, res) {
+  const datos = await authService.validarToken(req.query.token);
+  res.json({ ok: true, ...datos });
+}
+
+async function restablecer(req, res) {
+  await authService.restablecerContrasena(req.body.token, req.body.contrasena);
+  res.json({ ok: true, mensaje: 'Su contraseña se cambió correctamente. Ya puede iniciar sesión con ella.' });
+}
+
+module.exports = { login, yo, recuperar, validarToken, restablecer };

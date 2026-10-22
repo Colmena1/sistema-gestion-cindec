@@ -153,6 +153,7 @@ img { max-width: 100%; }
   border-left: 4px solid currentColor;
 }
 .aviso p { color: var(--gris-texto); margin-top: 2px; }
+.aviso > svg { flex-shrink: 0; margin-top: 1px; } /* el ícono no se encoge con textos largos */
 .aviso--exito { background: var(--exito-fondo); color: var(--exito); }
 .aviso--error { background: var(--error-fondo); color: var(--error); }
 
@@ -200,7 +201,13 @@ img { max-width: 100%; }
 .acceso__titulo { font-size: 22px; font-weight: 700; text-align: center; }
 .acceso__subtitulo { text-align: center; margin: var(--esp-1) 0 var(--esp-4); }
 .acceso__tarjeta .aviso { margin-bottom: var(--esp-4); }
-.acceso__olvido, .acceso__registro span { color: var(--azul-cindec); font-weight: 700; font-size: 14px; opacity: .6; cursor: not-allowed; }
+.acceso__olvido { color: var(--azul-cindec); font-weight: 700; font-size: 14px; text-decoration: none; }
+.acceso__olvido:hover { text-decoration: underline; }
+.acceso__registro span { color: var(--azul-cindec); font-weight: 700; font-size: 14px; opacity: .6; cursor: not-allowed; }
+.acceso__aviso { margin-bottom: var(--esp-4); }
+.centrado { justify-content: center; }
+.enlace-volver { display: inline-flex; align-items: center; gap: 6px; color: var(--azul-cindec); font-weight: 700; font-size: 14px; text-decoration: none; }
+.enlace-volver:hover { text-decoration: underline; }
 .acceso__olvido { align-self: flex-end; }
 .acceso__registro { text-align: center; }
 .acceso__pie { display: flex; align-items: center; gap: 12px; color: var(--gris-medio); font-size: 14px; }

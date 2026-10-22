@@ -177,4 +177,19 @@ Formato sugerido por entrada:
 - Auditoría (RNF-07): cada alta, edición (con el detalle de qué cambió, de qué valor a qué valor), cambio de contraseña y activación/desactivación se guarda en la tabla `auditoria` dentro de la misma transacción.
 - Pantalla P-05 Usuarios: tabla con buscador, filtros, etiquetas de estatus, ventana para registrar/editar con validación por campo y confirmación para desactivar; en celular la tabla se muestra como tarjetas (RNF-02).
 - Componentes reutilizables: `Modal` (ventana emergente) y `EtiquetaEstatus`.
+- Sincronización de la sesión entre pestañas del mismo navegador (todas comparten un token): al iniciar o cerrar sesión en una pestaña, las demás se actualizan.
+
+**Hecho (22-oct) — Parte 3: Recuperar contraseña (CU-02 «include» CU-21, RF-USR-06):**
+- `POST /api/v1/auth/recuperar`: responde siempre lo mismo (no revela qué correos existen); si la cuenta existe y está activa genera un token aleatorio de un solo uso, guarda solo su hash SHA-256 en `token_recuperacion` con vencimiento de 30 minutos, anula los enlaces anteriores y envía el correo.
+- `GET /api/v1/auth/restablecer/validar` y `POST /api/v1/auth/restablecer`: validan el token (vigente, sin usar, cuenta activa), cambian la contraseña con bcrypt, marcan el token como usado y registran el cambio en auditoría, todo en una transacción.
+- Límite de 5 solicitudes de recuperación cada 15 minutos por IP.
+- Módulo Notificaciones: servicio de correo con Nodemailer y plantilla con la identidad de CINDEC (base de RF-NOT-01). En desarrollo se usa el buzón de prueba Ethereal; para producción basta configurar SMTP en `.env` (variables documentadas en `.env.example`).
+- Frontend: pantallas "Recuperar contraseña" y "Definir contraseña nueva" (P-02) y enlace activo en el login.
+- Pruebas ejecutadas por el residente (22-oct): solicitud con correo registrado y no registrado (misma respuesta), correo recibido en el buzón de prueba, contraseñas que no coinciden, cambio exitoso e inicio de sesión con la contraseña nueva.
+
+**Revisión del sprint:** Sprint 1 terminado el 22-oct-2026, adelantado respecto al cronograma (semana 44). Se cubren CU-01, CU-02 y CU-03 (RF-USR-01 a 06). Pendiente: mostrar el avance a Juan Alexis (Product Owner) y al asesor docente en la reunión del 29-oct.
+
+**Retrospectiva Sprint 1:**
+- Funcionó: dividir el sprint en tres partes probadas por separado; las pruebas del residente detectaron ajustes de interfaz (menú contraíble, tamaño de pantallas, botones de la tabla) que se corrigieron el mismo día.
+- A mejorar: verificar siempre que los archivos actualizados lleguen completos al equipo del residente (se detectaron dos copias que no se aplicaron) y usar una ventana de incógnito para probar dos roles a la vez.
 
