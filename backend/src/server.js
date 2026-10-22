@@ -7,15 +7,16 @@ const PORT = process.env.PORT || 4000;
 async function start() {
   try {
     await sequelize.authenticate();
-    console.log('Conexión a MySQL establecida correctamente.');
+    console.log(`Conectado a MySQL: ${process.env.DB_NAME} (puerto ${process.env.DB_PORT})`);
   } catch (err) {
     console.error('No se pudo conectar a la base de datos:', err.message);
-    console.error('Verifica tu archivo .env y que MySQL esté corriendo localmente.');
+    console.error('Revisa el archivo .env y que el servicio MySQL80 esté iniciado.');
+    process.exit(1); // sin base de datos la API no puede funcionar
   }
 
   app.listen(PORT, () => {
-    console.log(`Servidor backend escuchando en http://localhost:${PORT}`);
-    console.log(`Prueba de salud: http://localhost:${PORT}/api/health`);
+    console.log(`API escuchando en http://localhost:${PORT}/api/v1`);
+    console.log(`Prueba de salud: http://localhost:${PORT}/api/v1/health`);
   });
 }
 

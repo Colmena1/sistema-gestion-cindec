@@ -128,3 +128,32 @@ Formato sugerido por entrada:
 - Reunión con el asesor docente programada para el 29/10/2026.
 - Paso 6: entregable Word *Diseño completo del sistema*; 2do reporte parcial del 26 al 30 de octubre.
 
+### Inicio de Desarrollo — Sprint 0 (21 al 25-oct-2026)
+
+**Hecho (21-oct):**
+- Plan de la fase de Desarrollo aprobado (`docs/04-desarrollo/plan-de-desarrollo.md`): Sprint 0 de preparación y cuatro sprints semanales (semanas 44 a 47), cierre en la semana 48. Pruebas e integración se recorre a la semana 47 por el aplazamiento; se compensa con pruebas dentro de cada sprint.
+- ADR-0004: los scripts SQL son la fuente de verdad del esquema; Sequelize se usa solo como ORM (sin `sync()` ni migraciones).
+- Backend reorganizado según ADR-0003: API en `/api/v1`, carpetas `src/modules/<módulo>/`, manejo de errores centralizado (RNF-12), middleware de validación (RNF-09), helmet, morgan y CORS limitado al frontend; `.env.example` apunta al MySQL 8.0 local (3306).
+
+**Hecho (21-oct, cont.):**
+- Dependencias instaladas y API verificada: `GET /api/v1/health` responde 200 con `cindec_db` conectada (MySQL 8.0, puerto 3306).
+
+**Hecho (22-oct):**
+- Modelos Sequelize de las 20 tablas (`backend/src/models/`), copiados de los scripts SQL: 128 columnas; valores ENUM centralizados en `enums.js` (coinciden con las 10 enumeraciones del diagrama de clases).
+- 26 relaciones declaradas en `models/index.js` (una por llave foránea del diseño lógico), con nombres para consultas (`instructor`, `evaluador`, `inscripciones`, etc.).
+- El modelo `Usuario` nunca devuelve `contrasena_hash` salvo que se pida explícitamente (solo el login).
+- Script `npm run verificar-modelos`: compara cada modelo con su tabla real en MySQL (columnas y nulos).
+
+- Verificación ejecutada contra MySQL: las 20 tablas coinciden con sus modelos (128 columnas, 26 relaciones). Se corrigió el script para considerar que las llaves primarias nunca aceptan nulos.
+- Frontend creado con Vite (React, ESLint) e instalados react-router-dom, axios, lucide-react y @fontsource/nunito-sans.
+- Base visual de la guía de estilo en `frontend/src/index.css` (colores, tipografía Nunito Sans, espacios, tarjetas, avisos, botones) y estructura de pantalla: menú lateral de 264 px con logo de CINDEC, opciones por rol (figura 16) y, en celular, menú con botón ☰ (RNF-02).
+- Cliente HTTP central (`api/cliente.js`) con base `/api/v1`, token JWT y manejo de sesión expirada; proxy de Vite hacia el backend.
+- Panel de inicio (P-04) con saludo y comprobación en vivo de la conexión frontend → API → `cindec_db`. Las demás pantallas muestran en qué sprint se construyen.
+- Usuario de demostración con selector de rol, temporal hasta el inicio de sesión del Sprint 1.
+
+**Pendiente del Sprint 0:**
+- Revisión del residente de la base visual en computadora y celular.
+
+**Retrospectiva Sprint 0:**
+- Funcionó: verificar cada paso contra la base de datos real antes de avanzar (el script de modelos detectó al instante una diferencia).
+- A mejorar: correr las pruebas en el equipo del residente justo después de cada cambio.
