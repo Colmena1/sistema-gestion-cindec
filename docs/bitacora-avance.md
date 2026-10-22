@@ -157,3 +157,16 @@ Formato sugerido por entrada:
 **Retrospectiva Sprint 0:**
 - Funcionó: verificar cada paso contra la base de datos real antes de avanzar (el script de modelos detectó al instante una diferencia).
 - A mejorar: correr las pruebas en el equipo del residente justo después de cada cambio.
+
+## Semana 43-44 — Sprint 1: Autenticación, y usuarios y roles (iniciado el 22-oct-2026, adelantado)
+
+**Planeación del sprint:** CU-01 Iniciar sesión, CU-02 Recuperar contraseña y CU-03 Gestionar usuarios y roles (RF-USR-01 a 06). Se trabaja en tres partes: (1) inicio de sesión y control de acceso por rol, (2) gestión de usuarios con auditoría, (3) recuperación de contraseña por correo.
+
+**Hecho (22-oct) — Parte 1:**
+- Backend: `POST /api/v1/auth/login` (bcrypt + JWT con expiración configurable) y `GET /api/v1/auth/yo`; mensaje único para correo o contraseña incorrectos; cuentas desactivadas sin acceso; registro de `ultimo_acceso`; límite de 10 intentos de login cada 15 minutos por IP.
+- Middlewares `autenticar` (valida el token y que la cuenta siga activa en cada petición) y `autorizar(...roles)` (403 si el rol no tiene permiso) — RF-USR-03, RNF-03, RNF-04.
+- Regla de contraseñas: mínimo 8 caracteres con letras y números; cifrado bcrypt (RNF-05).
+- Scripts `npm run asignar-contrasena` y `npm run contrasenas-prueba` (usuarios ficticios del script 08).
+- Frontend: pantalla de inicio de sesión (P-01, mockup M01), sesión real con token, rutas protegidas por rol, menú del rol del usuario y Cerrar sesión. Se retiró el usuario de demostración.
+- Corrección: el nombre del rol en la base es "Coordinador de capacitación"; el menú del frontend se alineó con los nombres exactos de la tabla `rol`.
+

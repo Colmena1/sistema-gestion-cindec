@@ -10,8 +10,8 @@ router.get('/health', asyncHandler(async (req, res) => {
 }));
 
 // Rutas por módulo (se activan conforme avanzan los sprints):
-// router.use('/auth', require('../modules/auth/auth.routes'));
-// router.use('/usuarios', require('../modules/usuarios/usuarios.routes'));
-// router.use('/cursos', require('../modules/cursos/cursos.routes'));
+router.use('/auth', require('../modules/auth/auth.routes'));              // Sprint 1
+// router.use('/usuarios', require('../modules/usuarios/usuarios.routes')); // Sprint 1 (parte 2)
+// router.use('/cursos', require('../modules/cursos/cursos.routes'));       // Sprint 2
 
 module.exports = router;

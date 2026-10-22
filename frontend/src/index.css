@@ -68,20 +68,35 @@ img { max-width: 100%; }
   border-right: 1px solid var(--gris-engrane);
   display: flex;
   flex-direction: column;
-  padding: var(--esp-6) var(--esp-4);
+  padding: var(--esp-4);
   position: sticky;
   top: 0;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  transition: width .2s ease;
 }
-.menu__cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--esp-6); }
-.menu__logo { width: 180px; height: auto; }
+.menu__cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--esp-4); }
+.menu__logo { width: 130px; height: auto; }
 .menu__cabecera .menu__cerrar { display: none; } /* solo se ve en celular */
-.menu__opciones { display: flex; flex-direction: column; gap: var(--esp-1); }
+.menu__colapsar { color: var(--gris-medio); }
+.menu__opcion span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Menú contraído (solo computadora): barra angosta con íconos */
+@media (min-width: 900px) {
+  .menu--colapsado { width: 72px; padding: var(--esp-4) 12px; }
+  .menu--colapsado .menu__logo,
+  .menu--colapsado .menu__opcion span,
+  .menu--colapsado .menu__usuario strong,
+  .menu--colapsado .menu__usuario > span { display: none; }
+  .menu--colapsado .menu__cabecera { justify-content: center; }
+  .menu--colapsado .menu__opcion { justify-content: center; padding: 10px; }
+}
+.menu__opciones { display: flex; flex-direction: column; gap: 2px; }
 
 .menu__opcion {
   display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px;
+  padding: 8px 12px;
   border-radius: var(--radio-control);
   color: var(--gris-texto);
   font-weight: 700;
@@ -110,7 +125,7 @@ img { max-width: 100%; }
   border: 1px solid var(--borde-control); border-radius: 6px; padding: 4px; background: var(--blanco);
 }
 
-.contenido { flex: 1; min-width: 0; padding: var(--esp-12) var(--esp-8); }
+.contenido { flex: 1; min-width: 0; padding: var(--esp-8); }
 .contenido > * { max-width: var(--ancho-contenido); }
 
 /* ---------- 5. Componentes ---------- */
@@ -155,6 +170,42 @@ img { max-width: 100%; }
 .girando { animation: girar 1s linear infinite; }
 @keyframes girar { to { transform: rotate(360deg); } }
 
+/* Botón sin acción todavía / mientras se envía */
+.boton:disabled { opacity: .6; cursor: not-allowed; }
+.boton--ancho { width: 100%; }
+.separador { border: 0; border-top: 1px solid var(--gris-engrane); margin: var(--esp-4) 0; }
+.pantalla-centrada { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+/* Campo de formulario: etiqueta arriba, error debajo (guía de estilo, sección 6) */
+.campo { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.campo label { font-size: 14px; font-weight: 700; }
+.campo input, .campo select {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--borde-control); border-radius: var(--radio-control);
+  background: var(--blanco); font-size: 16px;
+}
+.campo input[aria-invalid="true"] { border-color: var(--error); }
+.campo__error { color: var(--error); font-size: 14px; }
+.campo__con-boton { position: relative; }
+.campo__con-boton input { padding-right: 48px; }
+.campo__con-boton .boton-icono { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); color: var(--gris-medio); }
+
+/* ---------- Pantalla de acceso (P-01, mockup M01) ---------- */
+.acceso {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--esp-4); padding: var(--esp-4);
+}
+.acceso__tarjeta { width: 100%; max-width: 420px; padding: var(--esp-6) var(--esp-8); }
+.acceso__logo { display: block; width: 170px; margin: 0 auto var(--esp-4); }
+.acceso__titulo { font-size: 22px; font-weight: 700; text-align: center; }
+.acceso__subtitulo { text-align: center; margin: var(--esp-1) 0 var(--esp-4); }
+.acceso__tarjeta .aviso { margin-bottom: var(--esp-4); }
+.acceso__olvido, .acceso__registro span { color: var(--azul-cindec); font-weight: 700; font-size: 14px; opacity: .6; cursor: not-allowed; }
+.acceso__olvido { align-self: flex-end; }
+.acceso__registro { text-align: center; }
+.acceso__pie { display: flex; align-items: center; gap: 12px; color: var(--gris-medio); font-size: 14px; }
+.acceso__pie img { width: 60px; height: auto; }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -173,6 +224,8 @@ img { max-width: 100%; }
   }
   .menu--abierto { transform: translateX(0); box-shadow: 0 8px 32px rgba(0, 0, 0, .18); }
   .menu__cabecera .menu__cerrar { display: inline-flex; }
+  .menu__colapsar { display: none; }
   .velo { display: block; position: fixed; inset: 0; z-index: 20; background: rgba(20, 20, 30, .35); }
   .contenido { padding: var(--esp-6) var(--esp-4); }
+  .acceso__tarjeta { padding: var(--esp-6) var(--esp-4); }
 }

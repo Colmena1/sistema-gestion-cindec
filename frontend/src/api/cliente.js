@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // Cliente HTTP central (Diseño, cap. 2): todas las pantallas piden datos a la API por aquí.
 // - Usa siempre la ruta base /api/v1.
-// - Adjunta el token JWT si hay sesión (se activa en el Sprint 1).
+// - Adjunta el token JWT si hay sesión.
 // - Si la sesión expiró (401), borra el token y regresa al inicio de sesión.
 const cliente = axios.create({ baseURL: '/api/v1', timeout: 15000 })
 
@@ -16,7 +16,8 @@ cliente.interceptors.request.use((config) => {
 cliente.interceptors.response.use(
   (respuesta) => respuesta,
   (error) => {
-    if (error.response?.status === 401) {
+    // 401 en cualquier petición (menos el propio login) = la sesión ya no es válida.
+    if (error.response?.status === 401 && !error.config?.url?.includes('/auth/login')) {
       try { localStorage.removeItem('token') } catch { /* nada que borrar */ }
       if (window.location.pathname !== '/login') window.location.assign('/login')
     }

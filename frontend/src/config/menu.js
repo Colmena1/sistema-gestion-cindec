@@ -3,6 +3,15 @@ import {
   ChartColumn, ShieldCheck, FolderOpen, ClipboardCheck, History, FileBadge,
 } from 'lucide-react'
 
+// Nombres EXACTOS de los roles en la tabla rol de cindec_db (igual que backend/src/config/roles.js).
+export const ROLES = {
+  ADMIN: 'Administrador general',
+  COORDINADOR: 'Coordinador de capacitación',
+  INSTRUCTOR: 'Instructor',
+  EVALUADOR: 'Evaluador',
+  PARTICIPANTE: 'Participante',
+}
+
 // Opciones del menú lateral (mapa de navegación, figura 16).
 // "pantalla" es el ID del inventario de prototipos y "sprint" cuándo se construye.
 const OP = {
@@ -27,12 +36,24 @@ const COORDINADOR = [OP.inicio, OP.cursos, OP.grupos, OP.participantes, OP.instr
 
 // Menú de cada rol. El Administrador ve lo del Coordinador más Usuarios.
 export const MENU_POR_ROL = {
-  'Administrador general': [OP.inicio, OP.usuarios, ...COORDINADOR.slice(1)],
-  Coordinador: COORDINADOR,
-  Instructor: [OP.inicio, OP.misGrupos, OP.materiales, OP.verificar],
-  Evaluador: [OP.inicio, OP.porEvaluar, OP.verificar],
-  Participante: [OP.inicio, OP.misCursos, OP.materiales, OP.miHistorial, OP.misCertificados, OP.verificar],
+  [ROLES.ADMIN]: [OP.inicio, OP.usuarios, ...COORDINADOR.slice(1)],
+  [ROLES.COORDINADOR]: COORDINADOR,
+  [ROLES.INSTRUCTOR]: [OP.inicio, OP.misGrupos, OP.materiales, OP.verificar],
+  [ROLES.EVALUADOR]: [OP.inicio, OP.porEvaluar, OP.verificar],
+  [ROLES.PARTICIPANTE]: [OP.inicio, OP.misCursos, OP.materiales, OP.miHistorial, OP.misCertificados, OP.verificar],
 }
 
-export const ROLES = Object.keys(MENU_POR_ROL)
 export const TODAS_LAS_OPCIONES = Object.values(OP)
+
+// Qué roles pueden entrar a una ruta: los que la tienen en su menú.
+export const rolesDeRuta = (ruta) =>
+  Object.entries(MENU_POR_ROL).filter(([, ops]) => ops.some((o) => o.ruta === ruta)).map(([rol]) => rol)
+
+// Nombre corto para mostrar debajo del usuario
+export const NOMBRE_CORTO_ROL = {
+  [ROLES.ADMIN]: 'Administrador',
+  [ROLES.COORDINADOR]: 'Coordinador',
+  [ROLES.INSTRUCTOR]: 'Instructor',
+  [ROLES.EVALUADOR]: 'Evaluador',
+  [ROLES.PARTICIPANTE]: 'Participante',
+}

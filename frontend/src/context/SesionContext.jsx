@@ -1,18 +1,42 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import cliente from '../api/cliente.js'
 
-// Guarda quién está usando el sistema y lo comparte con todas las pantallas.
-// TEMPORAL (Sprint 0): todavía no hay inicio de sesión, así que se usa un
-// usuario de demostración y se puede cambiar de rol para ver cada menú.
-// En el Sprint 1 este archivo recibirá el usuario real desde /api/v1/auth/login.
+// Guarda quién tiene la sesión abierta y lo comparte con todas las pantallas.
+// El token JWT se guarda en el navegador para no pedir la contraseña en cada recarga;
+// al abrir la aplicación se valida contra GET /auth/yo.
 const SesionContext = createContext(null)
 
-const USUARIO_DEMO = { nombre: 'Usuario', apellidos: 'de demostración', rol: 'Coordinador' }
+const leerToken = () => { try { return localStorage.getItem('token') } catch { return null } }
+const guardarToken = (t) => { try { localStorage.setItem('token', t) } catch { /* sin almacenamiento */ } }
+const borrarToken = () => { try { localStorage.removeItem('token') } catch { /* sin almacenamiento */ } }
 
 export function SesionProvider({ children }) {
-  const [usuario, setUsuario] = useState(USUARIO_DEMO)
-  const cambiarRol = (rol) => setUsuario((u) => ({ ...u, rol }))
+  const [usuario, setUsuario] = useState(null)
+  const [cargando, setCargando] = useState(() => Boolean(leerToken()))
+
+  // Al abrir o recargar la página: si hay token, preguntar a la API quién es.
+  useEffect(() => {
+    if (!leerToken()) return
+    cliente.get('/auth/yo')
+      .then(({ data }) => setUsuario(data.usuario))
+      .catch(() => borrarToken())
+      .finally(() => setCargando(false))
+  }, [])
+
+  const iniciarSesion = useCallback(async (correo, contrasena) => {
+    const { data } = await cliente.post('/auth/login', { correo, contrasena })
+    guardarToken(data.token)
+    setUsuario(data.usuario)
+    return data.usuario
+  }, [])
+
+  const cerrarSesion = useCallback(() => {
+    borrarToken()
+    setUsuario(null)
+  }, [])
+
   return (
-    <SesionContext.Provider value={{ usuario, cambiarRol, esDemo: true }}>
+    <SesionContext.Provider value={{ usuario, cargando, iniciarSesion, cerrarSesion }}>
       {children}
     </SesionContext.Provider>
   )

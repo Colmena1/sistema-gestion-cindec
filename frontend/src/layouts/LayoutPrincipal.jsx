@@ -1,18 +1,34 @@
 import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
-import { LogOut, Menu, X } from 'lucide-react'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import logo from '../assets/logo-cindec.png'
-import { MENU_POR_ROL, ROLES } from '../config/menu.js'
+import { MENU_POR_ROL, NOMBRE_CORTO_ROL } from '../config/menu.js'
 import { useSesion } from '../context/SesionContext.jsx'
 
 // Estructura de todas las pantallas con sesión (guía de estilo, sección 5):
 // menú lateral de 264 px + contenido de máximo 1120 px.
+// En computadora el menú se puede contraer a solo íconos (se recuerda la preferencia).
 // En celular (menos de 900 px) el menú se oculta tras el botón ☰ (RNF-02).
+const leerColapsado = () => { try { return localStorage.getItem('menuColapsado') === '1' } catch { return false } }
 export default function LayoutPrincipal() {
-  const { usuario, cambiarRol, esDemo } = useSesion()
+  const { usuario, cerrarSesion } = useSesion()
+  const navegar = useNavigate()
   const [menuAbierto, setMenuAbierto] = useState(false)
+  const [colapsado, setColapsado] = useState(leerColapsado)
   const opciones = MENU_POR_ROL[usuario.rol] || []
   const cerrarMenu = () => setMenuAbierto(false)
+
+  const alternarColapsado = () => {
+    setColapsado((c) => {
+      try { localStorage.setItem('menuColapsado', c ? '0' : '1') } catch { /* sin almacenamiento */ }
+      return !c
+    })
+  }
+
+  const salir = () => {
+    cerrarSesion()
+    navegar('/login', { replace: true })
+  }
 
   return (
     <div className="app">
@@ -25,9 +41,13 @@ export default function LayoutPrincipal() {
 
       {menuAbierto && <div className="velo" onClick={cerrarMenu} />}
 
-      <aside className={`menu ${menuAbierto ? 'menu--abierto' : ''}`}>
+      <aside className={`menu ${menuAbierto ? 'menu--abierto' : ''} ${colapsado ? 'menu--colapsado' : ''}`}>
         <div className="menu__cabecera">
           <img src={logo} alt="CINDEC — Centro Integral de Desarrollo y Evaluación de Competencia Laboral" className="menu__logo" />
+          <button className="boton-icono menu__colapsar" onClick={alternarColapsado}
+            aria-label={colapsado ? 'Expandir menú' : 'Contraer menú'} title={colapsado ? 'Expandir menú' : 'Contraer menú'}>
+            {colapsado ? <PanelLeftOpen size={22} /> : <PanelLeftClose size={22} />}
+          </button>
           <button className="boton-icono menu__cerrar" onClick={cerrarMenu} aria-label="Cerrar menú">
             <X size={22} />
           </button>
@@ -35,7 +55,7 @@ export default function LayoutPrincipal() {
 
         <nav className="menu__opciones">
           {opciones.map(({ ruta, texto, icono: Icono }) => (
-            <NavLink key={ruta} to={ruta} end={ruta === '/'} onClick={cerrarMenu}
+            <NavLink key={ruta} to={ruta} end={ruta === '/'} onClick={cerrarMenu} title={colapsado ? texto : undefined}
               className={({ isActive }) => `menu__opcion ${isActive ? 'menu__opcion--activa' : ''}`}>
               <Icono size={20} strokeWidth={1.75} />
               <span>{texto}</span>
@@ -45,16 +65,8 @@ export default function LayoutPrincipal() {
 
         <div className="menu__usuario">
           <strong>{usuario.nombre} {usuario.apellidos}</strong>
-          <span>{usuario.rol}</span>
-          {esDemo && (
-            <label className="menu__demo">
-              Ver menú como:
-              <select value={usuario.rol} onChange={(e) => cambiarRol(e.target.value)}>
-                {ROLES.map((r) => <option key={r}>{r}</option>)}
-              </select>
-            </label>
-          )}
-          <button className="menu__opcion menu__salir" disabled={esDemo} title={esDemo ? 'Disponible en el Sprint 1' : undefined}>
+          <span>{NOMBRE_CORTO_ROL[usuario.rol] || usuario.rol}</span>
+          <button className="menu__opcion menu__salir" onClick={salir} title={colapsado ? 'Cerrar sesión' : undefined}>
             <LogOut size={20} strokeWidth={1.75} />
             <span>Cerrar sesión</span>
           </button>
