@@ -326,6 +326,40 @@ img { max-width: 100%; }
 .relleno-lateral { padding: 0 var(--esp-6) var(--esp-4); }
 .enlace-tabla { font-weight: 700; color: var(--azul-cindec); }
 
+/* ---------- Inscripción, asistencia y vistas por rol (parte 4 del Sprint 2) ---------- */
+.lista-seleccion { list-style: none; padding: 0; margin: 0 0 var(--esp-4); border: 1px solid var(--gris-engrane); border-radius: var(--radio-control); overflow: hidden; }
+.lista-seleccion li + li { border-top: 1px solid var(--gris-engrane); }
+.lista-seleccion__opcion { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--esp-4); padding: 12px var(--esp-4); background: var(--blanco); border: 0; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.lista-seleccion__opcion:hover:not(:disabled) { background: var(--gris-fondo); }
+.lista-seleccion__opcion:disabled { cursor: not-allowed; opacity: .7; }
+.lista-seleccion__opcion--elegida, .lista-seleccion__opcion--elegida:hover:not(:disabled) { background: var(--azul-niebla); color: var(--azul-cindec); }
+.casilla { display: flex; align-items: flex-start; gap: var(--esp-2); font-size: 14px; margin-bottom: var(--esp-4); cursor: pointer; }
+.casilla input { margin-top: 3px; }
+.otros-grupos { display: flex; flex-direction: column; gap: var(--esp-2); margin-top: 12px; }
+.selector-sesion { display: flex; align-items: flex-end; gap: var(--esp-6); flex-wrap: wrap; margin-bottom: var(--esp-4); }
+.selector-sesion .campo { margin: 0; flex: 1; min-width: 260px; }
+.selector-sesion .auxiliar { padding-bottom: 10px; }
+.lista-asistencia { list-style: none; padding: 0; margin: 0; }
+.lista-asistencia li { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-4); padding: 12px var(--esp-6); border-top: 1px solid var(--gris-engrane); }
+.lista-asistencia__fila--pendiente { background: var(--alerta-fondo); }
+.lista-asistencia__persona { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.lista-asistencia__obs { width: 100%; max-width: 420px; padding: 6px 10px; border: 1px solid var(--borde-control); border-radius: var(--radio-control); font: inherit; font-size: 14px; }
+.interruptor { display: inline-flex; border: 1px solid var(--borde-control); border-radius: var(--radio-control); overflow: hidden; flex-shrink: 0; }
+.interruptor__opcion { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-weight: 700; cursor: pointer; background: var(--blanco); }
+.interruptor__opcion + .interruptor__opcion { border-left: 1px solid var(--borde-control); }
+.interruptor__opcion--si { background: var(--exito-fondo); color: var(--exito); }
+.interruptor__opcion--no { background: var(--error-fondo); color: var(--error); }
+.pie-guardar { display: flex; align-items: center; justify-content: flex-end; gap: var(--esp-4); flex-wrap: wrap; margin-bottom: var(--esp-8); }
+.pie-guardar .auxiliar { margin-right: auto; }
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--esp-4); }
+.tarjeta-curso { display: flex; flex-direction: column; gap: var(--esp-2); }
+.tarjeta-curso__cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--esp-2); }
+.tarjeta-curso__cabecera .subtitulo { margin: 0; }
+.etiquetas { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.enlace-video { align-self: flex-start; }
+.lista-sesiones { list-style: none; padding: 0; margin: var(--esp-2) 0 0; border-top: 1px solid var(--gris-engrane); }
+.lista-sesiones li { display: flex; justify-content: space-between; align-items: center; gap: var(--esp-2); padding: 10px 0; border-bottom: 1px solid var(--gris-engrane); font-size: 15px; }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -354,6 +388,11 @@ img { max-width: 100%; }
   .pasos__nombre { display: none; }
   .pasos__paso--actual .pasos__nombre { display: inline; }
   .relleno-lateral { padding: 0 var(--esp-4) var(--esp-4); }
+  .lista-asistencia li { flex-direction: column; align-items: stretch; padding: 12px var(--esp-4); }
+  .interruptor { display: flex; }
+  .interruptor__opcion { flex: 1; justify-content: center; }
+  .pie-guardar .boton { width: 100%; }
+  .tarjetas { grid-template-columns: 1fr; }
   .barra-acciones .boton--principal { width: 100%; }
   .recorte { white-space: normal; max-width: none; }
   .grupo-botones, .grupo-botones .boton { width: 100%; }

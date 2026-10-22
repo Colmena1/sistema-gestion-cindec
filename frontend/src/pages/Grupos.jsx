@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronRight, Layers, LoaderCircle, Plus, Search } from 'lucide-react'
 import cliente from '../api/cliente.js'
 import Aviso from '../components/Aviso.jsx'
@@ -12,10 +12,11 @@ import { ESTATUS_GRUPO, MODALIDAD, fecha } from '../utils/formato.js'
 // Lista con cupo y estatus; desde aquí se crea un grupo y se abre su detalle.
 export default function Grupos() {
   const navegar = useNavigate()
+  const [parametros] = useSearchParams()
   const [cursos, setCursos] = useState([])
   const [personal, setPersonal] = useState({ instructores: [], evaluadores: [] })
   const [buscar, setBuscar] = useState('')
-  const [idCurso, setIdCurso] = useState('')
+  const [idCurso, setIdCurso] = useState(parametros.get('curso') || '')
   const [estatus, setEstatus] = useState('')
   const [pagina, setPagina] = useState(1)
   const buscarRetrasado = useDebounce(buscar)

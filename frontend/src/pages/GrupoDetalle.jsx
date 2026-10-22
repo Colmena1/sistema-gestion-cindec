@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { ArrowLeft, CalendarPlus, FolderOpen, LoaderCircle, Pencil, Play, Search, Trash2, Video } from 'lucide-react'
+import { ArrowLeft, CalendarPlus, ClipboardCheck, FolderOpen, GraduationCap, LoaderCircle, Pencil, Play, Search, Trash2, UserCheck, UserPlus, UserX, Video } from 'lucide-react'
 import cliente from '../api/cliente.js'
 import Aviso from '../components/Aviso.jsx'
 import Campo from '../components/Campo.jsx'
@@ -8,15 +8,22 @@ import Modal from '../components/Modal.jsx'
 import Confirmacion from '../components/Confirmacion.jsx'
 import EtiquetaEstatus from '../components/EtiquetaEstatus.jsx'
 import FormularioGrupo from '../components/FormularioGrupo.jsx'
+import InscribirParticipante from '../components/InscribirParticipante.jsx'
 import useAvisoTemporal from '../hooks/useAvisoTemporal.js'
 import { ESTATUS_GRUPO, ESTATUS_INSCRIPCION, MODALIDAD, erroresPorCampo, fecha, fechaConDia, fechaDeInstante } from '../utils/formato.js'
 
 // P-08 Detalle del grupo (CU-05; mockup M08): datos, avance de cupo, sesiones e inscritos.
-// La inscripción de participantes (CU-07) se agrega en la parte 4 del Sprint 2.
+// Desde aquí se inscribe (CU-07/CU-08), se da de baja y se abre la asistencia de cada sesión (CU-09).
 const ACCIONES_ESTATUS = {
   en_curso: { texto: 'Iniciar grupo', titulo: 'Iniciar grupo', peligro: false, explicacion: 'El grupo pasará a "En curso". Se requiere instructor y al menos una sesión.' },
   concluido: { texto: 'Concluir grupo', titulo: 'Concluir grupo', peligro: false, explicacion: 'El grupo pasará a "Concluido" y ya no podrá modificarse.' },
   cancelado: { texto: 'Cancelar grupo', titulo: 'Cancelar grupo', peligro: true, explicacion: 'El grupo pasará a "Cancelado" y ya no podrá modificarse. Su información se conserva.' },
+}
+
+const TEXTOS_INSCRIPCION = {
+  baja: { titulo: 'Dar de baja', texto: (n) => `¿Dar de baja a ${n} de este grupo? Se libera su lugar; su historial se conserva y se puede reactivar si hay cupo.` },
+  inscrito: { titulo: 'Reactivar inscripción', texto: (n) => `¿Reactivar la inscripción de ${n}? Volverá a ocupar un lugar del grupo.` },
+  capacitacion_concluida: { titulo: 'Marcar capacitación concluida', texto: (n) => `¿Marcar que ${n} concluyó la capacitación? Es el paso previo a su evaluación.` },
 }
 
 export default function GrupoDetalle() {
@@ -32,6 +39,8 @@ export default function GrupoDetalle() {
   const [sesionEnEdicion, setSesionEnEdicion] = useState(null)   // {} = nueva
   const [sesionAEliminar, setSesionAEliminar] = useState(null)
   const [buscarInscrito, setBuscarInscrito] = useState('')
+  const [inscribiendo, setInscribiendo] = useState(false)
+  const [cambioInscripcion, setCambioInscripcion] = useState(null) // { inscrito, estatus }
 
   const cargar = useCallback(() => {
     cliente.get(`/grupos/${id}`)
@@ -49,6 +58,7 @@ export default function GrupoDetalle() {
 
   const alGuardar = (mensaje) => {
     setEditando(false); setCambioEstatus(null); setSesionEnEdicion(null); setSesionAEliminar(null)
+    setInscribiendo(false); setCambioInscripcion(null)
     mostrarAviso(mensaje)
     cargar()
   }
@@ -87,8 +97,9 @@ export default function GrupoDetalle() {
             ))}
             <button className="boton boton--secundario" onClick={() => setEditando(true)}><Pencil size={18} /> Editar grupo</button>
             {grupo.transicionesPermitidas.includes('en_curso') && (
-              <button className="boton boton--principal" onClick={() => setCambioEstatus('en_curso')}><Play size={18} /> Iniciar grupo</button>
+              <button className="boton boton--secundario" onClick={() => setCambioEstatus('en_curso')}><Play size={18} /> Iniciar grupo</button>
             )}
+            <button className="boton boton--principal" onClick={() => setInscribiendo(true)}><UserPlus size={18} /> Inscribir participante</button>
           </div>
         )}
       </div>
@@ -127,7 +138,7 @@ export default function GrupoDetalle() {
           </div>
         ) : (
           <table className="tabla">
-            <thead><tr><th>Sesión</th><th>Fecha</th><th>Horario</th><th>Tema</th>{editable && <th className="tabla__acciones">Acciones</th>}</tr></thead>
+            <thead><tr><th>Sesión</th><th>Fecha</th><th>Horario</th><th>Tema</th>{(editable || grupo.estatus === 'concluido') && <th className="tabla__acciones">Acciones</th>}</tr></thead>
             <tbody>
               {grupo.sesiones.map((s) => (
                 <tr key={s.id}>
@@ -135,14 +146,21 @@ export default function GrupoDetalle() {
                   <td data-etiqueta="Fecha">{fechaConDia(s.fecha)}</td>
                   <td data-etiqueta="Horario">{s.horaInicio} a {s.horaFin}</td>
                   <td data-etiqueta="Tema">{s.tema || <span className="auxiliar">—</span>}</td>
-                  {editable && (
+                  {(editable || grupo.estatus === 'concluido') && (
                     <td className="tabla__acciones">
+                      {grupo.estatus !== 'planeado' && (
+                        <Link to={`/asistencia/${s.id}`} className="boton boton--secundario boton--chico boton--accion" title="Asistencia" aria-label={`Asistencia de la sesión ${s.numero}`}>
+                          <ClipboardCheck size={16} /><span className="texto-boton">Asistencia</span>
+                        </Link>
+                      )}
+                      {editable && <>
                       <button className="boton boton--secundario boton--chico boton--accion" title="Editar" aria-label={`Editar sesión ${s.numero}`} onClick={() => setSesionEnEdicion(s)}>
                         <Pencil size={16} /><span className="texto-boton">Editar</span>
                       </button>
                       <button className="boton boton--secundario boton--chico boton--accion" title="Eliminar" aria-label={`Eliminar sesión ${s.numero}`} onClick={() => setSesionAEliminar(s)}>
                         <Trash2 size={16} /><span className="texto-boton">Eliminar</span>
                       </button>
+                      </>}
                     </td>
                   )}
                 </tr>
@@ -166,7 +184,7 @@ export default function GrupoDetalle() {
         {grupo.inscritosLista.length === 0 ? (
           <div className="estado-vacio">
             <p className="subtitulo">Todavía no hay participantes inscritos</p>
-            <p className="auxiliar">La inscripción de participantes se habilita en la siguiente parte del sprint.</p>
+            <p className="auxiliar">{editable ? 'Use “Inscribir participante” para agregar personas a este grupo.' : 'Este grupo no tuvo participantes.'}</p>
           </div>
         ) : (
           <table className="tabla">
@@ -185,6 +203,24 @@ export default function GrupoDetalle() {
                     <Link to={`/participantes/${i.idParticipante}`} className="boton boton--secundario boton--chico boton--accion" title="Ver expediente" aria-label={`Ver expediente de ${i.nombre}`}>
                       <FolderOpen size={16} /><span className="texto-boton">Ver expediente</span>
                     </Link>
+                    {i.estatus === 'inscrito' && ['en_curso', 'concluido'].includes(grupo.estatus) && (
+                      <button className="boton boton--secundario boton--chico boton--accion" title="Capacitación concluida" aria-label={`Marcar capacitación concluida de ${i.nombre}`}
+                        onClick={() => setCambioInscripcion({ inscrito: i, estatus: 'capacitacion_concluida' })}>
+                        <GraduationCap size={16} /><span className="texto-boton">Capacitación concluida</span>
+                      </button>
+                    )}
+                    {editable && i.estatus !== 'baja' && (
+                      <button className="boton boton--secundario boton--chico boton--accion" title="Dar de baja" aria-label={`Dar de baja a ${i.nombre}`}
+                        onClick={() => setCambioInscripcion({ inscrito: i, estatus: 'baja' })}>
+                        <UserX size={16} /><span className="texto-boton">Dar de baja</span>
+                      </button>
+                    )}
+                    {editable && i.estatus === 'baja' && (
+                      <button className="boton boton--secundario boton--chico boton--accion" title="Reactivar" aria-label={`Reactivar a ${i.nombre}`}
+                        onClick={() => setCambioInscripcion({ inscrito: i, estatus: 'inscrito' })}>
+                        <UserCheck size={16} /><span className="texto-boton">Reactivar</span>
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -192,6 +228,21 @@ export default function GrupoDetalle() {
           </table>
         )}
       </section>
+
+      {inscribiendo && <InscribirParticipante grupo={grupo} onCerrar={() => setInscribiendo(false)} onInscrito={alGuardar} />}
+
+      {cambioInscripcion && (
+        <Confirmacion
+          titulo={TEXTOS_INSCRIPCION[cambioInscripcion.estatus].titulo}
+          textoBoton={TEXTOS_INSCRIPCION[cambioInscripcion.estatus].titulo}
+          peligro={cambioInscripcion.estatus === 'baja'}
+          accion={async () => (await cliente.patch(`/inscripciones/${cambioInscripcion.inscrito.idInscripcion}/estatus`, { estatus: cambioInscripcion.estatus })).data.mensaje}
+          onCerrar={() => setCambioInscripcion(null)}
+          onHecho={alGuardar}
+        >
+          {TEXTOS_INSCRIPCION[cambioInscripcion.estatus].texto(cambioInscripcion.inscrito.nombre)}
+        </Confirmacion>
+      )}
 
       {editando && (
         <FormularioGrupo grupo={grupo} cursos={cursos} personal={personal} onCerrar={() => setEditando(false)} onGuardado={alGuardar} />

@@ -16,8 +16,14 @@ const rutasCursos = require('../modules/cursos/cursos.routes');               //
 router.use('/estandares', rutasCursos.estandares);
 router.use('/cursos', rutasCursos.cursos);
 const rutasGrupos = require('../modules/cursos/grupos.routes');                // Sprint 2
+const rutasInscripciones = require('../modules/cursos/inscripciones.routes');  // Sprint 2
+router.use('/grupos', rutasInscripciones.grupos);   // primero: rutas con roles propios (inscribir)
+router.use('/sesiones', rutasInscripciones.sesiones); // asistencia: también para el instructor
 router.use('/grupos', rutasGrupos.grupos);
 router.use('/sesiones', rutasGrupos.sesiones);
+router.use('/inscripciones', rutasInscripciones.inscripciones);
+router.use('/mis-grupos', rutasInscripciones.misGrupos);
+router.use('/mis-cursos', rutasInscripciones.misCursos);
 const rutasParticipantes = require('../modules/participantes/participantes.routes'); // Sprint 2
 router.use('/participantes', rutasParticipantes.participantes);
 router.use('/documentos-participante', rutasParticipantes.documentos);

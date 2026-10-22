@@ -218,4 +218,15 @@ Formato sugerido por entrada:
 - Correo de confirmación de registro (RF-NOT-01).
 - Coordinación: P-10 Participantes (lista con búsqueda por nombre, correo o CURP) y alta de participantes con contraseña inicial; P-11 Expediente con datos editables, documentos (ver y agregar; aviso de documentos pendientes) e historial de cursos. Desde el detalle del grupo se abre el expediente de cada inscrito.
 - Todo con auditoría.
+- Ajustes tras las pruebas del residente: la fotografía de más de 300 KB se marca al elegirla; se corrigió un desplazamiento horizontal en el paso 3 del registro; mensaje claro cuando el archivo de un documento no existe en el servidor.
+
+**Hecho (22-oct) — Parte 4: Inscripción, asistencia y vistas por rol (CU-07 «include» CU-08, CU-09, CU-11/CU-13 parcial; RF-CUR-04, 06, 07 y 10):**
+- Inscripción (P-09, mockups M09 y M09b): búsqueda de participantes por nombre o CURP con aviso de "ya inscrito"; lugares restantes; si no hay cupo, el botón se deshabilita y se ofrecen otros grupos del mismo curso con lugares. Opción de inscripción como refuerzo (RF-EVA-04).
+- Validación de cupo con el renglón del grupo bloqueado (SELECT … FOR UPDATE) dentro de la transacción, para que dos inscripciones simultáneas no rebasen el cupo (diagrama de secuencia, figura 14). Si el participante estaba de baja en el grupo, se reactiva (restricción UNIQUE participante-grupo).
+- Baja, reactivación y "capacitación concluida" por inscripción (primer estado de RF-EVA-03), con auditoría. Correo de confirmación de inscripción al participante (RF-NOT-01).
+- Asistencia por sesión (P-17, mockup M17): selector de sesión, "Asistió / No asistió", observaciones, "Marcar a todos como presentes" y aviso "Falta marcar". Solo en grupos en curso y sesiones que ya ocurrieron; el instructor solo en sus grupos (validado en el servidor).
+- Mis grupos (Instructor, P-16): grupos asignados con sesiones y acceso a la asistencia (RF-CUR-07).
+- Mis cursos (Participante, P-21): grupos inscritos, sesiones, enlace de videoconferencia, instructor y su asistencia por sesión (RF-CUR-06).
+- Pruebas del residente (22-oct): inscripción con búsqueda, aviso de "ya inscrito", grupo lleno con botón deshabilitado, baja que libera el lugar, asistencia con "Falta marcar" y guardado (2 de 2), y "Mis cursos" del participante.
+- Hallazgo del residente: en "Mis cursos" de Ana aparecía "Asistió" en una sesión futura del grupo G-2026-01 (planeado). Causa: el script `08-datos-prueba.sql` de la fase de Diseño insertó directamente asistencias, intentos, evidencias y un trámite adelantados para probar las tablas. No es un error del sistema (sus reglas no permiten crear esos registros). Se agregó `docs/02-diseno/sql/10-limpiar-registros-adelantados.sql`, que elimina solo esos registros para que los datos de prueba sean coherentes antes del Sprint 3.
 
