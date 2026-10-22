@@ -15,5 +15,8 @@ router.use('/usuarios', require('../modules/usuarios/usuarios.routes'));     // 
 const rutasCursos = require('../modules/cursos/cursos.routes');               // Sprint 2
 router.use('/estandares', rutasCursos.estandares);
 router.use('/cursos', rutasCursos.cursos);
+const rutasGrupos = require('../modules/cursos/grupos.routes');                // Sprint 2
+router.use('/grupos', rutasGrupos.grupos);
+router.use('/sesiones', rutasGrupos.sesiones);
 
 module.exports = router;

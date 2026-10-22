@@ -279,8 +279,26 @@ img { max-width: 100%; }
 .pestana--activa { color: var(--azul-cindec); border-bottom-color: var(--azul-cindec); }
 .barra-acciones { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-4); flex-wrap: wrap; margin-bottom: var(--esp-4); }
 .filtros--dos { grid-template-columns: minmax(220px, 2fr) minmax(140px, 1fr); }
-.recorte { max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recorte { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .campo textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--borde-control); border-radius: var(--radio-control); background: var(--blanco); font: inherit; resize: vertical; }
+
+/* ---------- Lista de grupos y detalle del grupo (P-07, P-08) ---------- */
+.tabla--clic tbody tr { cursor: pointer; }
+.solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.texto-alerta { color: var(--alerta); }
+.encabezado-pantalla--detalle { align-items: flex-start; margin-top: var(--esp-4); }
+.encabezado-pantalla--detalle .titulo-pantalla { margin-bottom: var(--esp-1); flex-wrap: wrap; }
+.grupo-botones { display: flex; gap: var(--esp-2); flex-wrap: wrap; }
+.datos-grupo { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--esp-6); margin-bottom: var(--esp-6); }
+.dato { display: flex; flex-direction: column; gap: 2px; }
+.barra-progreso { height: 8px; background: var(--gris-engrane); border-radius: 999px; overflow: hidden; margin-top: 6px; max-width: 220px; }
+.barra-progreso > div { height: 100%; background: var(--azul-cindec); border-radius: 999px; }
+.seccion-detalle { margin-bottom: var(--esp-6); }
+.seccion-detalle__cabecera { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-4); flex-wrap: wrap; padding: var(--esp-4) var(--esp-6); }
+.seccion-detalle__cabecera .subtitulo { margin: 0; }
+.buscador-chico { width: 280px; max-width: 100%; }
+.buscador-chico input { width: 100%; padding: 8px 12px 8px 38px; border: 1px solid var(--borde-control); border-radius: var(--radio-control); font: inherit; }
+.enlace-boton { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--azul-cindec); text-decoration: underline; cursor: pointer; }
 
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
@@ -308,6 +326,9 @@ img { max-width: 100%; }
   .filtros, .filtros--dos { grid-template-columns: 1fr; }
   .barra-acciones .boton--principal { width: 100%; }
   .recorte { white-space: normal; max-width: none; }
+  .grupo-botones, .grupo-botones .boton { width: 100%; }
+  .seccion-detalle__cabecera { padding: var(--esp-4); }
+  .seccion-detalle .tabla tr { margin: 0 var(--esp-2) 12px; width: auto; }
   .dos-columnas { grid-template-columns: 1fr; }
   .encabezado-pantalla .boton--principal { width: 100%; }
   .tarjeta--tabla { background: none; border: 0; }

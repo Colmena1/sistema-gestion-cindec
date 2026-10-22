@@ -203,3 +203,10 @@ Formato sugerido por entrada:
 - Pantalla P-06 "Cursos y estándares" con dos pestañas (Cursos / Estándares de competencia), conteo de grupos vigentes y de cursos activos.
 - Componentes reutilizables nuevos: `Campo`, `Aviso`, `Confirmacion` y los hooks `useDebounce` y `useAvisoTemporal`.
 
+**Hecho (22-oct) — Parte 2: Grupos y sesiones (CU-05, RF-CUR-02, 05, 08 y 09):**
+- API `/api/v1/grupos` y `/api/v1/sesiones` (Coordinador y Administrador): lista paginada con filtros, inscritos y lugares libres calculados (el cupo disponible no se guarda, se calcula); detalle con sesiones e inscritos; alta, edición, cambio de estatus; alta, edición y eliminación de sesiones; catálogo de instructores y evaluadores activos. Todo con auditoría.
+- Reglas: curso activo; clave única, generada automáticamente si no se escribe (código del estándar + año + consecutivo, p. ej. EC0301-2026-01); instructor y evaluador deben ser usuarios activos con ese rol; enlace de videoconferencia obligatorio en línea o mixta (RF-CUR-09); el cupo no baja de los inscritos; las sesiones caen dentro de las fechas del grupo; no se elimina una sesión con asistencia.
+- Ciclo de estatus (RF-CUR-08): planeado → en curso → concluido, o cancelado desde planeado o en curso; para iniciar se requiere instructor y al menos una sesión; un grupo concluido o cancelado ya no se modifica (RNF-10).
+- Pantallas P-07 Grupos (lista) y P-08 Detalle del grupo (mockup M08): datos, barra de ocupación, instructor y evaluador ("Sin asignar · Asignar"), sesiones e inscritos con buscador.
+- Ajuste: la tabla de Cursos ya no necesita desplazamiento horizontal.
+

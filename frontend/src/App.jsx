@@ -7,6 +7,8 @@ import RestablecerContrasena from './pages/RestablecerContrasena.jsx'
 import Inicio from './pages/Inicio.jsx'
 import Usuarios from './pages/Usuarios.jsx'
 import CursosEstandares from './pages/CursosEstandares.jsx'
+import Grupos from './pages/Grupos.jsx'
+import GrupoDetalle from './pages/GrupoDetalle.jsx'
 import PantallaPendiente from './pages/PantallaPendiente.jsx'
 import NoEncontrada from './pages/NoEncontrada.jsx'
 import { TODAS_LAS_OPCIONES, rolesDeRuta } from './config/menu.js'
@@ -16,7 +18,7 @@ import { TODAS_LAS_OPCIONES, rolesDeRuta } from './config/menu.js'
 // - Todo lo demás requiere sesión, y cada pantalla solo la abren los roles que la tienen en su menú.
 // Las pantallas que todavía no se construyen muestran en qué sprint se hacen.
 // Rutas que ya tienen su pantalla real (las demás muestran "se construye en el Sprint N").
-const PANTALLAS_LISTAS = ['/', '/usuarios', '/cursos']
+const PANTALLAS_LISTAS = ['/', '/usuarios', '/cursos', '/grupos']
 
 export default function App() {
   return (
@@ -29,6 +31,8 @@ export default function App() {
         <Route index element={<Inicio />} />
         <Route path="/usuarios" element={<RutaProtegida roles={rolesDeRuta('/usuarios')}><Usuarios /></RutaProtegida>} />
         <Route path="/cursos" element={<RutaProtegida roles={rolesDeRuta('/cursos')}><CursosEstandares /></RutaProtegida>} />
+        <Route path="/grupos" element={<RutaProtegida roles={rolesDeRuta('/grupos')}><Grupos /></RutaProtegida>} />
+        <Route path="/grupos/:id" element={<RutaProtegida roles={rolesDeRuta('/grupos')}><GrupoDetalle /></RutaProtegida>} />
         {TODAS_LAS_OPCIONES.filter((op) => !PANTALLAS_LISTAS.includes(op.ruta)).map((op) => (
           <Route key={op.ruta} path={op.ruta}
             element={<RutaProtegida roles={rolesDeRuta(op.ruta)}><PantallaPendiente opcion={op} /></RutaProtegida>} />
