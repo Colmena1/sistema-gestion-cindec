@@ -272,6 +272,16 @@ img { max-width: 100%; }
 .dos-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--esp-4); }
 .campo input:disabled { background: var(--gris-fondo); color: var(--gris-medio); }
 
+/* ---------- Pestañas, barra de acciones y textos largos ---------- */
+.pestanas { display: flex; gap: var(--esp-1); border-bottom: 1px solid var(--gris-engrane); margin-bottom: var(--esp-4); overflow-x: auto; }
+.pestana { background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px var(--esp-4); font-weight: 700; color: var(--gris-medio); cursor: pointer; white-space: nowrap; }
+.pestana:hover { color: var(--gris-texto); }
+.pestana--activa { color: var(--azul-cindec); border-bottom-color: var(--azul-cindec); }
+.barra-acciones { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-4); flex-wrap: wrap; margin-bottom: var(--esp-4); }
+.filtros--dos { grid-template-columns: minmax(220px, 2fr) minmax(140px, 1fr); }
+.recorte { max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.campo textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--borde-control); border-radius: var(--radio-control); background: var(--blanco); font: inherit; resize: vertical; }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -295,7 +305,9 @@ img { max-width: 100%; }
   .contenido { padding: var(--esp-6) var(--esp-4); }
   .acceso__tarjeta { padding: var(--esp-6) var(--esp-4); }
   /* Filtros uno debajo de otro y tablas convertidas en tarjetas */
-  .filtros { grid-template-columns: 1fr; }
+  .filtros, .filtros--dos { grid-template-columns: 1fr; }
+  .barra-acciones .boton--principal { width: 100%; }
+  .recorte { white-space: normal; max-width: none; }
   .dos-columnas { grid-template-columns: 1fr; }
   .encabezado-pantalla .boton--principal { width: 100%; }
   .tarjeta--tabla { background: none; border: 0; }

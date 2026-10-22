@@ -193,3 +193,13 @@ Formato sugerido por entrada:
 - Funcionó: dividir el sprint en tres partes probadas por separado; las pruebas del residente detectaron ajustes de interfaz (menú contraíble, tamaño de pantallas, botones de la tabla) que se corrigieron el mismo día.
 - A mejorar: verificar siempre que los archivos actualizados lleguen completos al equipo del residente (se detectaron dos copias que no se aplicaron) y usar una ventana de incógnito para probar dos roles a la vez.
 
+## Semana 43 — Sprint 2: Cursos, grupos y participantes (iniciado el 22-oct-2026, adelantado)
+
+**Planeación del sprint:** CU-04 a CU-11 (RF-CUR-01 a 10) en cuatro partes: (1) estándares y cursos, (2) grupos y sesiones, (3) participantes: autorregistro, alta y expediente, (4) inscripción con cupo, asistencia y consultas por rol.
+
+**Hecho (22-oct) — Parte 1: Estándares y cursos (CU-04, RF-CUR-01):**
+- API `/api/v1/estandares` y `/api/v1/cursos` (Coordinador y Administrador): listar con búsqueda y filtros, registrar, editar y activar/desactivar, con auditoría.
+- Reglas: código de estándar único con formato CONOCER (EC0301, EC0110.02); un curso solo se registra con un estándar activo; no se desactiva un estándar con cursos activos ni un curso con grupos planeados o en curso; no se cambia el estándar de un curso que ya tiene grupos.
+- Pantalla P-06 "Cursos y estándares" con dos pestañas (Cursos / Estándares de competencia), conteo de grupos vigentes y de cursos activos.
+- Componentes reutilizables nuevos: `Campo`, `Aviso`, `Confirmacion` y los hooks `useDebounce` y `useAvisoTemporal`.
+
