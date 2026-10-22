@@ -87,7 +87,7 @@ export default function Login() {
 
         <hr className="separador" />
         <p className="acceso__registro">
-          ¿Aún no tiene cuenta? <span title="Disponible en el Sprint 2">Regístrese como participante</span>
+          ¿Aún no tiene cuenta? <Link to="/registro" className="acceso__olvido">Regístrese como participante</Link>
         </p>
       </form>
 

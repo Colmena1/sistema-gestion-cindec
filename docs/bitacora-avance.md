@@ -210,3 +210,12 @@ Formato sugerido por entrada:
 - Pantallas P-07 Grupos (lista) y P-08 Detalle del grupo (mockup M08): datos, barra de ocupación, instructor y evaluador ("Sin asignar · Asignar"), sesiones e inscritos con buscador.
 - Ajuste: la tabla de Cursos ya no necesita desplazamiento horizontal.
 
+**Hecho (22-oct) — Parte 3: Participantes (CU-06 «include» CU-21, CU-10; RF-CUR-03 y 06):**
+- Autorregistro público en tres pasos (P-03, mockup M03): Cuenta · Datos personales · Documentos. Antes de avanzar se verifica que el correo y la CURP no estén registrados; todo se envía junto al final.
+- Documentos según el manual de CONOCER: identificación oficial (INE, pasaporte, cédula o cartilla) y fotografía obligatorias; ficha de registro opcional; identificación del tutor obligatoria si la CURP indica que es menor de edad (se calcula con la fecha de nacimiento de la CURP). Fotografía JPG/PNG de 300 KB como máximo, guardada con la CURP como nombre.
+- Archivos con multer: PDF, JPG o PNG de hasta 5 MB; se guardan en `backend/uploads/` fuera de lo público (excluido de Git) y solo se descargan por la API con permisos (coordinación o el propio participante). Si algo falla al registrar, se borran los archivos ya escritos y la transacción se revierte.
+- Validación de CURP (formato y fecha de nacimiento real) y teléfono a 10 dígitos, en el navegador y en el servidor.
+- Correo de confirmación de registro (RF-NOT-01).
+- Coordinación: P-10 Participantes (lista con búsqueda por nombre, correo o CURP) y alta de participantes con contraseña inicial; P-11 Expediente con datos editables, documentos (ver y agregar; aviso de documentos pendientes) e historial de cursos. Desde el detalle del grupo se abre el expediente de cada inscrito.
+- Todo con auditoría.
+

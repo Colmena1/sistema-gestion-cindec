@@ -24,3 +24,6 @@ Thumbs.db
 
 # Respaldo automático de MySQL Workbench
 *.mwb.bak
+
+# Archivos subidos por los usuarios (documentos personales: nunca a Git)
+backend/uploads/

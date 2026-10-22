@@ -284,7 +284,8 @@ img { max-width: 100%; }
 
 /* ---------- Lista de grupos y detalle del grupo (P-07, P-08) ---------- */
 .tabla--clic tbody tr { cursor: pointer; }
-.solo-lector { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.solo-lector,
+.campo input.solo-lector { position: absolute; width: 1px; height: 1px; padding: 0; border: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .texto-alerta { color: var(--alerta); }
 .encabezado-pantalla--detalle { align-items: flex-start; margin-top: var(--esp-4); }
 .encabezado-pantalla--detalle .titulo-pantalla { margin-bottom: var(--esp-1); flex-wrap: wrap; }
@@ -299,6 +300,31 @@ img { max-width: 100%; }
 .buscador-chico { width: 280px; max-width: 100%; }
 .buscador-chico input { width: 100%; padding: 8px 12px 8px 38px; border: 1px solid var(--borde-control); border-radius: var(--radio-control); font: inherit; }
 .enlace-boton { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--azul-cindec); text-decoration: underline; cursor: pointer; }
+
+/* ---------- Participantes: autorregistro por pasos, archivos y expediente ---------- */
+.registro { width: 100%; max-width: 640px; padding: var(--esp-8); }
+.registro__titulo { margin-bottom: var(--esp-1); color: var(--gris-texto); }
+.registro__nota { margin-bottom: 12px; }
+.registro__botones { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-4); }
+.pasos { list-style: none; display: flex; align-items: center; gap: var(--esp-2); padding: 0; margin: var(--esp-6) 0; }
+.pasos__paso { display: flex; align-items: center; gap: var(--esp-2); flex: 1; color: var(--gris-medio); font-weight: 700; }
+.pasos__paso:not(:last-child)::after { content: ''; flex: 1; height: 2px; background: var(--gris-engrane); min-width: 16px; }
+.pasos__numero { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--borde-control); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pasos__paso--actual { color: var(--azul-cindec); }
+.pasos__paso--actual .pasos__numero { border-color: var(--azul-cindec); box-shadow: 0 0 0 4px var(--azul-engrane); }
+.pasos__paso--hecho .pasos__numero { background: var(--azul-cindec); border-color: var(--azul-cindec); color: var(--blanco); }
+.pasos__nombre { white-space: nowrap; }
+.mayusculas { text-transform: uppercase; }
+.zona-archivo { display: flex; align-items: center; justify-content: center; gap: var(--esp-2); width: 100%; padding: 14px; border: 1px dashed var(--borde-control); border-radius: var(--radio-control); background: var(--gris-fondo); color: var(--azul-cindec); font-weight: 700; cursor: pointer; }
+.zona-archivo:hover { background: var(--azul-niebla); }
+.zona-archivo--error { border-color: var(--error); }
+.archivo-elegido { display: flex; align-items: center; gap: var(--esp-2); padding: 8px 8px 8px 12px; border: 1px solid var(--exito); border-radius: var(--radio-control); background: var(--exito-fondo); color: var(--exito); }
+.archivo-elegido--error { border-color: var(--error); background: var(--error-fondo); color: var(--error); }
+.archivo-elegido__nombre { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--gris-texto); font-weight: 600; }
+.enlace-boton-plano { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+.filtros--uno { grid-template-columns: minmax(220px, 560px); }
+.relleno-lateral { padding: 0 var(--esp-6) var(--esp-4); }
+.enlace-tabla { font-weight: 700; color: var(--azul-cindec); }
 
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
@@ -323,7 +349,11 @@ img { max-width: 100%; }
   .contenido { padding: var(--esp-6) var(--esp-4); }
   .acceso__tarjeta { padding: var(--esp-6) var(--esp-4); }
   /* Filtros uno debajo de otro y tablas convertidas en tarjetas */
-  .filtros, .filtros--dos { grid-template-columns: 1fr; }
+  .filtros, .filtros--dos, .filtros--uno { grid-template-columns: 1fr; }
+  .registro { padding: var(--esp-6) var(--esp-4); }
+  .pasos__nombre { display: none; }
+  .pasos__paso--actual .pasos__nombre { display: inline; }
+  .relleno-lateral { padding: 0 var(--esp-4) var(--esp-4); }
   .barra-acciones .boton--principal { width: 100%; }
   .recorte { white-space: normal; max-width: none; }
   .grupo-botones, .grupo-botones .boton { width: 100%; }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { ArrowLeft, CalendarPlus, LoaderCircle, Pencil, Play, Search, Trash2, Video } from 'lucide-react'
+import { ArrowLeft, CalendarPlus, FolderOpen, LoaderCircle, Pencil, Play, Search, Trash2, Video } from 'lucide-react'
 import cliente from '../api/cliente.js'
 import Aviso from '../components/Aviso.jsx'
 import Campo from '../components/Campo.jsx'
@@ -170,7 +170,7 @@ export default function GrupoDetalle() {
           </div>
         ) : (
           <table className="tabla">
-            <thead><tr><th>Participante</th><th>Empresa</th><th>Inscripción</th><th>Estatus</th></tr></thead>
+            <thead><tr><th>Participante</th><th>Empresa</th><th>Inscripción</th><th>Estatus</th><th className="tabla__acciones"><span className="solo-lector">Expediente</span></th></tr></thead>
             <tbody>
               {lista.map((i) => (
                 <tr key={i.idInscripcion}>
@@ -180,6 +180,11 @@ export default function GrupoDetalle() {
                   <td data-etiqueta="Estatus">
                     <EtiquetaEstatus tono={ESTATUS_INSCRIPCION[i.estatus].tono}>{ESTATUS_INSCRIPCION[i.estatus].texto}</EtiquetaEstatus>
                     {i.esRefuerzo && <span className="auxiliar bloque">Refuerzo</span>}
+                  </td>
+                  <td className="tabla__acciones">
+                    <Link to={`/participantes/${i.idParticipante}`} className="boton boton--secundario boton--chico boton--accion" title="Ver expediente" aria-label={`Ver expediente de ${i.nombre}`}>
+                      <FolderOpen size={16} /><span className="texto-boton">Ver expediente</span>
+                    </Link>
                   </td>
                 </tr>
               ))}
