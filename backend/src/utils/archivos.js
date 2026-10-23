@@ -66,10 +66,23 @@ const subirEvidencia = multer({
   },
 });
 
+// Documento oficial de CONOCER (RF-CERT-03): solo PDF, hasta 10 MB.
+const subirCertificado = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * MB, files: 1 },
+  fileFilter: (req, archivo, cb) => {
+    if (archivo.mimetype !== 'application/pdf') {
+      return cb(new AppError(400, `El archivo "${archivo.originalname}" no es PDF. El certificado de CONOCER se resguarda en PDF.`));
+    }
+    cb(null, true);
+  },
+});
+
 // Tamaño máximo según la ruta que recibió el archivo
 function mensajeTamano(url) {
   if (url.includes('materiales')) return 'El material debe pesar como máximo 20 MB.';
   if (url.includes('evidencias')) return 'La evidencia debe pesar como máximo 10 MB.';
+  if (url.includes('tramites')) return 'El certificado debe pesar como máximo 10 MB.';
   return 'Cada archivo debe pesar como máximo 5 MB.';
 }
 
@@ -108,4 +121,4 @@ function rutaAbsoluta(relativa) {
   return absoluta;
 }
 
-module.exports = { subir, subirMaterial, subirEvidencia, manejarErrorMulter, guardar, eliminar, rutaAbsoluta, MB };
+module.exports = { subir, subirMaterial, subirEvidencia, subirCertificado, manejarErrorMulter, guardar, eliminar, rutaAbsoluta, MB };

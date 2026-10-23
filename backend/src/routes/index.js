@@ -35,5 +35,10 @@ router.use('/evaluaciones', rutasEvaluaciones.instrumentos);
 router.use('/por-evaluar', rutasEvaluaciones.porEvaluar);
 router.use('/intentos', rutasEvaluaciones.intentos);
 router.use('/evidencias', rutasEvaluaciones.evidencias);
+const rutasCertificaciones = require('../modules/certificaciones/certificaciones.routes'); // Sprint 3
+router.use('/tramites', rutasCertificaciones.tramites);
+router.use('/mis-certificados', rutasCertificaciones.misCertificados);
+router.use('/mi-historial', rutasCertificaciones.miHistorial);
+router.use('/verificar-folio', rutasCertificaciones.verificarFolio);
 
 module.exports = router;

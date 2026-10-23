@@ -51,3 +51,16 @@ export const DICTAMEN = {
 }
 // 92 -> "92", 92.5 -> "92.5"
 export const calificacion = (valor) => (valor === null || valor === undefined ? '—' : String(Number(valor)))
+
+// Certificaciones (RF-CERT-02): el trámite avanza en este orden
+export const ORDEN_TRAMITE = ['solicitado', 'pagado', 'en_tramite', 'emitido']
+export const ESTATUS_TRAMITE = {
+  solicitado: { texto: 'Solicitado', tono: 'neutro' },
+  pagado: { texto: 'Pagado', tono: 'info' },
+  en_tramite: { texto: 'En trámite', tono: 'alerta' },
+  emitido: { texto: 'Emitido', tono: 'exito' },
+}
+// Instante (DATETIME) -> "22/10/2026 13:05"
+export const fechaHora = (valor) => (valor
+  ? new Date(valor).toLocaleString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
+  : '—')

@@ -389,6 +389,27 @@ img { max-width: 100%; }
 .celda-etiquetas { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 .recorte-texto { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* Certificaciones: trámite (M14), mis certificados y verificar folio (M25) */
+.aviso--alerta { background: var(--alerta-fondo); color: var(--alerta); }
+.texto-exito { color: var(--exito); }
+.tres-columnas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 var(--esp-4); }
+.tarjeta .pie-guardar { margin-bottom: 0; }
+.avance-tramite { list-style: none; padding: 0; margin: var(--esp-4) 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--esp-4); }
+.avance-tramite li { display: flex; flex-direction: column; gap: 4px; padding-top: 12px; border-top: 4px solid var(--gris-engrane); color: var(--gris-medio); }
+.avance-tramite__paso--hecho { border-top-color: var(--azul-cindec) !important; }
+.avance-tramite__paso--hecho strong { color: var(--azul-cindec); }
+.avance-tramite--chico { gap: var(--esp-2); margin-top: 0; }
+.avance-tramite--chico li { font-size: 13px; padding-top: 6px; border-top-width: 3px; }
+.historial-tramite { list-style: none; padding: 0; margin: 0; }
+.historial-tramite li { display: flex; align-items: center; gap: var(--esp-4); padding: 12px var(--esp-6); border-top: 1px solid var(--gris-engrane); }
+.historial-tramite__texto { flex: 1; min-width: 0; }
+.etiqueta-campo { display: block; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.fila-verificar { display: flex; gap: var(--esp-4); }
+.fila-verificar input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid var(--borde-control); border-radius: var(--radio-control); font: inherit; font-size: 16px; }
+.fila-verificar input[aria-invalid="true"] { border-color: var(--error); }
+.pie-red-conocer { display: flex; align-items: center; gap: var(--esp-4); margin-top: var(--esp-6); padding-top: var(--esp-4); border-top: 1px solid var(--gris-engrane); }
+.pie-red-conocer img { height: 48px; width: auto; }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -431,6 +452,11 @@ img { max-width: 100%; }
   .seccion-detalle .tabla tr { margin: 0 var(--esp-2) 12px; width: auto; }
   .dos-columnas { grid-template-columns: 1fr; }
   .opciones-dictamen { grid-template-columns: 1fr; }
+  .tres-columnas { grid-template-columns: 1fr; }
+  .avance-tramite:not(.avance-tramite--chico) { grid-template-columns: 1fr 1fr; }
+  .historial-tramite li { flex-wrap: wrap; gap: var(--esp-2); padding: 12px var(--esp-4); }
+  .historial-tramite__texto { flex-basis: 100%; order: 3; }
+  .fila-verificar { flex-direction: column; }
   .pie-captura { flex-direction: column-reverse; align-items: stretch; }
   .pie-captura > .boton { width: 100%; }
   .encabezado-pantalla .boton--principal { width: 100%; }

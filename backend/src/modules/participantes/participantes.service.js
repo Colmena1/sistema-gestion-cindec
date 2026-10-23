@@ -9,6 +9,7 @@ const ROLES = require('../../config/roles');
 const { plantilla, enviarCorreo } = require('../notificaciones/correo.service');
 const { avancePorParticipante: avanceMateriales } = require('../aprendizaje/materiales.service');
 const { historialDeParticipante: historialEvaluaciones } = require('../evaluaciones/intentos.service');
+const { deParticipante: tramitesDeParticipante } = require('../certificaciones/tramites.service');
 const {
   Usuario, Rol, Participante, DocumentoParticipante, Curso, EstandarCompetencia,
   Inscripcion, Grupo, sequelize,
@@ -238,7 +239,7 @@ async function expediente(id) {
       order: [['fecha_inscripcion', 'DESC']],
     }),
   ]);
-  const [avance, evaluaciones] = await Promise.all([avanceMateriales(id), historialEvaluaciones(id)]);
+  const [avance, evaluaciones, certificaciones] = await Promise.all([avanceMateriales(id), historialEvaluaciones(id), tramitesDeParticipante(id)]);
   return {
     id: p.id_participante,
     idUsuario: p.usuario.id_usuario,
@@ -273,6 +274,7 @@ async function expediente(id) {
       materiales: avance[i.grupo.curso.id_curso] || { total: 0, consultados: 0 }, // RF-APR-03
     })),
     evaluaciones, // RF-EVA-05: intentos con su estatus y dictamen
+    certificaciones, // RF-CERT-05: trámites y certificados del participante
   };
 }
 

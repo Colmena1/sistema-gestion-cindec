@@ -19,6 +19,11 @@ import Materiales from './pages/Materiales.jsx'
 import Instrumentos from './pages/Instrumentos.jsx'
 import PorEvaluar from './pages/PorEvaluar.jsx'
 import IntentoEvaluacion from './pages/IntentoEvaluacion.jsx'
+import Tramites from './pages/Tramites.jsx'
+import TramiteDetalle from './pages/TramiteDetalle.jsx'
+import MisCertificados from './pages/MisCertificados.jsx'
+import MiHistorial from './pages/MiHistorial.jsx'
+import VerificarFolio from './pages/VerificarFolio.jsx'
 import PantallaPendiente from './pages/PantallaPendiente.jsx'
 import NoEncontrada from './pages/NoEncontrada.jsx'
 import { ROLES, TODAS_LAS_OPCIONES, rolesDeRuta } from './config/menu.js'
@@ -28,7 +33,8 @@ import { ROLES, TODAS_LAS_OPCIONES, rolesDeRuta } from './config/menu.js'
 // - Todo lo demás requiere sesión, y cada pantalla solo la abren los roles que la tienen en su menú.
 // Las pantallas que todavía no se construyen muestran en qué sprint se hacen.
 // Rutas que ya tienen su pantalla real (las demás muestran "se construye en el Sprint N").
-const PANTALLAS_LISTAS = ['/', '/usuarios', '/cursos', '/grupos', '/participantes', '/mis-grupos', '/mis-cursos', '/materiales', '/instrumentos', '/por-evaluar']
+const PANTALLAS_LISTAS = ['/', '/usuarios', '/cursos', '/grupos', '/participantes', '/mis-grupos', '/mis-cursos', '/materiales', '/instrumentos', '/por-evaluar',
+  '/tramites', '/mis-certificados', '/mi-historial', '/verificar-folio']
 
 export default function App() {
   return (
@@ -53,6 +59,11 @@ export default function App() {
         <Route path="/instrumentos" element={<RutaProtegida roles={rolesDeRuta('/instrumentos')}><Instrumentos /></RutaProtegida>} />
         <Route path="/por-evaluar" element={<RutaProtegida roles={rolesDeRuta('/por-evaluar')}><PorEvaluar /></RutaProtegida>} />
         <Route path="/por-evaluar/intento/:id" element={<RutaProtegida roles={[ROLES.ADMIN, ROLES.COORDINADOR, ROLES.EVALUADOR]}><IntentoEvaluacion /></RutaProtegida>} />
+        <Route path="/tramites" element={<RutaProtegida roles={rolesDeRuta('/tramites')}><Tramites /></RutaProtegida>} />
+        <Route path="/tramites/:id" element={<RutaProtegida roles={rolesDeRuta('/tramites')}><TramiteDetalle /></RutaProtegida>} />
+        <Route path="/mis-certificados" element={<RutaProtegida roles={rolesDeRuta('/mis-certificados')}><MisCertificados /></RutaProtegida>} />
+        <Route path="/mi-historial" element={<RutaProtegida roles={rolesDeRuta('/mi-historial')}><MiHistorial /></RutaProtegida>} />
+        <Route path="/verificar-folio" element={<RutaProtegida roles={rolesDeRuta('/verificar-folio')}><VerificarFolio /></RutaProtegida>} />
         {TODAS_LAS_OPCIONES.filter((op) => !PANTALLAS_LISTAS.includes(op.ruta)).map((op) => (
           <Route key={op.ruta} path={op.ruta}
             element={<RutaProtegida roles={rolesDeRuta(op.ruta)}><PantallaPendiente opcion={op} /></RutaProtegida>} />

@@ -10,7 +10,7 @@ import Modal from '../components/Modal.jsx'
 import EtiquetaEstatus from '../components/EtiquetaEstatus.jsx'
 import FormularioParticipante from '../components/FormularioParticipante.jsx'
 import useAvisoTemporal from '../hooks/useAvisoTemporal.js'
-import { DICTAMEN, ESTATUS_GRUPO, ESTATUS_INSCRIPCION, ESTATUS_INTENTO, calificacion, erroresPorCampo, fecha, fechaDeInstante } from '../utils/formato.js'
+import { DICTAMEN, ESTATUS_GRUPO, ESTATUS_INSCRIPCION, ESTATUS_INTENTO, ESTATUS_TRAMITE, calificacion, erroresPorCampo, fecha, fechaDeInstante } from '../utils/formato.js'
 
 // P-11 Expediente e historial del participante (CU-10, RF-CUR-06):
 // datos, documentos y cursos. Evaluaciones y certificaciones se agregan en el Sprint 3.
@@ -168,9 +168,26 @@ export default function ParticipanteExpediente() {
         )}
       </section>
 
-      <section className="tarjeta estado-vacio seccion-detalle">
-        <p className="subtitulo">Certificaciones</p>
-        <p className="auxiliar">Esta parte del historial se agrega con el módulo de Certificaciones (Sprint 3, parte 3).</p>
+      {/* Certificaciones (RF-CERT-05) */}
+      <section className="tarjeta tarjeta--tabla seccion-detalle">
+        <div className="seccion-detalle__cabecera"><h2 className="subtitulo">Certificaciones ({p.certificaciones.length})</h2></div>
+        {p.certificaciones.length === 0 ? (
+          <div className="estado-vacio"><p className="auxiliar">Sin trámites de certificación. Se inician desde Trámites cuando el participante es dictaminado competente.</p></div>
+        ) : (
+          <table className="tabla">
+            <thead><tr><th>Trámite</th><th>Estándar</th><th>Estatus</th><th>Certificado CONOCER</th></tr></thead>
+            <tbody>
+              {p.certificaciones.map((c) => (
+                <tr key={c.id}>
+                  <td data-etiqueta="Trámite"><Link to={`/tramites/${c.id}`} className="enlace-tabla">{c.folioInterno}</Link><span className="auxiliar bloque">Solicitado el {fecha(c.fechaSolicitud)}</span></td>
+                  <td data-etiqueta="Estándar"><strong>{c.estandar.codigo}</strong><span className="auxiliar bloque">Grupo {c.grupo}</span></td>
+                  <td data-etiqueta="Estatus"><EtiquetaEstatus tono={ESTATUS_TRAMITE[c.estatus].tono}>{ESTATUS_TRAMITE[c.estatus].texto}</EtiquetaEstatus></td>
+                  <td data-etiqueta="Certificado CONOCER">{c.documento ? <>Folio {c.documento.folioConocer}<span className="auxiliar bloque">Emitido el {fecha(c.documento.fechaEmision)}</span></> : <span className="auxiliar">En proceso</span>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </section>
 
       {editando && (
