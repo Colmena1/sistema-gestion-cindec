@@ -148,10 +148,10 @@ export default function ParticipanteExpediente() {
       <section className="tarjeta tarjeta--tabla seccion-detalle">
         <div className="seccion-detalle__cabecera"><h2 className="subtitulo">Evaluaciones ({p.evaluaciones.length})</h2></div>
         {p.evaluaciones.length === 0 ? (
-          <div className="estado-vacio"><p className="auxiliar">Todavía no presenta evaluaciones. Se evalúa después de marcar su capacitación como concluida.</p></div>
+          <div className="estado-vacio"><p className="auxiliar">Todavía no presenta evaluaciones. Lo evalúa el evaluador asignado a su grupo cuando el grupo está en curso o concluido.</p></div>
         ) : (
           <table className="tabla">
-            <thead><tr><th>Estándar</th><th>Intento</th><th>Calificación</th><th>Evaluación</th><th>Dictamen</th><th className="tabla__acciones">Detalle</th></tr></thead>
+            <thead><tr><th>Estándar</th><th>Intento</th><th>Calificación</th><th>Evaluación</th><th>Juicio de competencia</th><th className="tabla__acciones">Detalle</th></tr></thead>
             <tbody>
               {p.evaluaciones.map((e) => (
                 <tr key={e.id}>
@@ -159,7 +159,7 @@ export default function ParticipanteExpediente() {
                   <td data-etiqueta="Intento">{e.numero} · {fecha(e.fechaAplicacion)}</td>
                   <td data-etiqueta="Calificación">{calificacion(e.calificacion)}<span className="auxiliar bloque">Mínima {calificacion(e.calificacionMinima)}</span></td>
                   <td data-etiqueta="Evaluación"><EtiquetaEstatus tono={ESTATUS_INTENTO[e.estatus].tono}>{ESTATUS_INTENTO[e.estatus].texto}</EtiquetaEstatus></td>
-                  <td data-etiqueta="Dictamen">{e.dictamen ? <EtiquetaEstatus tono={DICTAMEN[e.dictamen].tono}>{DICTAMEN[e.dictamen].texto}</EtiquetaEstatus> : '—'}</td>
+                  <td data-etiqueta="Juicio de competencia">{e.dictamen ? <EtiquetaEstatus tono={DICTAMEN[e.dictamen].tono}>{DICTAMEN[e.dictamen].texto}</EtiquetaEstatus> : '—'}</td>
                   <td className="tabla__acciones"><Link to={`/por-evaluar/intento/${e.id}`} className="enlace-tabla">Ver</Link></td>
                 </tr>
               ))}
@@ -172,7 +172,7 @@ export default function ParticipanteExpediente() {
       <section className="tarjeta tarjeta--tabla seccion-detalle">
         <div className="seccion-detalle__cabecera"><h2 className="subtitulo">Certificaciones ({p.certificaciones.length})</h2></div>
         {p.certificaciones.length === 0 ? (
-          <div className="estado-vacio"><p className="auxiliar">Sin trámites de certificación. Se inician desde Trámites cuando el participante es dictaminado competente.</p></div>
+          <div className="estado-vacio"><p className="auxiliar">Sin trámites de certificación. Se inician desde Trámites cuando el participante tiene juicio de competencia "competente".</p></div>
         ) : (
           <table className="tabla">
             <thead><tr><th>Trámite</th><th>Estándar</th><th>Estatus</th><th>Certificado CONOCER</th></tr></thead>

@@ -40,7 +40,7 @@ module.exports = {
       body('fechaAplicacion').isISO8601({ strict: true }).withMessage('Escriba la fecha de aplicación.').bail()
         .customSanitizer((v) => String(v).slice(0, 10)),
       calificacion('calificacion', 'Escriba la calificación, de 0 a 100.', false),
-      body('dictamen').isIn(DICTAMEN).withMessage('Seleccione el dictamen.'),
+      body('dictamen').isIn(DICTAMEN).withMessage('Seleccione el juicio de competencia.'),
       body('observaciones').optional({ values: 'null' }).isString().trim()
         .isLength({ max: 2000 }).withMessage('Las observaciones deben tener como máximo 2000 caracteres.'),
     ],

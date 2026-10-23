@@ -53,7 +53,7 @@ export default function TramiteDetalle() {
           <h1 className="titulo-pantalla fila-icono">Trámite {t.folioInterno} <EtiquetaEstatus tono={est.tono}>{est.texto}</EtiquetaEstatus></h1>
           <p className="auxiliar">
             <Link to={`/participantes/${t.participante.id}`} className="enlace-tabla">{t.participante.nombre}</Link> · {t.estandar.codigo} {t.estandar.nombre} ·
-            Dictamen <strong className="texto-exito">Competente</strong> ({fecha(t.dictamen.fecha)}, <Link to={`/por-evaluar/intento/${t.dictamen.idIntento}`} className="enlace-tabla">intento {t.dictamen.numeroIntento}</Link>)
+            Juicio de competencia: <strong className="texto-exito">Competente</strong> ({fecha(t.dictamen.fecha)}, <Link to={`/por-evaluar/intento/${t.dictamen.idIntento}`} className="enlace-tabla">intento {t.dictamen.numeroIntento}</Link>)
           </p>
         </div>
         {t.siguiente && <button className="boton boton--principal" onClick={() => setAvanzando(true)}>{PASO[t.siguiente].boton}</button>}

@@ -42,3 +42,17 @@ Ir más allá de "consultar y descargar materiales de un curso" (que sí está e
 Inicialmente se había planeado incluir en V1 una versión acotada de este rol (una empresa consultando el avance/resultados de sus propios trabajadores). El 2026-10-01 se decidió sacar el rol completo de V1 por restricción de tiempo de desarrollo: ni la versión acotada ni la completa se implementan durante la residencia. En V1, todo el seguimiento de participantes por empresa lo realiza el personal de CINDEC (coordinador/administrador) a través de los módulos existentes, sin que la empresa tenga acceso propio al sistema.
 
 La visión completa del rol —donde la empresa se auto-registra y administra su propia cuenta, cursos y usuarios sin intervención de CINDEC, incluyendo el acceso de solo consulta a sus propios resultados— queda íntegramente para después, como parte de la visión SaaS.
+
+## Proceso completo de dictamen y portafolio CONOCER (agregado 2026-10-23)
+
+Al revisar los documentos oficiales que proporcionó CINDEC (Manual de Operaciones de ECE/OC M-DGAOSU-03, Cédula de Evaluación, plantilla de Portafolio de Evidencias, Encuesta de satisfacción e informe de una auditoría anual) se identificaron partes del proceso que V1 no cubre. Se decidió no modificar la base de datos durante la residencia (ver `docs/00-decisiones/ADR-0005-evaluacion-sin-condicionar-y-terminologia-conocer.md`) y dejarlas aquí:
+
+- **Grupo de Dictamen:** después del juicio de competencia del evaluador, un grupo impar (mínimo 3: dos expertos en la función y un representante de la ECE) revisa una muestra de portafolios y determina *procedente / no procedente*; solo lo procedente pasa a la solicitud de emisión. Requiere nuevas tablas (sesión de grupo, integrantes, resultado por portafolio).
+- **Cédula de Evaluación completa:** mejores prácticas, áreas de oportunidad, reactivos no cubiertos, recomendaciones, incidencias, cédula de acreditación del evaluador y del centro evaluador, y acuse del candidato. V1 solo guarda "observaciones".
+- **Portafolio de evidencias tipificado:** ficha de registro, diagnóstico, autorización de digitalización, plan de evaluación, instrumento aplicado, evidencias complementarias, cédula y encuesta, con lista de verificación por candidato (los hallazgos típicos de auditoría son portafolios perdidos, documentos o firmas faltantes y fechas inconsistentes).
+- **Encuesta de satisfacción digital** del proceso de evaluación-certificación (se conserva 5 años y se revisa en auditoría).
+- **Plazos oficiales con alertas:** solicitud de emisión ≤ 10 días hábiles después del dictamen; pago de la línea de captura ≤ 60 días naturales; envío de certificados por CONOCER ≤ 5 días hábiles después de confirmar el pago.
+- **Vigencia del certificado por estándar** (por ejemplo, EC1564: 2 años), para calcularla en lugar de capturarla a mano.
+- **Tipo de certificado** (impreso o digital, con o sin fotografía) y **autorización de publicación en el RENAP**.
+- **Centros de Evaluación y Evaluadores Independientes externos** acreditados por CINDEC (por ejemplo, mediante convenio ECE-CE), con su propia cédula de acreditación.
+- **Candidatos solo de evaluación** con registro propio (sin inscribirse a un grupo de capacitación). En V1 se atienden inscribiéndolos en un grupo sin exigir que concluyan la capacitación (ADR-0005).

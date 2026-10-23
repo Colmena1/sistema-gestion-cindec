@@ -15,7 +15,9 @@ import { useSesion } from '../context/SesionContext.jsx'
 import useAvisoTemporal from '../hooks/useAvisoTemporal.js'
 import { DICTAMEN, ESTATUS_INTENTO, calificacion, erroresPorCampo, fecha, fechaDeInstante } from '../utils/formato.js'
 
-// P-20 Resultado y dictamen (CU-15 + CU-16; RF-EVA-02, 03, 04) — mockup M20.
+// P-20 Resultado y juicio de competencia (CU-15 + CU-16; RF-EVA-02, 03, 04) — mockup M20.
+// Término CONOCER: el evaluador emite el "juicio de competencia"; el "dictamen" lo da después el
+// Grupo de Dictamen (visión futura). En la base de datos la columna sigue llamándose "dictamen".
 // El evaluador del grupo captura fecha, calificación, dictamen, observaciones y evidencias.
 // Coordinación y administración la abren en modo consulta. Ya calificado, nada se modifica (RNF-06).
 const EXTENSIONES_EVIDENCIA = /\.(pdf|docx?|jpe?g|png)$/i
@@ -71,7 +73,7 @@ export default function IntentoEvaluacion() {
         <section className="tarjeta tarjeta--tabla seccion-detalle">
           <div className="seccion-detalle__cabecera"><h2 className="subtitulo">Otros intentos de este participante</h2></div>
           <table className="tabla">
-            <thead><tr><th>Intento</th><th>Fecha</th><th>Calificación</th><th>Evaluación</th><th>Dictamen</th></tr></thead>
+            <thead><tr><th>Intento</th><th>Fecha</th><th>Calificación</th><th>Evaluación</th><th>Juicio de competencia</th></tr></thead>
             <tbody>
               {intento.otrosIntentos.map((o) => (
                 <tr key={o.id}>
@@ -79,7 +81,7 @@ export default function IntentoEvaluacion() {
                   <td data-etiqueta="Fecha">{fecha(o.fechaAplicacion)}</td>
                   <td data-etiqueta="Calificación">{calificacion(o.calificacion)}</td>
                   <td data-etiqueta="Evaluación"><EtiquetaEstatus tono={ESTATUS_INTENTO[o.estatus].tono}>{ESTATUS_INTENTO[o.estatus].texto}</EtiquetaEstatus></td>
-                  <td data-etiqueta="Dictamen">{o.dictamen ? <EtiquetaEstatus tono={DICTAMEN[o.dictamen].tono}>{DICTAMEN[o.dictamen].texto}</EtiquetaEstatus> : '—'}</td>
+                  <td data-etiqueta="Juicio de competencia">{o.dictamen ? <EtiquetaEstatus tono={DICTAMEN[o.dictamen].tono}>{DICTAMEN[o.dictamen].texto}</EtiquetaEstatus> : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -109,7 +111,7 @@ function Resultado({ intento }) {
             <Dato etiqueta="Calificación" valor={calificacion(intento.calificacion)}>
               <span><EtiquetaEstatus tono={ESTATUS_INTENTO[intento.estatus].tono}>Evaluación {ESTATUS_INTENTO[intento.estatus].texto.toLowerCase()}</EtiquetaEstatus></span>
             </Dato>
-            <Dato etiqueta="Dictamen" valor={intento.dictamen ? DICTAMEN[intento.dictamen].texto : '—'} />
+            <Dato etiqueta="Juicio de competencia" valor={intento.dictamen ? DICTAMEN[intento.dictamen].texto : '—'} />
             <Dato etiqueta="Evaluador" valor={intento.evaluador || '—'} />
           </div>
         ) : <p className="auxiliar">El evaluador todavía no registra el resultado de este intento.</p>}
@@ -153,8 +155,8 @@ function Captura({ intento, onCambio, onAviso }) {
     else if (v.fechaAplicacion < intento.grupo.fechaInicio) e.fechaAplicacion = `No puede ser anterior al inicio del grupo (${fecha(intento.grupo.fechaInicio)}).`
     if (v.calificacion === '') e.calificacion = 'Escriba la calificación.'
     else if (!hayCalificacion) e.calificacion = 'Escriba un número de 0 a 100, con dos decimales como máximo.'
-    if (!v.dictamen) e.dictamen = 'Seleccione el dictamen.'
-    else if (v.dictamen === 'competente' && !aprobada) e.dictamen = `Con una calificación menor que ${calificacion(minima)} el dictamen solo puede ser "Todavía no competente".`
+    if (!v.dictamen) e.dictamen = 'Seleccione el juicio de competencia.'
+    else if (v.dictamen === 'competente' && !aprobada) e.dictamen = `Con una calificación menor que ${calificacion(minima)} el juicio de competencia solo puede ser "Todavía no competente".`
     if (intento.evidencias.length === 0) e.evidencias = 'Suba al menos una evidencia antes de guardar el resultado.'
     setErrores(e)
     return Object.keys(e).length === 0
@@ -204,7 +206,7 @@ function Captura({ intento, onCambio, onAviso }) {
           </div>
 
           <fieldset className="opciones-dictamen">
-            <legend>Dictamen</legend>
+            <legend>Juicio de competencia</legend>
             <OpcionDictamen valor="competente" elegido={v.dictamen} deshabilitada={hayCalificacion && !aprobada}
               titulo="Competente" texto={hayCalificacion && !aprobada ? 'Requiere una calificación aprobatoria.' : 'Se podrá iniciar su trámite de certificación.'}
               onElegir={(d) => setV((x) => ({ ...x, dictamen: d }))} />
@@ -237,7 +239,7 @@ function Captura({ intento, onCambio, onAviso }) {
         <Confirmacion titulo="Guardar resultado" textoBoton="Guardar resultado" accion={enviar}
           onCerrar={() => setConfirmar(false)} onHecho={(mensaje) => { setConfirmar(false); onAviso(mensaje); onCambio() }}>
           {intento.participante.nombre}: calificación <strong>{calificacion(numero)}</strong> ({aprobada ? 'aprobada' : 'no aprobada'}),
-          dictamen <strong>{DICTAMEN[v.dictamen]?.texto.toLowerCase()}</strong>. Una vez guardado, el resultado y sus evidencias ya no se podrán modificar.
+          juicio de competencia <strong>{DICTAMEN[v.dictamen]?.texto.toLowerCase()}</strong>. Una vez guardado, el resultado y sus evidencias ya no se podrán modificar.
         </Confirmacion>
       )}
       {cancelar && (

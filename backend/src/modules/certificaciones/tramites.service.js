@@ -145,7 +145,7 @@ async function crear({ idIntento, observaciones }, idUsuario) {
         if (!intento) throw new AppError(404, 'No se encontró el intento de evaluación.');
         const nombre = nombreCompleto(intento.inscripcion.participante.usuario);
         if (intento.dictamen !== 'competente') {
-          throw new AppError(422, `El intento ${intento.numero_intento} de ${nombre} no tiene dictamen "competente"; no se puede iniciar el trámite de certificación.`);
+          throw new AppError(422, `El intento ${intento.numero_intento} de ${nombre} no tiene juicio de competencia "competente"; no se puede iniciar el trámite de certificación.`);
         }
         const existente = await TramiteCertificacion.findOne({ where: { id_intento: idIntento }, transaction: t });
         if (existente) throw new AppError(409, `Este resultado ya tiene el trámite ${existente.folio_interno}.`);

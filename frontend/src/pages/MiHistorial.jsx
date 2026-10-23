@@ -44,7 +44,7 @@ export default function MiHistorial() {
 
         <section className="tarjeta tarjeta--tabla seccion-detalle">
           <div className="seccion-detalle__cabecera"><h2 className="subtitulo">Evaluaciones ({datos.evaluaciones.length})</h2></div>
-          {datos.evaluaciones.length === 0 ? <div className="estado-vacio"><p className="auxiliar">Todavía no presenta evaluaciones. Se evalúa al concluir la capacitación.</p></div> : (
+          {datos.evaluaciones.length === 0 ? <div className="estado-vacio"><p className="auxiliar">Todavía no presenta evaluaciones.</p></div> : (
             <table className="tabla tabla--compacta">
               <thead><tr><th>Estándar</th><th>Intento</th><th>Calificación</th><th>Resultado</th></tr></thead>
               <tbody>

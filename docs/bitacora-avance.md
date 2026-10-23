@@ -270,3 +270,11 @@ Formato sugerido por entrada:
 - Funcionó: seguir los diagramas de secuencia y los mockups (M14, M20, M22, M25) como contrato; las reglas de negocio quedaron en el backend y las pruebas del residente recorrieron el flujo completo de un participante: capacitación → evaluación → certificación.
 - A mejorar: no hacer que una pantalla dependa de un servicio externo (correo) para responder; revisar que ningún formulario quede dentro de otro; probar con el ancho de pantalla del residente antes de entregar tablas con muchas columnas.
 - Pendiente para el Sprint 4: reportes PDF/Excel (CU-22) y recordatorios por correo (RF-NOT-01); reenvío del aviso de certificado emitido cuando el correo falle.
+
+## Semana 43 — Sprint 4: Reportes y notificaciones (iniciado el 23-oct-2026, adelantado)
+
+**Revisión previa de documentos oficiales (23-oct):** CINDEC proporcionó el Manual de Operaciones de ECE/OC (M-DGAOSU-03), el Manual de identidad gráfica Red CONOCER 2025, la Cédula de Evaluación, las plantillas de Portafolio de evidencias y Encuesta de satisfacción, el estándar EC1564, un convenio ECE-CE, un informe de auditoría anual y logotipos. Hallazgos y decisiones (ADR-0005):
+- La evaluación no debe condicionarse a la capacitación (convenio ECE-CE, cláusula A.10; criterio de Libre Acceso). Se ajustó la regla del Sprint 3: el evaluador asignado puede evaluar a cualquier inscrito sin baja de un grupo en curso o concluido.
+- Terminología CONOCER: lo que registra el evaluador se muestra como "juicio de competencia"; el Grupo de Dictamen, la cédula completa, el portafolio tipificado, la encuesta de satisfacción y los plazos oficiales se registraron en `vision-futura-cindec.md` para no modificar la base de datos.
+- Los reportes oficiales usarán la razón social "Compromiso Compartido, Centro Integral de Desarrollo y Capacitación A.C." (ECE516-22).
+- Logotipo Red CONOCER: se sustituyó por el vectorial oficial de Entidad de Certificación y Evaluación (color #611232, interior blanco, tamaño mínimo 1.7 × 3 cm). No se usa el logotipo del Gobierno de Guanajuato (pertenece a otra ECE y el manual no autoriza imagen de dependencias).

@@ -33,7 +33,7 @@ export default function MisCertificados() {
       {lista && lista.length === 0 && (
         <div className="tarjeta estado-vacio">
           <p className="subtitulo">Todavía no tiene certificados</p>
-          <p className="auxiliar">Cuando sea dictaminado competente, CINDEC iniciará su trámite ante CONOCER y aquí verá su avance y su certificado.</p>
+          <p className="auxiliar">Cuando su evaluador emita un juicio de competencia "competente", CINDEC iniciará su trámite ante CONOCER y aquí verá su avance y su certificado.</p>
         </div>
       )}
       <div className="tarjetas">

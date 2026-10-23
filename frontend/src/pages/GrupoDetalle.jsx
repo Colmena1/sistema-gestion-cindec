@@ -23,7 +23,7 @@ const ACCIONES_ESTATUS = {
 const TEXTOS_INSCRIPCION = {
   baja: { titulo: 'Dar de baja', texto: (n) => `¿Dar de baja a ${n} de este grupo? Se libera su lugar; su historial se conserva y se puede reactivar si hay cupo.` },
   inscrito: { titulo: 'Reactivar inscripción', texto: (n) => `¿Reactivar la inscripción de ${n}? Volverá a ocupar un lugar del grupo.` },
-  capacitacion_concluida: { titulo: 'Marcar capacitación concluida', texto: (n) => `¿Marcar que ${n} concluyó la capacitación? Es el paso previo a su evaluación.` },
+  capacitacion_concluida: { titulo: 'Marcar capacitación concluida', texto: (n) => `¿Marcar que ${n} concluyó la capacitación? Queda en su historial. No es requisito para evaluarlo: la evaluación no se condiciona a la capacitación.` },
 }
 
 export default function GrupoDetalle() {

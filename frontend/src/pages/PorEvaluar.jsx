@@ -123,7 +123,7 @@ function Accion({ grupo, p, iniciando, onIniciar, onAbrir }) {
     )
   }
   if (p.ultimo) return <button className="boton boton--secundario boton--chico" onClick={() => onAbrir(p.ultimo.id)}><Eye size={16} /> Ver</button>
-  if (p.estatusInscripcion === 'inscrito') return <span className="auxiliar">En capacitación</span>
+  if (grupo.estatus === 'planeado') return <span className="auxiliar">Grupo sin iniciar</span>
   return <span className="auxiliar">—</span>
 }
 

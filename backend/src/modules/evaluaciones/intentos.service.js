@@ -16,12 +16,13 @@ const {
 // RF-EVA-02, 03, 04 y 05.
 // Reglas:
 //  - solo evalúa el EVALUADOR ASIGNADO al grupo; coordinación y administración solo consultan (RNF-06);
-//  - se evalúa a quien ya tiene "capacitación concluida" (RF-EVA-03: son estados distintos y en orden);
+//  - la evaluación NO se condiciona a la capacitación (ADR-0005; convenio ECE-CE cláusula A.10, criterio
+//    de Libre Acceso): se evalúa a cualquier inscrito sin baja de un grupo en curso o concluido;
 //  - el instrumento debe ser del mismo estándar que el curso del grupo y estar activo;
 //  - cada intento es una fila nueva con su número (1, 2, 3…); nunca se sobrescribe uno anterior;
 //  - solo hay un intento pendiente a la vez, y no hay intentos nuevos después de "competente";
 //  - aprobada / no aprobada lo calcula el sistema con la calificación mínima del instrumento;
-//  - con calificación reprobatoria el dictamen solo puede ser "todavía no competente";
+//  - con calificación reprobatoria el juicio de competencia solo puede ser "todavía no competente";
 //  - para guardar el resultado se necesita al menos una evidencia;
 //  - un intento calificado ya no se modifica, ni sus evidencias (RNF-06, RNF-10).
 // ---------------------------------------------------------------------
@@ -116,7 +117,7 @@ async function porEvaluar(idEvaluador) {
           ultimo: ultimo ? resumenIntento(ultimo) : null,
           idPendiente: pendiente ? pendiente.id_intento : null,
           competente,
-          puedeIniciar: i.estatus === 'capacitacion_concluida' && !competente && !pendiente,
+          puedeIniciar: ['en_curso', 'concluido'].includes(g.estatus) && !competente && !pendiente,
         };
       }),
     };
@@ -133,11 +134,13 @@ async function crear({ idInscripcion, idEvaluacion }, solicitante) {
     verificarEvaluador(grupo, solicitante);
     const nombre = nombreCompleto(inscripcion.participante.usuario);
 
-    if (inscripcion.estatus !== 'capacitacion_concluida') {
-      throw new AppError(409, `${nombre} todavía no tiene la capacitación concluida. La coordinación la marca en el detalle del grupo; después se puede evaluar.`);
+    // ADR-0005: no se exige "capacitación concluida"; solo que siga inscrito y que el grupo ya haya iniciado
+    if (inscripcion.estatus === 'baja') throw new AppError(409, `${nombre} está dado(a) de baja en este grupo.`);
+    if (!['en_curso', 'concluido'].includes(grupo.estatus)) {
+      throw new AppError(409, `El grupo ${grupo.clave} todavía no inicia (o fue cancelado); se evalúa cuando está en curso o concluido.`);
     }
     const anteriores = await IntentoEvaluacion.findAll({ where: { id_inscripcion: idInscripcion }, transaction: t });
-    if (anteriores.some((x) => x.dictamen === 'competente')) throw new AppError(409, `${nombre} ya fue dictaminado(a) competente en este grupo.`);
+    if (anteriores.some((x) => x.dictamen === 'competente')) throw new AppError(409, `${nombre} ya tiene juicio de competencia "competente" en este grupo.`);
     const pendiente = anteriores.find((x) => x.estatus === 'pendiente');
     if (pendiente) throw new AppError(409, `${nombre} ya tiene el intento ${pendiente.numero_intento} pendiente de calificar.`);
 
@@ -238,7 +241,7 @@ async function guardarResultado(id, d, solicitante) {
     if (d.fechaAplicacion < grupo.fecha_inicio) errores.push({ campo: 'fechaAplicacion', mensaje: `No puede ser anterior al inicio del grupo (${grupo.fecha_inicio.split('-').reverse().join('/')}).` });
     const aprobada = d.calificacion >= minima;
     if (!aprobada && d.dictamen === 'competente') {
-      errores.push({ campo: 'dictamen', mensaje: `Con una calificación menor que ${minima} el dictamen solo puede ser "Todavía no competente".` });
+      errores.push({ campo: 'dictamen', mensaje: `Con una calificación menor que ${minima} el juicio de competencia solo puede ser "Todavía no competente".` });
     }
     if (errores.length) throw new AppError(400, 'Revise los datos del resultado.', errores);
     const evidencias = await Evidencia.count({ where: { id_intento: id }, transaction: t });
@@ -256,7 +259,7 @@ async function guardarResultado(id, d, solicitante) {
     const nombre = nombreCompleto(intento.inscripcion.participante.usuario);
     await registrarAuditoria({
       idUsuario: solicitante.id, accion: 'registrar_resultado', entidad: 'intento_evaluacion', idRegistro: intento.id_intento,
-      detalle: `${nombre}, grupo ${grupo.clave}, intento ${intento.numero_intento}: ${d.calificacion} (${estatus}), dictamen ${d.dictamen}`,
+      detalle: `${nombre}, grupo ${grupo.clave}, intento ${intento.numero_intento}: ${d.calificacion} (${estatus}), juicio de competencia ${d.dictamen}`,
     }, t);
     return { nombre, estatus, dictamen: d.dictamen };
   });

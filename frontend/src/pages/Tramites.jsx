@@ -79,7 +79,7 @@ export default function Tramites() {
             : datos.tramites.length === 0 ? (
               <div className="estado-vacio">
                 <p className="subtitulo">No hay trámites con esos filtros</p>
-                <p className="auxiliar">Inicie un trámite para cada participante dictaminado competente.</p>
+                <p className="auxiliar">Inicie un trámite para cada participante con juicio de competencia "competente".</p>
               </div>
             ) : (
               <table className="tabla tabla--clic tabla--compacta">
@@ -105,7 +105,7 @@ export default function Tramites() {
   )
 }
 
-// Elige a un participante competente sin trámite (CU-17: solo nace de un dictamen competente)
+// Elige a un participante competente sin trámite (CU-17: solo nace de un juicio "competente")
 function IniciarTramite({ onCerrar, onCreado }) {
   const [candidatos, setCandidatos] = useState(null)
   const [elegido, setElegido] = useState(null)
@@ -138,10 +138,10 @@ function IniciarTramite({ onCerrar, onCreado }) {
       </button>
     </>}>
       {error && <Aviso tipo="error" titulo="No se pudo iniciar">{error}</Aviso>}
-      <p className="auxiliar">Solo aparecen participantes con dictamen <strong>competente</strong> que todavía no tienen trámite.</p>
+      <p className="auxiliar">Solo aparecen participantes con juicio de competencia <strong>competente</strong> que todavía no tienen trámite.</p>
       {!candidatos && !error && <p className="fila-icono auxiliar"><LoaderCircle size={20} className="girando" /> Cargando…</p>}
       {candidatos?.length === 0 && (
-        <div className="estado-vacio"><p className="subtitulo">No hay participantes pendientes de trámite</p><p className="auxiliar">Cuando un evaluador dictamine a alguien como competente, aparecerá aquí.</p></div>
+        <div className="estado-vacio"><p className="subtitulo">No hay participantes pendientes de trámite</p><p className="auxiliar">Cuando un evaluador emita un juicio "competente", aparecerá aquí.</p></div>
       )}
       {candidatos?.length > 0 && (
         <ul className="lista-seleccion">
