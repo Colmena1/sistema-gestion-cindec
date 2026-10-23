@@ -24,6 +24,7 @@ import TramiteDetalle from './pages/TramiteDetalle.jsx'
 import MisCertificados from './pages/MisCertificados.jsx'
 import MiHistorial from './pages/MiHistorial.jsx'
 import VerificarFolio from './pages/VerificarFolio.jsx'
+import Reportes from './pages/Reportes.jsx'
 import PantallaPendiente from './pages/PantallaPendiente.jsx'
 import NoEncontrada from './pages/NoEncontrada.jsx'
 import { ROLES, TODAS_LAS_OPCIONES, rolesDeRuta } from './config/menu.js'
@@ -34,7 +35,7 @@ import { ROLES, TODAS_LAS_OPCIONES, rolesDeRuta } from './config/menu.js'
 // Las pantallas que todavía no se construyen muestran en qué sprint se hacen.
 // Rutas que ya tienen su pantalla real (las demás muestran "se construye en el Sprint N").
 const PANTALLAS_LISTAS = ['/', '/usuarios', '/cursos', '/grupos', '/participantes', '/mis-grupos', '/mis-cursos', '/materiales', '/instrumentos', '/por-evaluar',
-  '/tramites', '/mis-certificados', '/mi-historial', '/verificar-folio']
+  '/tramites', '/mis-certificados', '/mi-historial', '/verificar-folio', '/reportes']
 
 export default function App() {
   return (
@@ -64,6 +65,7 @@ export default function App() {
         <Route path="/mis-certificados" element={<RutaProtegida roles={rolesDeRuta('/mis-certificados')}><MisCertificados /></RutaProtegida>} />
         <Route path="/mi-historial" element={<RutaProtegida roles={rolesDeRuta('/mi-historial')}><MiHistorial /></RutaProtegida>} />
         <Route path="/verificar-folio" element={<RutaProtegida roles={rolesDeRuta('/verificar-folio')}><VerificarFolio /></RutaProtegida>} />
+        <Route path="/reportes" element={<RutaProtegida roles={rolesDeRuta('/reportes')}><Reportes /></RutaProtegida>} />
         {TODAS_LAS_OPCIONES.filter((op) => !PANTALLAS_LISTAS.includes(op.ruta)).map((op) => (
           <Route key={op.ruta} path={op.ruta}
             element={<RutaProtegida roles={rolesDeRuta(op.ruta)}><PantallaPendiente opcion={op} /></RutaProtegida>} />

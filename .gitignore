@@ -27,3 +27,6 @@ Thumbs.db
 
 # Archivos subidos por los usuarios (documentos personales: nunca a Git)
 backend/uploads/
+
+# Correos de prueba guardados en archivo (desarrollo)
+backend/correos-prueba/

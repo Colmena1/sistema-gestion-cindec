@@ -278,3 +278,24 @@ Formato sugerido por entrada:
 - Terminología CONOCER: lo que registra el evaluador se muestra como "juicio de competencia"; el Grupo de Dictamen, la cédula completa, el portafolio tipificado, la encuesta de satisfacción y los plazos oficiales se registraron en `vision-futura-cindec.md` para no modificar la base de datos.
 - Los reportes oficiales usarán la razón social "Compromiso Compartido, Centro Integral de Desarrollo y Capacitación A.C." (ECE516-22).
 - Logotipo Red CONOCER: se sustituyó por el vectorial oficial de Entidad de Certificación y Evaluación (color #611232, interior blanco, tamaño mínimo 1.7 × 3 cm). No se usa el logotipo del Gobierno de Guanajuato (pertenece a otra ECE y el manual no autoriza imagen de dependencias).
+- Pruebas del residente: Luis (inscrito, sin capacitación concluida marcada al inicio) aparece con "Evaluar"; las pantallas muestran "Juicio de competencia"; el inicio de sesión muestra el logotipo oficial Red CONOCER; un grupo planeado muestra "Grupo sin iniciar".
+
+**Hecho (23-oct) — Parte 1: Reportes (CU-22; RF-REP-01 y 02):**
+- API `/api/v1/reportes` (Coordinador y Administrador): catálogo, vista previa y exportación a PDF (pdfkit) y Excel (exceljs). Dependencias nuevas del backend: `pdfkit` y `exceljs`.
+- 11 reportes con filtros de periodo (y curso o estatus cuando aplica): participantes registrados, cursos impartidos, inscripciones por curso, avance de participantes, asistencia por sesión, evaluaciones realizadas, personas competentes y no competentes, certificaciones por estatus, historial de certificaciones, reporte por instructor y por evaluador. Consultas SQL de solo lectura con parámetros.
+- Encabezado oficial en PDF y Excel: logotipo de CINDEC en alta resolución, logotipo Red CONOCER (ECE, mínimo 3 cm), razón social y cédula ECE516-22, filtros, fecha y usuario que lo generó, totales; el PDF repite el encabezado de la tabla en cada página y numera "Página X de Y".
+- Cada exportación queda en la auditoría (quién, qué reporte, formato y filtros). La fecha "desde" no puede ser posterior a "hasta" (calendario, formulario y servidor).
+- Pruebas del residente: vista previa y PDF de "Evaluaciones realizadas" (1 aprobada, 1 no aprobada), Excel de "Avance de participantes", recorrido de los 11 reportes sin errores y validación del periodo.
+
+**Hecho (23-oct) — Parte 2: Notificaciones (CU-21; RF-NOT-01):**
+- Avisos que ya existían: registro exitoso, inscripción confirmada, certificado emitido y recuperación de contraseña.
+- Nuevos: recordatorio de la próxima sesión (el día anterior, a inscritos e instructor), evaluación pendiente (al participante cuando se inicia su intento y resumen diario al evaluador de lo que tiene sin calificar) y reenvío manual del aviso de certificado emitido.
+- Revisión automática cada hora (8:00 a 21:00) y botón "Enviar recordatorios ahora" en Inicio para la coordinación. Para no repetir avisos sin modificar la base de datos (ADR-0004), cada envío se anota en `auditoria` y se consulta antes de volver a enviar.
+- Robustez del correo: límites de espera de 10 s; si en desarrollo el buzón Ethereal no responde, cada correo se guarda como página .html en `backend/correos-prueba/` (excluida de Git); también se puede forzar con `CORREO_MODO=archivo`. Con un SMTP real en el `.env` los mismos correos llegan a las bandejas sin cambiar código.
+- Pruebas del residente: sesión del 24/10 → la revisión automática avisó a Ana, Luis e Iván (3 correos) y el botón ya no repitió el aviso; al evaluar a Luis se generó su aviso de evaluación pendiente y Elena recibió su resumen; reenvío del aviso de certificado de Ana.
+- Corrección tras las pruebas: Ethereal dejó de responder desde la red del residente y cada correo esperaba 10 s; se agregó el modo archivo automático.
+
+**Retrospectiva Sprint 4:**
+- Funcionó: revisar los documentos oficiales de CINDEC antes de construir los reportes evitó dos errores de fondo (condicionar la evaluación a la capacitación y usar logotipos no autorizados); un solo "motor" de reportes alimenta la pantalla, el PDF y el Excel, lo que facilitó cubrir los 11 reportes.
+- A mejorar: no depender de servicios externos gratuitos (Ethereal) para probar; se resolvió con el modo archivo. Pendiente acordar con CINDEC la cuenta de correo real para producción.
+- Estado del sistema: los 22 casos de uso de V1 (CU-01 a CU-22) están implementados y probados en el equipo del residente. Siguiente: pruebas integrales (fase de Pruebas del Gantt), ajustes de la revisión con CINDEC y documentación para el reporte del 2.º parcial.

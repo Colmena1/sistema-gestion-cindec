@@ -40,5 +40,7 @@ router.use('/tramites', rutasCertificaciones.tramites);
 router.use('/mis-certificados', rutasCertificaciones.misCertificados);
 router.use('/mi-historial', rutasCertificaciones.miHistorial);
 router.use('/verificar-folio', rutasCertificaciones.verificarFolio);
+router.use('/reportes', require('../modules/reportes/reportes.routes'));        // Sprint 4
+router.use('/notificaciones', require('../modules/notificaciones/notificaciones.routes')); // Sprint 4
 
 module.exports = router;

@@ -20,6 +20,10 @@ module.exports = {
       mensaje: `Certificado resguardado. El trámite ${r.folio} quedó emitido y se enviará el aviso por correo al participante.`,
     });
   },
+  reenviarAviso: async (req, res) => {
+    const r = await s.reenviarAviso(req.params.id);
+    res.json({ ok: true, mensaje: `Aviso del trámite ${r.folio} reenviado a ${r.correo}.` });
+  },
   descargar: async (req, res) => {
     const { ruta, nombre } = await s.archivoDocumento(req.params.id, req.usuario);
     res.download(ruta, nombre);

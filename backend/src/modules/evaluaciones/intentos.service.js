@@ -6,6 +6,7 @@ const { registrarAuditoria } = require('../../utils/auditoria');
 const archivos = require('../../utils/archivos');
 const ROLES = require('../../config/roles');
 const { TIPO_TEXTO } = require('./instrumentos.service');
+const { avisarEvaluacionPendiente } = require('../notificaciones/recordatorios.service');
 const {
   IntentoEvaluacion, Evidencia, Evaluacion, Inscripcion, Grupo, Curso, EstandarCompetencia,
   Participante, Usuario, sequelize,
@@ -126,7 +127,7 @@ async function porEvaluar(idEvaluador) {
 
 // ---------- Iniciar un intento (queda "pendiente" hasta guardar el resultado) ----------
 async function crear({ idInscripcion, idEvaluacion }, solicitante) {
-  return sequelize.transaction(async (t) => {
+  const creado = await sequelize.transaction(async (t) => {
     // Bloquea la inscripción: dos clics simultáneos no crean dos intentos con el mismo número
     const inscripcion = await Inscripcion.findByPk(idInscripcion, { include: [incluirGrupo, incluirParticipante], transaction: t, lock: t.LOCK.UPDATE });
     if (!inscripcion) throw new AppError(404, 'No se encontró la inscripción.');
@@ -172,6 +173,9 @@ async function crear({ idInscripcion, idEvaluacion }, solicitante) {
     }, t);
     return { id: intento.id_intento, numero };
   });
+  // Aviso de "evaluación pendiente" al participante (RF-NOT-01), después del commit y sin esperar al correo
+  avisarEvaluacionPendiente(creado.id).catch((err) => console.error('No se pudo avisar la evaluación pendiente:', err.message));
+  return creado;
 }
 
 async function buscarIntento(id, transaction, lock) {

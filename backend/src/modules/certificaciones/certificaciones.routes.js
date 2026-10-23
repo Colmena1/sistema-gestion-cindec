@@ -18,6 +18,7 @@ tramites.get('/candidatos', ...personal, asyncHandler(c.candidatos));
 tramites.post('/', ...personal, v.crear, validar, asyncHandler(c.crear));
 tramites.get('/:id', ...personal, v.tramite, validar, asyncHandler(c.obtener));
 tramites.post('/:id/estatus', ...personal, v.avanzar, validar, asyncHandler(c.avanzar));
+tramites.post('/:id/reenviar-aviso', ...personal, v.tramite, validar, asyncHandler(c.reenviarAviso));
 tramites.post('/:id/documento', ...personal, subirCertificado.single('archivo'), manejarErrorMulter, v.documento, validar, asyncHandler(c.documento));
 // Descarga: personal o el propio participante (lo valida el servicio)
 tramites.get('/:id/documento/archivo', autenticar, v.tramite, validar, asyncHandler(c.descargar));

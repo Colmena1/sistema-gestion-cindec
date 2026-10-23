@@ -261,6 +261,16 @@ async function resguardarDocumento(id, d, archivo, idUsuario) {
   }
 }
 
+// Reenvío manual del aviso de certificado emitido (por si el correo falló al emitirlo)
+async function reenviarAviso(id) {
+  const tramite = await buscar(id);
+  if (tramite.estatus !== 'emitido' || !tramite.documento) throw new AppError(409, 'El aviso solo se envía cuando el trámite ya está emitido.');
+  const { participante, grupo } = tramite.intento.inscripcion;
+  const enviado = await notificarEmision({ usuario: participante.usuario, estandar: grupo.curso.estandar, folio: tramite.documento.folio_conocer });
+  if (!enviado) throw new AppError(502, 'El servidor de correo no respondió; el aviso no se pudo enviar. Intente más tarde.');
+  return { correo: participante.usuario.correo, folio: tramite.folio_interno };
+}
+
 async function notificarEmision({ usuario, estandar, folio }) {
   try {
     await enviarCorreo({
@@ -346,5 +356,5 @@ async function verificar(folio) {
 
 module.exports = {
   listar, candidatos, crear, obtener, avanzar, resguardarDocumento, archivoDocumento,
-  deParticipante, misCertificados, miHistorial, verificar,
+  deParticipante, misCertificados, miHistorial, verificar, reenviarAviso,
 };

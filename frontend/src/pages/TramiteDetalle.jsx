@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Download, FileCheck2, LoaderCircle } from 'lucide-react'
+import { ArrowLeft, Download, FileCheck2, LoaderCircle, Send } from 'lucide-react'
 import cliente from '../api/cliente.js'
 import { descargarCertificado } from '../api/certificados.js'
 import Aviso from '../components/Aviso.jsx'
@@ -25,6 +25,7 @@ export default function TramiteDetalle() {
   const [aviso, mostrarAviso] = useAvisoTemporal(7000)
   const [avanzando, setAvanzando] = useState(false)
   const [errorDescarga, setErrorDescarga] = useState('')
+  const [reenviando, setReenviando] = useState(false)
 
   const cargar = useCallback(() => {
     cliente.get(`/tramites/${id}`).then(({ data }) => { setT(data.tramite); setError('') }).catch((err) => setError(err.mensaje))
@@ -40,6 +41,18 @@ export default function TramiteDetalle() {
   const fechaPaso = Object.fromEntries([...t.historial].reverse().map((h) => [h.estatus, h]))
   const indice = ORDEN_TRAMITE.indexOf(t.estatus)
   const alAvanzar = (mensaje) => { setAvanzando(false); mostrarAviso(mensaje); cargar() }
+  const reenviar = async () => {
+    setErrorDescarga('')
+    setReenviando(true)
+    try {
+      const { data } = await cliente.post(`/tramites/${t.id}/reenviar-aviso`, null, { timeout: 60000 })
+      mostrarAviso(data.mensaje)
+    } catch (err) {
+      setErrorDescarga(err.mensaje)
+    } finally {
+      setReenviando(false)
+    }
+  }
   const descargar = async () => {
     setErrorDescarga('')
     try { await descargarCertificado(t.id) } catch (err) { setErrorDescarga(err.mensaje) }
@@ -84,9 +97,14 @@ export default function TramiteDetalle() {
         <section className="tarjeta seccion-detalle">
           <div className="seccion-detalle__cabecera" style={{ padding: 0, marginBottom: 16 }}>
             <h2 className="subtitulo fila-icono"><FileCheck2 size={22} /> Documento oficial de CONOCER</h2>
-            <button className="boton boton--secundario" onClick={descargar}><Download size={18} /> Descargar PDF</button>
+            <div className="grupo-botones">
+              <button className="boton boton--secundario" onClick={reenviar} disabled={reenviando}>
+                {reenviando ? <LoaderCircle size={18} className="girando" /> : <Send size={18} />} Reenviar aviso por correo
+              </button>
+              <button className="boton boton--secundario" onClick={descargar}><Download size={18} /> Descargar PDF</button>
+            </div>
           </div>
-          {errorDescarga && <div style={{ marginBottom: 16 }}><Aviso tipo="error" titulo="No se pudo descargar" onCerrar={() => setErrorDescarga('')}>{errorDescarga}</Aviso></div>}
+          {errorDescarga && <div style={{ marginBottom: 16 }}><Aviso tipo="error" titulo="No se pudo completar" onCerrar={() => setErrorDescarga('')}>{errorDescarga}</Aviso></div>}
           <div className="datos-grupo" style={{ marginBottom: 0 }}>
             <Dato etiqueta="Folio CONOCER" valor={t.documento.folioConocer} />
             <Dato etiqueta="Tipo de documento" valor={t.documento.tipoDocumento} />

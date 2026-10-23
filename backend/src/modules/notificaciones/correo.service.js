@@ -1,4 +1,8 @@
-const { obtenerTransportador, remitente, usaBuzonDePrueba, nodemailer } = require('../../config/correo');
+const fs = require('fs/promises');
+const path = require('path');
+const { obtenerTransportador, remitente, modoCorreo, nodemailer } = require('../../config/correo');
+
+const CARPETA_PRUEBA = path.resolve(__dirname, '../../../correos-prueba');
 
 // Servicio de correo del módulo Notificaciones (CU-21, RF-NOT-01).
 // Lo usan otros módulos para enviar avisos; aquí se arma el diseño común del mensaje.
@@ -28,8 +32,18 @@ function plantilla({ titulo, parrafos, boton, notaFinal }) {
 async function enviarCorreo({ para, asunto, html, texto }) {
   const transportador = await obtenerTransportador();
   const info = await transportador.sendMail({ from: remitente(), to: para, subject: asunto, html, text: texto });
-  if (usaBuzonDePrueba()) {
+  if (modoCorreo() === 'ethereal') {
     console.log(`Correo de prueba para ${para} — ábralo aquí: ${nodemailer.getTestMessageUrl(info)}`);
+  } else if (modoCorreo() === 'archivo') {
+    // Se guarda una página con los datos del envío y el contenido tal como lo vería el destinatario
+    await fs.mkdir(CARPETA_PRUEBA, { recursive: true });
+    const sello = new Date().toISOString().replace(/[:.]/g, '-');
+    const archivo = path.join(CARPETA_PRUEBA, `${sello}-${para.replace(/[^a-zA-Z0-9.@_-]/g, '_')}.html`);
+    const cabecera = `<div style="font-family:Arial,sans-serif;font-size:13px;background:#FFF4D6;color:#8A5A00;padding:12px 16px;border-bottom:1px solid #E7E6EB">`
+      + `<strong>Correo de prueba guardado por el Sistema CINDEC</strong> (no se envió por internet)<br>`
+      + `Para: ${para} · Asunto: ${asunto} · ${new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}</div>`;
+    await fs.writeFile(archivo, html.replace(/<body([^>]*)>/, `<body$1>${cabecera}`), 'utf8');
+    console.log(`Correo de prueba para ${para} — guardado en: ${archivo}`);
   }
   return info;
 }

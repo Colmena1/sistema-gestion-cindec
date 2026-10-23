@@ -1,6 +1,7 @@
 require('dotenv').config();
 const app = require('./app');
 const sequelize = require('./config/db');
+const { iniciarProgramador } = require('./modules/notificaciones/recordatorios.service');
 
 const PORT = process.env.PORT || 4000;
 
@@ -17,6 +18,7 @@ async function start() {
   app.listen(PORT, () => {
     console.log(`API escuchando en http://localhost:${PORT}/api/v1`);
     console.log(`Prueba de salud: http://localhost:${PORT}/api/v1/health`);
+    iniciarProgramador(); // recordatorios por correo (RF-NOT-01)
   });
 }
 

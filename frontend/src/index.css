@@ -410,6 +410,17 @@ img { max-width: 100%; }
 .pie-red-conocer { display: flex; align-items: center; gap: var(--esp-4); margin-top: var(--esp-6); padding-top: var(--esp-4); border-top: 1px solid var(--gris-engrane); }
 .pie-red-conocer img { width: 120px; height: auto; } /* mínimo 1.7 x 3 cm (manual Red CONOCER 6.2) */
 
+/* Reportes (P-15) */
+.reportes { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: var(--esp-4); align-items: start; }
+.reportes__lista { padding: var(--esp-2); }
+.reportes__lista .lista-seleccion { margin: 0; border: 0; }
+.reportes__lista .lista-seleccion__opcion { padding: 10px 12px; font-size: 15px; }
+.filtros-reporte { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0 var(--esp-4); }
+.resumen-reporte { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.resumen-reporte__dato { display: flex; flex-direction: column; padding: 8px 14px; border: 1px solid var(--gris-engrane); border-radius: var(--radio-control); background: var(--gris-fondo); min-width: 120px; }
+.resumen-reporte__dato strong { font-size: 20px; color: var(--azul-cindec); }
+.tabla-desplazable { overflow-x: auto; }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -453,6 +464,7 @@ img { max-width: 100%; }
   .dos-columnas { grid-template-columns: 1fr; }
   .opciones-dictamen { grid-template-columns: 1fr; }
   .tres-columnas { grid-template-columns: 1fr; }
+  .reportes { grid-template-columns: 1fr; }
   .avance-tramite:not(.avance-tramite--chico) { grid-template-columns: 1fr 1fr; }
   .historial-tramite li { flex-wrap: wrap; gap: var(--esp-2); padding: 12px var(--esp-4); }
   .historial-tramite__texto { flex-basis: 100%; order: 3; }
