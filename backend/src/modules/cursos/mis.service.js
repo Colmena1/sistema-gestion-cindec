@@ -70,6 +70,7 @@ async function misCursos(idUsuario) {
       estatus: i.estatus,
       esRefuerzo: i.es_refuerzo,
       clave: g.clave,
+      idCurso: g.id_curso,
       curso: g.curso.nombre,
       estandar: g.curso.estandar.codigo,
       nombreEstandar: g.curso.estandar.nombre,

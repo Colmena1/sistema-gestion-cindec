@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { BookOpen, LoaderCircle, Pencil, Plus, Power, PowerOff, Search } from 'lucide-react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { BookOpen, FolderOpen, LoaderCircle, Pencil, Plus, Power, PowerOff, Search } from 'lucide-react'
 import cliente from '../api/cliente.js'
 import Modal from '../components/Modal.jsx'
 import Campo from '../components/Campo.jsx'
@@ -39,6 +39,7 @@ export default function CursosEstandares() {
 // Pestaña: Cursos
 // =====================================================================
 function PestanaCursos({ onAviso }) {
+  const navegar = useNavigate()
   const [estandares, setEstandares] = useState([])
   const [buscar, setBuscar] = useState('')
   const [idEstandar, setIdEstandar] = useState('')
@@ -116,6 +117,7 @@ function PestanaCursos({ onAviso }) {
                     <td data-etiqueta="Grupos vigentes">{c.gruposVigentes}</td>
                     <td data-etiqueta="Estado"><EstadoActivo activo={c.activo} /></td>
                     <td className="tabla__acciones">
+                      <BotonAccion icono={FolderOpen} texto="Materiales" onClick={() => navegar(`/materiales?curso=${c.id}`)} />
                       <BotonAccion icono={Pencil} texto="Editar" onClick={() => setFormulario({ id: c.id, valores: { idEstandar: String(c.idEstandar), nombre: c.nombre, descripcion: c.descripcion || '' } })} />
                       <BotonAccion icono={c.activo ? PowerOff : Power} texto={c.activo ? 'Desactivar' : 'Activar'} onClick={() => setConfirmar(c)} />
                     </td>

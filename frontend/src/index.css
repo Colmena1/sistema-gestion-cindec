@@ -154,6 +154,8 @@ img { max-width: 100%; }
 }
 .aviso p { color: var(--gris-texto); margin-top: 2px; }
 .aviso > svg { flex-shrink: 0; margin-top: 1px; } /* el ícono no se encoge con textos largos */
+.aviso__texto { flex: 1; min-width: 0; }
+.aviso__cerrar { margin: -6px -6px 0 0; color: inherit; }
 .aviso--exito { background: var(--exito-fondo); color: var(--exito); }
 .aviso--error { background: var(--error-fondo); color: var(--error); }
 
@@ -360,6 +362,12 @@ img { max-width: 100%; }
 .lista-sesiones { list-style: none; padding: 0; margin: var(--esp-2) 0 0; border-top: 1px solid var(--gris-engrane); }
 .lista-sesiones li { display: flex; justify-content: space-between; align-items: center; gap: var(--esp-2); padding: 10px 0; border-bottom: 1px solid var(--gris-engrane); font-size: 15px; }
 
+/* ---------- Materiales (P-18, P-22; mockup M22) ---------- */
+.lista-materiales { list-style: none; padding: 0; margin: 0; }
+.lista-materiales li { display: flex; align-items: center; gap: var(--esp-4); padding: var(--esp-4) var(--esp-6); border-top: 1px solid var(--gris-engrane); }
+.lista-materiales__icono { width: 44px; height: 44px; border-radius: var(--radio-control); background: var(--azul-niebla); color: var(--azul-cindec); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lista-materiales__texto { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -393,6 +401,8 @@ img { max-width: 100%; }
   .interruptor__opcion { flex: 1; justify-content: center; }
   .pie-guardar .boton { width: 100%; }
   .tarjetas { grid-template-columns: 1fr; }
+  .lista-materiales li { flex-wrap: wrap; padding: var(--esp-4); }
+  .lista-materiales li .boton { width: 100%; }
   .barra-acciones .boton--principal { width: 100%; }
   .recorte { white-space: normal; max-width: none; }
   .grupo-botones, .grupo-botones .boton { width: 100%; }

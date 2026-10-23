@@ -27,5 +27,8 @@ router.use('/mis-cursos', rutasInscripciones.misCursos);
 const rutasParticipantes = require('../modules/participantes/participantes.routes'); // Sprint 2
 router.use('/participantes', rutasParticipantes.participantes);
 router.use('/documentos-participante', rutasParticipantes.documentos);
+const rutasMateriales = require('../modules/aprendizaje/materiales.routes');     // Sprint 3
+router.use('/materiales', rutasMateriales.materiales);
+router.use('/mis-materiales', rutasMateriales.misMateriales);
 
 module.exports = router;

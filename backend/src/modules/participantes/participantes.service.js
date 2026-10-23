@@ -7,6 +7,7 @@ const archivos = require('../../utils/archivos');
 const curpUtil = require('../../utils/curp');
 const ROLES = require('../../config/roles');
 const { plantilla, enviarCorreo } = require('../notificaciones/correo.service');
+const { avancePorParticipante: avanceMateriales } = require('../aprendizaje/materiales.service');
 const {
   Usuario, Rol, Participante, DocumentoParticipante, Curso, EstandarCompetencia,
   Inscripcion, Grupo, sequelize,
@@ -231,11 +232,12 @@ async function expediente(id) {
       where: { id_participante: id },
       include: {
         model: Grupo, as: 'grupo', attributes: ['id_grupo', 'clave', 'fecha_inicio', 'fecha_fin', 'modalidad', 'estatus'],
-        include: { model: Curso, as: 'curso', attributes: ['nombre'], include: { model: EstandarCompetencia, as: 'estandar', attributes: ['codigo'] } },
+        include: { model: Curso, as: 'curso', attributes: ['id_curso', 'nombre'], include: { model: EstandarCompetencia, as: 'estandar', attributes: ['codigo'] } },
       },
       order: [['fecha_inscripcion', 'DESC']],
     }),
   ]);
+  const avance = await avanceMateriales(id);
   return {
     id: p.id_participante,
     idUsuario: p.usuario.id_usuario,
@@ -267,6 +269,7 @@ async function expediente(id) {
       estatus: i.estatus,
       esRefuerzo: i.es_refuerzo,
       fechaInscripcion: i.fecha_inscripcion,
+      materiales: avance[i.grupo.curso.id_curso] || { total: 0, consultados: 0 }, // RF-APR-03
     })),
   };
 }

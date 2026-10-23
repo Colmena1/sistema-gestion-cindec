@@ -229,4 +229,19 @@ Formato sugerido por entrada:
 - Mis cursos (Participante, P-21): grupos inscritos, sesiones, enlace de videoconferencia, instructor y su asistencia por sesión (RF-CUR-06).
 - Pruebas del residente (22-oct): inscripción con búsqueda, aviso de "ya inscrito", grupo lleno con botón deshabilitado, baja que libera el lugar, asistencia con "Falta marcar" y guardado (2 de 2), y "Mis cursos" del participante.
 - Hallazgo del residente: en "Mis cursos" de Ana aparecía "Asistió" en una sesión futura del grupo G-2026-01 (planeado). Causa: el script `08-datos-prueba.sql` de la fase de Diseño insertó directamente asistencias, intentos, evidencias y un trámite adelantados para probar las tablas. No es un error del sistema (sus reglas no permiten crear esos registros). Se agregó `docs/02-diseno/sql/10-limpiar-registros-adelantados.sql`, que elimina solo esos registros para que los datos de prueba sean coherentes antes del Sprint 3.
+- Script 10 ejecutado por el residente: se eliminaron los registros adelantados y se verificó que "Mis cursos" ya no muestra asistencia en sesiones futuras y que la asistencia de un grupo planeado queda en "Solo consulta".
+
+**Retrospectiva Sprint 2:**
+- Funcionó: dividir el sprint en cuatro partes con pruebas del residente en cada una; las pruebas detectaron un problema de datos (registros de prueba adelantados) que se corrigió con un script documentado.
+- A mejorar: mantener los datos de prueba coherentes con las reglas del sistema; a partir de ahora, los registros de evaluación y certificación se crean desde el sistema.
+
+## Semana 43 — Sprint 3: Materiales, evaluaciones y certificaciones (iniciado el 22-oct-2026, adelantado)
+
+**Planeación del sprint:** CU-12 a CU-20 (RF-APR-01 a 03, RF-EVA-01 a 05, RF-CERT-01 a 07) en tres partes: (1) materiales, (2) evaluaciones, (3) certificaciones.
+
+**Hecho (22-oct) — Parte 1: Materiales (CU-12, CU-13; RF-APR-01, 02 y 03):**
+- API `/api/v1/materiales` y `/api/v1/mis-materiales`: cursos que cada persona puede administrar; lista de materiales por curso con número de consultas; alta de archivo (PDF, Word, PowerPoint, Excel, JPG o PNG, hasta 20 MB) o enlace a video; edición de título, orden y enlace; eliminación solo si nadie lo ha consultado; descarga protegida y apertura de video.
+- Reglas: el material pertenece al curso (lo comparten sus grupos); el instructor solo administra los cursos que imparte; el participante solo ve los cursos en los que está inscrito; cada descarga o apertura de video del participante queda en `consulta_material` (primera y última consulta).
+- Pantallas: P-18 Materiales del curso (instructor y coordinación; acceso desde Cursos y estándares), P-22 Materiales del participante (mockup M22) con marca "Consultado" y avance por curso; "Ver materiales" desde Mis cursos.
+- Indicador "materiales consultados" (RF-APR-03): por material ("consultado por X de Y") y por participante en su expediente ("X de Y" por curso).
 

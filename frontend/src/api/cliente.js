@@ -15,7 +15,12 @@ cliente.interceptors.request.use((config) => {
 
 cliente.interceptors.response.use(
   (respuesta) => respuesta,
-  (error) => {
+  async (error) => {
+    // En las descargas (responseType 'blob') el error también llega como archivo:
+    // se convierte a JSON para poder leer el mensaje real del servidor.
+    if (error.response?.data instanceof Blob && error.response.data.type?.includes('json')) {
+      try { error.response.data = JSON.parse(await error.response.data.text()) } catch { /* no era JSON */ }
+    }
     // 401 en cualquier petición (menos el propio login) = la sesión ya no es válida.
     if (error.response?.status === 401 && !error.config?.url?.includes('/auth/login')) {
       try { localStorage.removeItem('token') } catch { /* nada que borrar */ }

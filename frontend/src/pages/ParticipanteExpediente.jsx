@@ -92,7 +92,7 @@ export default function ParticipanteExpediente() {
           <button className="boton boton--secundario" onClick={() => setAgregandoDoc(true)}><FilePlus2 size={18} /> Agregar documento</button>
         </div>
         {faltantes.length > 0 && <div className="relleno-lateral"><Aviso tipo="info" titulo="Documentos pendientes">Falta: {faltantes.join(', ')}.</Aviso></div>}
-        {errorDoc && <div className="relleno-lateral"><Aviso tipo="error" titulo="No se pudo abrir el documento">{errorDoc}</Aviso></div>}
+        {errorDoc && <div className="relleno-lateral"><Aviso tipo="error" titulo="No se pudo abrir el documento" onCerrar={() => setErrorDoc('')}>{errorDoc}</Aviso></div>}
         {p.documentos.length === 0 ? (
           <div className="estado-vacio"><p className="subtitulo">Sin documentos</p><p className="auxiliar">Agregue la identificación oficial y la fotografía del participante.</p></div>
         ) : (
@@ -123,7 +123,7 @@ export default function ParticipanteExpediente() {
           <div className="estado-vacio"><p className="subtitulo">Todavía no está inscrito en ningún grupo</p></div>
         ) : (
           <table className="tabla">
-            <thead><tr><th>Grupo</th><th>Fechas</th><th>Estatus del grupo</th><th>Su estatus</th></tr></thead>
+            <thead><tr><th>Grupo</th><th>Fechas</th><th>Estatus del grupo</th><th>Su estatus</th><th>Materiales consultados</th></tr></thead>
             <tbody>
               {p.inscripciones.map((i) => (
                 <tr key={i.id}>
@@ -133,6 +133,9 @@ export default function ParticipanteExpediente() {
                   <td data-etiqueta="Su estatus">
                     <EtiquetaEstatus tono={ESTATUS_INSCRIPCION[i.estatus].tono}>{ESTATUS_INSCRIPCION[i.estatus].texto}</EtiquetaEstatus>
                     {i.esRefuerzo && <span className="auxiliar bloque">Refuerzo</span>}
+                  </td>
+                  <td data-etiqueta="Materiales consultados">
+                    {i.materiales.total === 0 ? <span className="auxiliar">Sin materiales</span> : `${i.materiales.consultados} de ${i.materiales.total}`}
                   </td>
                 </tr>
               ))}

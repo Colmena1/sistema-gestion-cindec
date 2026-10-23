@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { BookOpen, CalendarDays, LoaderCircle, UserRound, Video } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { BookOpen, CalendarDays, FolderOpen, LoaderCircle, UserRound, Video } from 'lucide-react'
 import cliente from '../api/cliente.js'
 import Aviso from '../components/Aviso.jsx'
 import EtiquetaEstatus from '../components/EtiquetaEstatus.jsx'
@@ -43,6 +44,9 @@ export default function MisCursos() {
             {c.instructor && <p className="fila-icono auxiliar"><UserRound size={16} /> Instructor: {c.instructor}</p>}
             {c.enlaceVideoconferencia && (
               <a href={c.enlaceVideoconferencia} target="_blank" rel="noreferrer" className="boton boton--principal boton--chico enlace-video"><Video size={16} /> Entrar a la videoconferencia</a>
+            )}
+            {c.estatus !== 'baja' && (
+              <Link to={`/materiales?curso=${c.idCurso}`} className="boton boton--secundario boton--chico enlace-video"><FolderOpen size={16} /> Ver materiales</Link>
             )}
             {c.asistencias.registradas > 0 && (
               <p className="auxiliar">Asistencia: {c.asistencias.presentes} de {c.asistencias.registradas} sesiones registradas</p>
