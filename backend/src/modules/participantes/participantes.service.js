@@ -8,6 +8,7 @@ const curpUtil = require('../../utils/curp');
 const ROLES = require('../../config/roles');
 const { plantilla, enviarCorreo } = require('../notificaciones/correo.service');
 const { avancePorParticipante: avanceMateriales } = require('../aprendizaje/materiales.service');
+const { historialDeParticipante: historialEvaluaciones } = require('../evaluaciones/intentos.service');
 const {
   Usuario, Rol, Participante, DocumentoParticipante, Curso, EstandarCompetencia,
   Inscripcion, Grupo, sequelize,
@@ -237,7 +238,7 @@ async function expediente(id) {
       order: [['fecha_inscripcion', 'DESC']],
     }),
   ]);
-  const avance = await avanceMateriales(id);
+  const [avance, evaluaciones] = await Promise.all([avanceMateriales(id), historialEvaluaciones(id)]);
   return {
     id: p.id_participante,
     idUsuario: p.usuario.id_usuario,
@@ -271,6 +272,7 @@ async function expediente(id) {
       fechaInscripcion: i.fecha_inscripcion,
       materiales: avance[i.grupo.curso.id_curso] || { total: 0, consultados: 0 }, // RF-APR-03
     })),
+    evaluaciones, // RF-EVA-05: intentos con su estatus y dictamen
   };
 }
 

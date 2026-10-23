@@ -30,5 +30,10 @@ router.use('/documentos-participante', rutasParticipantes.documentos);
 const rutasMateriales = require('../modules/aprendizaje/materiales.routes');     // Sprint 3
 router.use('/materiales', rutasMateriales.materiales);
 router.use('/mis-materiales', rutasMateriales.misMateriales);
+const rutasEvaluaciones = require('../modules/evaluaciones/evaluaciones.routes'); // Sprint 3
+router.use('/evaluaciones', rutasEvaluaciones.instrumentos);
+router.use('/por-evaluar', rutasEvaluaciones.porEvaluar);
+router.use('/intentos', rutasEvaluaciones.intentos);
+router.use('/evidencias', rutasEvaluaciones.evidencias);
 
 module.exports = router;

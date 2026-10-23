@@ -37,3 +37,17 @@ export function erroresPorCampo(err) {
   if (Array.isArray(detalles)) detalles.forEach((d) => { if (d.campo) porCampo[d.campo] = d.mensaje })
   return porCampo
 }
+
+// Evaluaciones (RF-EVA-03): aprobada/no aprobada y competente/todavía no competente son conceptos distintos
+export const TIPO_INSTRUMENTO = { guia_observacion: 'Guía de observación', lista_cotejo: 'Lista de cotejo', cuestionario: 'Cuestionario' }
+export const ESTATUS_INTENTO = {
+  pendiente: { texto: 'Pendiente', tono: 'alerta' },
+  aprobada: { texto: 'Aprobada', tono: 'exito' },
+  no_aprobada: { texto: 'No aprobada', tono: 'error' },
+}
+export const DICTAMEN = {
+  competente: { texto: 'Competente', tono: 'exito' },
+  todavia_no_competente: { texto: 'Todavía no competente', tono: 'alerta' },
+}
+// 92 -> "92", 92.5 -> "92.5"
+export const calificacion = (valor) => (valor === null || valor === undefined ? '—' : String(Number(valor)))

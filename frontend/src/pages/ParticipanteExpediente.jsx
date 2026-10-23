@@ -10,7 +10,7 @@ import Modal from '../components/Modal.jsx'
 import EtiquetaEstatus from '../components/EtiquetaEstatus.jsx'
 import FormularioParticipante from '../components/FormularioParticipante.jsx'
 import useAvisoTemporal from '../hooks/useAvisoTemporal.js'
-import { ESTATUS_GRUPO, ESTATUS_INSCRIPCION, erroresPorCampo, fecha, fechaDeInstante } from '../utils/formato.js'
+import { DICTAMEN, ESTATUS_GRUPO, ESTATUS_INSCRIPCION, ESTATUS_INTENTO, calificacion, erroresPorCampo, fecha, fechaDeInstante } from '../utils/formato.js'
 
 // P-11 Expediente e historial del participante (CU-10, RF-CUR-06):
 // datos, documentos y cursos. Evaluaciones y certificaciones se agregan en el Sprint 3.
@@ -144,9 +144,33 @@ export default function ParticipanteExpediente() {
         )}
       </section>
 
+      {/* Evaluaciones (RF-EVA-05) */}
+      <section className="tarjeta tarjeta--tabla seccion-detalle">
+        <div className="seccion-detalle__cabecera"><h2 className="subtitulo">Evaluaciones ({p.evaluaciones.length})</h2></div>
+        {p.evaluaciones.length === 0 ? (
+          <div className="estado-vacio"><p className="auxiliar">Todavía no presenta evaluaciones. Se evalúa después de marcar su capacitación como concluida.</p></div>
+        ) : (
+          <table className="tabla">
+            <thead><tr><th>Estándar</th><th>Intento</th><th>Calificación</th><th>Evaluación</th><th>Dictamen</th><th className="tabla__acciones">Detalle</th></tr></thead>
+            <tbody>
+              {p.evaluaciones.map((e) => (
+                <tr key={e.id}>
+                  <td data-etiqueta="Estándar"><strong>{e.estandar}</strong><span className="auxiliar bloque">Grupo {e.grupo} · {e.instrumento}</span></td>
+                  <td data-etiqueta="Intento">{e.numero} · {fecha(e.fechaAplicacion)}</td>
+                  <td data-etiqueta="Calificación">{calificacion(e.calificacion)}<span className="auxiliar bloque">Mínima {calificacion(e.calificacionMinima)}</span></td>
+                  <td data-etiqueta="Evaluación"><EtiquetaEstatus tono={ESTATUS_INTENTO[e.estatus].tono}>{ESTATUS_INTENTO[e.estatus].texto}</EtiquetaEstatus></td>
+                  <td data-etiqueta="Dictamen">{e.dictamen ? <EtiquetaEstatus tono={DICTAMEN[e.dictamen].tono}>{DICTAMEN[e.dictamen].texto}</EtiquetaEstatus> : '—'}</td>
+                  <td className="tabla__acciones"><Link to={`/por-evaluar/intento/${e.id}`} className="enlace-tabla">Ver</Link></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+
       <section className="tarjeta estado-vacio seccion-detalle">
-        <p className="subtitulo">Evaluaciones y certificaciones</p>
-        <p className="auxiliar">Esta parte del historial se agrega con los módulos de Evaluaciones y Certificaciones (Sprint 3).</p>
+        <p className="subtitulo">Certificaciones</p>
+        <p className="auxiliar">Esta parte del historial se agrega con el módulo de Certificaciones (Sprint 3, parte 3).</p>
       </section>
 
       {editando && (

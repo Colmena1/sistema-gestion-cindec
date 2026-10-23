@@ -49,11 +49,35 @@ const subirMaterial = multer({
   },
 });
 
+// Evidencias de evaluación (RF-EVA-02): PDF, imágenes y Word, hasta 10 MB.
+const TIPOS_EVIDENCIA = {
+  ...TIPOS,
+  'application/msword': '.doc',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+};
+const subirEvidencia = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * MB, files: 1 },
+  fileFilter: (req, archivo, cb) => {
+    if (!TIPOS_EVIDENCIA[archivo.mimetype]) {
+      return cb(new AppError(400, `El archivo "${archivo.originalname}" no es de un tipo permitido (PDF, Word, JPG o PNG).`));
+    }
+    cb(null, true);
+  },
+});
+
+// Tamaño máximo según la ruta que recibió el archivo
+function mensajeTamano(url) {
+  if (url.includes('materiales')) return 'El material debe pesar como máximo 20 MB.';
+  if (url.includes('evidencias')) return 'La evidencia debe pesar como máximo 10 MB.';
+  return 'Cada archivo debe pesar como máximo 5 MB.';
+}
+
 // Convierte los errores de multer en mensajes claros.
 function manejarErrorMulter(err, req, res, next) {
   if (err instanceof multer.MulterError) {
     const mensajes = {
-      LIMIT_FILE_SIZE: req.baseUrl.includes('materiales') || req.originalUrl.includes('materiales') ? 'El material debe pesar como máximo 20 MB.' : 'Cada archivo debe pesar como máximo 5 MB.',
+      LIMIT_FILE_SIZE: mensajeTamano(req.originalUrl),
       LIMIT_FILE_COUNT: 'Se enviaron demasiados archivos.',
       LIMIT_UNEXPECTED_FILE: 'Se recibió un archivo que no se esperaba.',
     };
@@ -84,4 +108,4 @@ function rutaAbsoluta(relativa) {
   return absoluta;
 }
 
-module.exports = { subir, subirMaterial, manejarErrorMulter, guardar, eliminar, rutaAbsoluta, MB };
+module.exports = { subir, subirMaterial, subirEvidencia, manejarErrorMulter, guardar, eliminar, rutaAbsoluta, MB };

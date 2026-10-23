@@ -368,6 +368,27 @@ img { max-width: 100%; }
 .lista-materiales__icono { width: 44px; height: 44px; border-radius: var(--radio-control); background: var(--azul-niebla); color: var(--azul-cindec); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .lista-materiales__texto { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 
+/* Evaluaciones: resultado y dictamen (P-20, mockup M20) */
+.seccion-detalle > .subtitulo:first-child { margin-top: 0; }
+.ayuda-resultado { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 14px; font-weight: 700; }
+.ayuda-resultado--exito { color: var(--exito); }
+.ayuda-resultado--error { color: var(--error); }
+.opciones-dictamen { border: 0; padding: 0; margin: 0 0 12px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--esp-4); }
+.opciones-dictamen legend { font-size: 14px; font-weight: 700; padding: 0; margin-bottom: 4px; }
+.opcion-dictamen { display: flex; align-items: flex-start; gap: 12px; padding: var(--esp-4); border: 1px solid var(--borde-control); border-radius: var(--radio-control); background: var(--blanco); cursor: pointer; }
+.opcion-dictamen input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--azul-cindec); flex-shrink: 0; }
+.opcion-dictamen--exito { border: 2px solid var(--exito); background: var(--exito-fondo); }
+.opcion-dictamen--exito strong { color: var(--exito); }
+.opcion-dictamen--alerta { border: 2px solid var(--alerta); background: var(--alerta-fondo); }
+.opcion-dictamen--alerta strong { color: var(--alerta); }
+.opcion-dictamen--deshabilitada { cursor: not-allowed; opacity: .6; }
+.pie-captura { display: flex; justify-content: space-between; align-items: center; gap: var(--esp-4); flex-wrap: wrap; margin-bottom: var(--esp-6); }
+.tabla--compacta th, .tabla--compacta td { padding: 10px 12px; }
+.tabla--compacta .etiqueta { white-space: normal; }
+.tabla--compacta .tabla__acciones .boton { white-space: nowrap; }
+.celda-etiquetas { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.recorte-texto { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* ---------- 6. Celular (menos de 900 px) — RNF-02 ---------- */
 .barra-movil, .velo { display: none; }
 
@@ -409,6 +430,9 @@ img { max-width: 100%; }
   .seccion-detalle__cabecera { padding: var(--esp-4); }
   .seccion-detalle .tabla tr { margin: 0 var(--esp-2) 12px; width: auto; }
   .dos-columnas { grid-template-columns: 1fr; }
+  .opciones-dictamen { grid-template-columns: 1fr; }
+  .pie-captura { flex-direction: column-reverse; align-items: stretch; }
+  .pie-captura > .boton { width: 100%; }
   .encabezado-pantalla .boton--principal { width: 100%; }
   .tarjeta--tabla { background: none; border: 0; }
   .tabla thead { display: none; }
